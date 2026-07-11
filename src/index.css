@@ -1,0 +1,350 @@
+:root {
+  --topbarHeight: 72px;
+  --sidebarWidth: 260px;
+  --bottomLineHeight: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: black;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: black;
+}
+
+.mainTheme{
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbarHeight);
+  padding: 0 12px;
+}
+
+.mainContent{
+  background-color: rgb(37, 37, 37);
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 5px;
+  padding: 0 20px 20px;
+}
+
+.spotifyLogo{
+  height: 60px;
+  width: 60px;
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.topCenter{
+  align-items: center;
+  display: flex;
+}
+
+.topRight{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.homeBackground{
+  display: flex;
+  height: 48px;
+  width: 48px;
+  border-radius: 50px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  font-size: 1.7em;
+  color: white;
+  background-color: rgba(56, 55, 55, 0.655);
+  transition: 0.5s;
+}
+
+.homeBackground:hover{
+  background-color: rgba(101, 100, 100, 0.655);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.searchWrapper{
+  width: 467px;
+  height: 48px;
+  background-color: rgba(56, 55, 55, 0.655);
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  text-align: left;
+  margin-left: 10px;
+  border: 1px solid black;
+  padding: 0 15px;
+}
+
+.searchBar{
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1em;
+}
+
+.searchBar:focus{
+  outline: none;
+}
+
+.searchIcon, .browseIcon, .userIcon, .newsIcon{
+  color: rgb(201, 198, 198);
+  font-size: 2.8em;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 10px;
+}
+
+.searchIcon:hover, .browseIcon:hover, .userIcon:hover, .newsIcon:hover{
+  color: white;
+  transition: 0.5s;
+  font-size: 2.9em;
+}
+
+.searchEnd{
+  text-align: end;
+  font-size: 1em;
+  color: white;
+  margin-left: 10px;
+}
+
+.sidebarLeft{
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--sidebarWidth);
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  color: white;
+  font-family: sans-serif;
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  justify-content: flex-start;
+}
+
+.sidebarRight{
+  display: flex;
+  flex-direction: column;
+  color: white;
+  flex: 0 0 var(--sidebarWidth);
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  font-family: sans-serif;
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  align-items: center;
+}
+
+.sidebarHeader{
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.plusIcon{
+  display: flex;
+  font-size: 1.5em;
+  color: white;
+  background-color: rgba(56, 55, 55, 0.655);
+  border-radius: 50px;
+  border: none;
+}
+
+.playlists{
+  list-style-type: none;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.playlistIcon{
+  padding: 10px;
+  font-size: 3em;
+  background-color: rgb(24, 24, 179);
+  border-radius: 5px;
+  margin-right: 20px;
+  text-align: end;
+  display: flex;
+}
+
+.playlistItem{
+  display: flex;
+  align-items: center;
+}
+
+.playlistItemText{
+  display: flex;
+  flex-direction: column;
+}
+
+.playlistName{
+  padding-top: 15px;
+  display: flex;
+}
+
+.playlistDescription{
+  font-size: 12px;
+}
+
+.contentArea{
+  display: flex;
+  align-items: flex-start;
+  color: white;
+  font-family: sans-serif;
+  gap: 0.4em;
+  padding: 8px;
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  overflow: hidden;
+}
+
+.recentlyViewedCards{
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+
+}
+
+.recentCard{
+  display: flex;
+  flex-direction: row;
+  background-color: hsl(0, 1%, 33%, 0.6);
+  width: 23vw;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+.recentCard:hover{
+  background-color: hsl(0, 1%, 33%, 0.9);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.recentCard p{
+  padding-left: 20px;
+  align-self: center;
+}
+
+.recentCardImage{
+  align-self: center;
+  padding-left: 10px;
+  font-size: 1.5em;
+}
+
+.albumSongCard{
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(0, 1%, 33%, 0);
+  transition: 0.5s;
+  border-radius: 5px;
+}
+
+.albumSongCard:hover{
+  background-color: hsl(0, 1%, 33%, 0.6);
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.albumSongCard b{
+  padding-top: 20px;
+}
+
+.albumSongCard p{
+  font-size: 12px;
+}
+
+.albumSongIcon{
+  height: 20vh;
+  width: 12vw;
+}
+
+.cardSection{
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollableCards{
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+}
+
+.playingSongImage{
+ font-size: 15em;
+}
+
+.songBottomLine{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border: none;
+  background-color: black;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.songBottomControls{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.playButton, .pauseButton{
+  color: black;
+  background-color: white;
+  border-radius: 50px;
+  border: none;
+  font-size: 2em;
+}
+
+.nextSongButton, .previousSongButton{
+  font-size: 1.3em;
+  color: grey;
+  cursor: pointer;
+}
+
+.songBottomInfo{
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.songBottomLineProgress{
+  width: 100%;
+  height: 6px;
+  background-color: rgba(109, 103, 103, 0.779);
+  border-radius: 10px;
+}
+
+.songBottomLineProgressFill{
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.songBottomInfo span{
+  color: rgb(166, 164, 164);
+  font-size: 0.7em;
+}
