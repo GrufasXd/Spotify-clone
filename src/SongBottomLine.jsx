@@ -59,6 +59,17 @@ function SongBottomLine({currentSong}){
 
     return(
         <div className="songBottomLine">
+            {currentSong != null ? (
+                <div className="songName">
+                    <b>{currentSong.title}</b>
+                    <p>{currentSong.artist}</p>
+                </div>
+            ) : 
+                <div className="songName">
+                        <p></p>
+                        <p></p>
+                </div>
+            }
             <audio
                 ref={audioRef}
                 src={`http://localhost:3001${currentSong?.file_url}`}
@@ -67,26 +78,29 @@ function SongBottomLine({currentSong}){
                 onEnded={() => setIsPlaying(false)}
             />
             <div className="songBottomControls">
-                <FaStepBackward className="previousSongButton"/>
-                {isPlaying ? (
-                    <IoPauseOutline className="pauseButton" onClick={handlePlayClick}/>
-                ) : (
-                    <CgPlayButton className="playButton" onClick={handlePlayClick}/>
-                )}
-                <FaStepForward className="nextSongButton"/>
+                <div className="songBottomButtons">
+                    <FaStepBackward className="previousSongButton"/>
+                    {isPlaying ? (
+                        <IoPauseOutline className="pauseButton" onClick={handlePlayClick}/>
+                    ) : (
+                        <CgPlayButton className="playButton" onClick={handlePlayClick}/>
+                    )}
+                    <FaStepForward className="nextSongButton"/>
+                </div>
+                <div className="songBottomInfo">
+                    <span>{currentTimeDisplay}</span>
+                    <div className="songBottomLineProgress"
+                        onClick={handleProgressClick}
+                        >
+                        <div className="songBottomLineProgressFill"
+                            style={{ width: `${(currentTime / duration) * 100}%`}} 
+                        />
+                    </div>
+                    <span>{durationDisplay}</span>
+                </div>
             </div>
-            <div className="songBottomInfo">
-                <span>{currentTimeDisplay}</span>
-                <div className="songBottomLineProgress"
-                     onClick={handleProgressClick}
-                     >
-                    <div className="songBottomLineProgressFill"
-                         style={{ width: `${(currentTime / duration) * 100}%`}} 
-                    />
-                </div>
-                <span>{durationDisplay}</span>
-                <div className="songBottomLineSectionSplit">
-                </div>
+            <div className="songBottomRight">
+
             </div>
         </div>
     )

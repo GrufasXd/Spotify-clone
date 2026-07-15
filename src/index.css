@@ -292,18 +292,20 @@ body {
   width: 100%;
   border: none;
   background-color: black;
-  padding: 12px 20px;
-  display: flex;
-  flex-direction: column;
+  padding: 12px 20px; 
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
   gap: 12px;
   align-items: center;
+  justify-content: space-between;
 }
 
-.songBottomControls{
+.songBottomButtons{
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 24px;
+  margin-bottom: 15px;
 }
 
 .playButton, .pauseButton{
@@ -347,4 +349,28 @@ body {
 .songBottomInfo span{
   color: rgb(166, 164, 164);
   font-size: 0.7em;
+}
+
+.songName{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-left: 20px;
+  color: white;
+  font-family: sans-serif;
+}
+
+.songName b{
+  font-size: 1em;
+}
+
+.songName p{
+  font-size: 0.8em;
+}
+
+.songBottomControls{
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
 }
