@@ -20,4 +20,18 @@ app.get('/api/playlists', (req, res) => {
   res.json(playlists)
 })
 
+// Tik searchinti artistai
+app.get('/api/artists/search', (req, res) => {
+  const query = req.query.q
+  const searchedString = db.prepare('SELECT * FROM artists WHERE name LIKE ?').all('%' + query + '%')
+  res.json(searchedString)
+})
+
+// Tik searchintos dainos
+app.get('/api/songs/search', (req, res) => {
+  const query = req.query.q
+  const searchedString = db.prepare('SELECT * FROM songs WHERE title LIKE ?').all('%' + query + '%')
+  res.json(searchedString)
+})
+
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))
