@@ -374,3 +374,28 @@ body {
   flex-direction: column;
   gap: 24px;
 }
+
+.searchResults{
+  background-color: rgba(56, 55, 55, 1);
+  color: white;
+  font-family: sans-serif;
+  position: absolute;
+  top: 100%;
+  margin-top: 3px;
+  width: 467px;
+  border-radius: 10px;
+  padding: 10px;
+  margin-left: 5px;
+  font-size: 1em;
+  height: 30vh;
+  overflow-y: auto;
+}
+
+.searchContainer {
+  position: relative;
+}
+
+.searchTag{
+  font-size: 0.8em;
+  margin-bottom: 20px;
+}
