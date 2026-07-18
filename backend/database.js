@@ -38,6 +38,7 @@ const count = db.prepare('SELECT COUNT(*) as c FROM songs').get()
 if (count.c === 0) {
   const artist = db.prepare(`INSERT INTO artists (name, monthly_listeners) VALUES(?,?)`)
   const yeat = artist.run('Yeat', 23000000).lastInsertRowid
+  const shy = artist.run('Jessica Shy', 243237).lastInsertRowid
   const kanye = artist.run('Kanye West', 64000000).lastInsertRowid
   const album = db.prepare(`INSERT INTO albums (title, artist_id) VALUES(?,?)`)
   const adl = album.run('ADL', yeat).lastInsertRowid

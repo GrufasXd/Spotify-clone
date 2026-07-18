@@ -399,3 +399,16 @@ body {
   font-size: 0.8em;
   margin-bottom: 20px;
 }
+
+.searchResult{
+  padding-left: 10px;
+  transition: 0.5s;
+  border-radius: 10px;
+  padding: auto;
+}
+
+.searchResult:hover{
+  background-color: rgb(74, 73, 73);
+  cursor: pointer;
+  transition: 0.5s;
+}

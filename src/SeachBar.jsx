@@ -3,10 +3,11 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosBrowsers } from "react-icons/io";
 
 
-function SearchBar(){
+function SearchBar({onSongSelect}){
     const [searchString, setSearchString] = useState("")
     const [artistsResults, setArtistsResults] = useState([])
     const [songResults, setSongResults] = useState([])
+    const [songRelatedResults, setSongRelatedResults] = useState([])
 
     function handleSearch(event){
         setSearchString(event.target.value)
@@ -20,8 +21,9 @@ function SearchBar(){
             fetch(`http://localhost:3001/api/songs/search?q=${searchString}`)
             .then(res => res.json())
             .then(data => setSongResults(data))
-            console.log(artistsResults)
-            console.log(songResults)
+            fetch(`http://localhost:3001/api/artists/songs?q=${searchString}`)
+            .then(res => res.json())
+            .then(data => setSongRelatedResults(data))
         }
         else if (searchString == ""){
             setArtistsResults([])
@@ -43,20 +45,39 @@ function SearchBar(){
                     <p>No results found</p>
                 ) :
                     <>
-                    <b>Artists</b>
-                    {artistsResults.map(artist =>(
-                        <div key={artist.id}>
-                            <p>{artist.name}</p>
-                            <p className="searchTag">Artist</p>
-                        </div>
-                    ))}
-                    <b>Songs</b>
-                    {songResults.map(song =>(
-                        <div key={song.id}>
-                            <p>{song.title}</p>
-                            <p className="searchTag">Song</p>
-                        </div>
-                    ))}
+                    {artistsResults.length === 0 ? (
+                            <></>
+                    ) : 
+                        <>
+                        <b>Artists</b>
+                        {artistsResults.map(artist =>(
+                            <div key={artist.id} className="searchResult">
+                                <p>{artist.name}</p>
+                            </div>
+                        ))}
+                        </>
+                    }
+                    <>
+                        {songResults.length === 0  && songRelatedResults.length === 0 ?(
+                            <></>
+                        ) :
+                        <>
+                            <b>Songs</b>
+                            {songResults.map(song =>(
+                                <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
+                                    <p>{song.title}</p>
+                                    <p className="searchTag">{song.name}</p>
+                                </div>
+                            ))}
+                            {songRelatedResults.map(song =>(
+                                <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
+                                    <p>{song.title}</p>
+                                    <p className="searchTag">{song.name}</p>
+                                </div>
+                            ))}
+                        </>
+                        }
+                    </>
                     </>
                 }
             </div>

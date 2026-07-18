@@ -30,7 +30,14 @@ app.get('/api/artists/search', (req, res) => {
 // Tik searchintos dainos
 app.get('/api/songs/search', (req, res) => {
   const query = req.query.q
-  const searchedString = db.prepare('SELECT * FROM songs WHERE title LIKE ?').all('%' + query + '%')
+  const searchedString = db.prepare('SELECT s.*, a.* FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE title LIKE ?').all('%' + query + '%')
+  res.json(searchedString)
+})
+
+// Searchintu artistu dainos
+app.get('/api/artists/songs', (req, res) => {
+  const query = req.query.q
+  const searchedString = db.prepare('SELECT s.*, a.* FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE a.name LIKE ?').all('%' + query + '%')
   res.json(searchedString)
 })
 

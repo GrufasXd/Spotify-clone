@@ -24,7 +24,7 @@ function App() {
             <SpotifyLogo/>
             <div className="topCenter">
               <HomeButton/>
-              <SearchBar/>
+              <SearchBar onSongSelect={handleSongSelect}/>
             </div>
             <div className="topRight">
               <NewsButton/>
