@@ -37,8 +37,16 @@ app.get('/api/songs/search', (req, res) => {
 // Searchintu artistu dainos
 app.get('/api/artists/songs', (req, res) => {
   const query = req.query.q
-  const searchedString = db.prepare('SELECT s.*, a.* FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE a.name LIKE ?').all('%' + query + '%')
+  const searchedString = db.prepare('SELECT s.*, a.id AS artist_id, a.name FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE a.name LIKE ?').all('%' + query + '%')
   res.json(searchedString)
 })
+
+// Gauti artisto duomenis is backendo
+app.get('/api/artists/:id', (req, res) => {
+  const neededId = req.params.id
+  const artistData = db.prepare('SELECT * FROM artists WHERE id = ?').get(neededId)
+  res.json(artistData)
+})
+
 
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))

@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoIosBrowsers } from "react-icons/io";
+import { useNavigate } from "react-router-dom"
 
 
 function SearchBar({onSongSelect}){
+    let navigate = useNavigate()
     const [searchString, setSearchString] = useState("")
     const [artistsResults, setArtistsResults] = useState([])
     const [songResults, setSongResults] = useState([])
     const [songRelatedResults, setSongRelatedResults] = useState([])
+    const [dropdownOpen, setDropdownOpen] = useState(false)
 
     function handleSearch(event){
         setSearchString(event.target.value)
+        setDropdownOpen(true)
+    }
+
+    function handleArtistClick(artistId){
+        navigate(`/artist/${artistId}`)
+        setDropdownOpen(false)
     }
 
     useEffect(() => {
@@ -24,6 +33,8 @@ function SearchBar({onSongSelect}){
             fetch(`http://localhost:3001/api/artists/songs?q=${searchString}`)
             .then(res => res.json())
             .then(data => setSongRelatedResults(data))
+            console.log(songResults)
+            console.log(songRelatedResults)
         }
         else if (searchString == ""){
             setArtistsResults([])
@@ -39,7 +50,7 @@ function SearchBar({onSongSelect}){
             <p className="searchEnd">|</p>
             <IoIosBrowsers className="browseIcon"/>
         </div>
-        {searchString != "" ?  (
+        {searchString != "" && dropdownOpen ?  (
             <div className="searchResults">
                 {artistsResults.length === 0 && songResults.length === 0 ? (
                     <p>No results found</p>
@@ -51,7 +62,7 @@ function SearchBar({onSongSelect}){
                         <>
                         <b>Artists</b>
                         {artistsResults.map(artist =>(
-                            <div key={artist.id} className="searchResult">
+                            <div key={artist.id} className="searchResult" onClick={() => handleArtistClick(artist.id)}>
                                 <p>{artist.name}</p>
                             </div>
                         ))}

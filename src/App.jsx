@@ -1,5 +1,7 @@
 import { useState } from "react"
+import { Routes, Route } from "react-router-dom"
 
+import ArtistPage from "./ArtistPage"
 import SpotifyLogo from "./SpotifyLogo"
 import HomeButton from "./HomeButton"
 import SearchBar from "./SeachBar"
@@ -31,11 +33,22 @@ function App() {
               <ProfileIcon/>
             </div>
           </div>
-          <div className="contentArea">
-            <SidebarLeft/>
-            <MainContent onSongSelect={handleSongSelect}/>
-            <SidebarRight/>
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="contentArea">
+                <SidebarLeft/>
+                <MainContent onSongSelect={handleSongSelect}/>
+                <SidebarRight/>
+              </div>
+            }/>
+            <Route path="/artist/:id" element={
+              <div className="contentArea">
+                <SidebarLeft/>
+                <ArtistPage/>
+                <SidebarRight/>
+              </div>
+              }/>
+          </Routes>
           <div>
             <SongBottomLine currentSong={currentSong}/>
           </div>
