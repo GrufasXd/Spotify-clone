@@ -33,8 +33,6 @@ function SearchBar({onSongSelect}){
             fetch(`http://localhost:3001/api/artists/songs?q=${searchString}`)
             .then(res => res.json())
             .then(data => setSongRelatedResults(data))
-            console.log(songResults)
-            console.log(songRelatedResults)
         }
         else if (searchString == ""){
             setArtistsResults([])

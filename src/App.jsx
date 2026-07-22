@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
 import SpotifyLogo from "./SpotifyLogo"
@@ -14,6 +14,7 @@ import SongBottomLine from "./SongBottomLine"
 
 
 function App() {
+  let navigate = useNavigate()
   const [currentSong, setCurrentSong] = useState(null)
 
   function handleSongSelect(song){
@@ -25,7 +26,9 @@ function App() {
           <div className="mainTheme">
             <SpotifyLogo/>
             <div className="topCenter">
-              <HomeButton/>
+              <div className="homeButton" onClick={() => navigate(`/`)}>
+                <HomeButton/>
+              </div>
               <SearchBar onSongSelect={handleSongSelect}/>
             </div>
             <div className="topRight">
@@ -44,7 +47,7 @@ function App() {
             <Route path="/artist/:id" element={
               <div className="contentArea">
                 <SidebarLeft/>
-                <ArtistPage/>
+                <ArtistPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
               }/>

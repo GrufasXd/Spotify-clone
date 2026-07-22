@@ -48,5 +48,11 @@ app.get('/api/artists/:id', (req, res) => {
   res.json(artistData)
 })
 
+// Gauti artisto dainas pagal jo id
+app.get('/api/artists/:id/songs', (req, res) => {
+  const artistId = req.params.id
+  const artistSongs = db.prepare('SELECT * FROM songs WHERE artist_id = ?').all(artistId)
+  res.json(artistSongs)
+})
 
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))
