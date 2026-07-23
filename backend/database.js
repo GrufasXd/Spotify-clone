@@ -40,9 +40,11 @@ if (count.c === 0) {
   const yeat = artist.run('Yeat', 23000000).lastInsertRowid
   const shy = artist.run('Jessica Shy', 243237).lastInsertRowid
   const kanye = artist.run('Kanye West', 64000000).lastInsertRowid
-  const album = db.prepare(`INSERT INTO albums (title, artist_id) VALUES(?,?)`)
-  const adl = album.run('ADL', yeat).lastInsertRowid
-  const pablo = album.run('The Life of Pablo', kanye).lastInsertRowid
+  const album = db.prepare(`INSERT INTO albums (title, artist_id, cover_url) VALUES(?,?,?)`)
+  const adl = album.run('ADL', yeat, '/album_covers/adl.jfif').lastInsertRowid
+  const lifestyle = album.run('LIFESTYLE', yeat, '/album_covers/lifestyle.png').lastInsertRowid
+  const _2093 = album.run('2093', yeat, '/album_covers/2093.png').lastInsertRowid
+  const pablo = album.run('The Life of Pablo', kanye, '/album_covers/pablo.jfif').lastInsertRowid
   const song = db.prepare('INSERT INTO songs (title, artist_id, album_id, duration, file_url) VALUES (?, ?, ?, ?, ?)')
   song.run('Naked', yeat, adl, 95, '/songs/Naked.mp3')
   song.run('Heliman', yeat, adl, 192, '/songs/HeliMAn 4.mp3')

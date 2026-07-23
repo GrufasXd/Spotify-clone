@@ -7,6 +7,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
+app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
 
 // Visos dainos
 app.get('/api/songs', (req, res) => {
@@ -53,6 +54,13 @@ app.get('/api/artists/:id/songs', (req, res) => {
   const artistId = req.params.id
   const artistSongs = db.prepare('SELECT * FROM songs WHERE artist_id = ?').all(artistId)
   res.json(artistSongs)
+})
+
+// Gauti artisto albumus
+app.get('/api/artists/:id/albums', (req, res) => {
+  const artistId = req.params.id
+  const artistAlbums = db.prepare('SELECT * FROM albums WHERE artist_id = ?').all(artistId)
+  res.json(artistAlbums)
 })
 
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))

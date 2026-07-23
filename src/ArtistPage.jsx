@@ -7,6 +7,7 @@ function ArtistPage({onSongSelect}){
     const artistId = params.id
     const [artistData, setArtistData] = useState(null)
     const [artistSongs, setArtistSongs] = useState([])
+    const [artistAlbums, setArtistAlbums] = useState([])
 
     function durationConverter(duration){
         const mins = Math.floor(duration / 60)
@@ -20,6 +21,9 @@ function ArtistPage({onSongSelect}){
             fetch(`http://localhost:3001/api/artists/${artistId}/songs`)
             .then(res => res.json())
             .then(data => setArtistSongs(data))
+            fetch(`http://localhost:3001/api/artists/${artistId}/albums`)
+            .then(res => res.json())
+            .then(data => setArtistAlbums(data))
     }, [artistId])
     
     return(
@@ -38,6 +42,15 @@ function ArtistPage({onSongSelect}){
                         <div className="artistSong" key={song.id} onClick={() => onSongSelect(song)}>
                             <p>{song.title}</p>
                             <p className="songDuration">{durationConverter(song.duration)}</p>
+                        </div>
+                    ))}
+                </div>
+                <b className="albumTag">Albums</b>
+                <div className="artistAlbums">
+                    {artistAlbums.map(album => (
+                        <div className="artistAlbum" key={album.id}>
+                            <img className="albumCover" src={`http://localhost:3001${album.cover_url}`}/>
+                            <p>{album.title}</p>
                         </div>
                     ))}
                 </div>
