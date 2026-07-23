@@ -413,7 +413,7 @@ body {
   transition: 0.5s;
 }
 
-.artistName{
+.artistName, .albumTitle{
   font-size: 2.5em;
   font-weight: bold;
 }
@@ -432,6 +432,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+  transition: 0.5s;
 }
 
 .songDuration{

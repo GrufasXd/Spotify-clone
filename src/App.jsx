@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
+import AlbumPage from "./AlbumPage"
 import SpotifyLogo from "./SpotifyLogo"
 import HomeButton from "./HomeButton"
 import SearchBar from "./SeachBar"
@@ -48,6 +49,13 @@ function App() {
               <div className="contentArea">
                 <SidebarLeft/>
                 <ArtistPage onSongSelect={handleSongSelect}/>
+                <SidebarRight/>
+              </div>
+              }/>
+              <Route path="/album/:id" element={
+              <div className="contentArea">
+                <SidebarLeft/>
+                <AlbumPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
               }/>

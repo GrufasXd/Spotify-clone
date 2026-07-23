@@ -63,4 +63,18 @@ app.get('/api/artists/:id/albums', (req, res) => {
   res.json(artistAlbums)
 })
 
+// Gauti albuma pagal id
+app.get('/api/albums/:id', (req, res) => {
+  const albumId = req.params.id
+  const albumData = db.prepare('SELECT * FROM albums WHERE id = ?').get(albumId)
+  res.json(albumData)
+})
+
+// Gauti albumo dainas
+app.get('/api/albums/:id/songs', (req, res) => {
+  const albumId = req.params.id
+  const albumSongs = db.prepare('SELECT * FROM songs WHERE album_id = ?').all(albumId)
+  res.json(albumSongs)
+})
+
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))
