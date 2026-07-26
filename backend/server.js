@@ -66,7 +66,7 @@ app.get('/api/artists/:id/albums', (req, res) => {
 // Gauti albuma pagal id
 app.get('/api/albums/:id', (req, res) => {
   const albumId = req.params.id
-  const albumData = db.prepare('SELECT * FROM albums WHERE id = ?').get(albumId)
+  const albumData = db.prepare('SELECT a.*, art.name AS artist_name FROM albums AS a JOIN artists AS art ON art.id = a.artist_id WHERE a.id = ?').get(albumId)
   res.json(albumData)
 })
 

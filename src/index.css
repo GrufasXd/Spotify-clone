@@ -455,7 +455,26 @@ body {
   transition: 0.5s;
 }
 
-.albumCover{
+.albumCover, .albumCoverInPage{
   width: 160px;
   height: 160px;
+  border-radius: 5px;
+}
+
+.albumPageTop{
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  gap: 0px 30px;
+}
+
+.albumInfo{
+  display: flex;
+  flex-direction: column;
+}
+
+.albumCoverInPage{
+  margin-top: 30px;
+  width: 180px;
+  height: 180px;
 }
