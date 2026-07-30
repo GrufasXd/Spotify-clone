@@ -10,6 +10,7 @@ function SearchBar({onSongSelect}){
     const [artistsResults, setArtistsResults] = useState([])
     const [songResults, setSongResults] = useState([])
     const [songRelatedResults, setSongRelatedResults] = useState([])
+    const [albumResults, setAlbumResults] = useState([])
     const [dropdownOpen, setDropdownOpen] = useState(false)
 
     function handleSearch(event){
@@ -17,8 +18,8 @@ function SearchBar({onSongSelect}){
         setDropdownOpen(true)
     }
 
-    function handleArtistClick(artistId){
-        navigate(`/artist/${artistId}`)
+    function handleNavigationClick(navigationSpot, artistId){
+        navigate(`/${navigationSpot}/${artistId}`)
         setDropdownOpen(false)
     }
 
@@ -33,12 +34,18 @@ function SearchBar({onSongSelect}){
             fetch(`http://localhost:3001/api/artists/songs?q=${searchString}`)
             .then(res => res.json())
             .then(data => setSongRelatedResults(data))
+            fetch(`http://localhost:3001/api/albums/search?q=${searchString}`)
+            .then(res => res.json())
+            .then(data => setAlbumResults(data))
+            console.log(albumResults)
         }
         else if (searchString == ""){
             setArtistsResults([])
             setSongResults([])
         }
     },[searchString])
+
+    const filteredRelatedResults = songRelatedResults.filter(relatedSong => !songResults.find(song => song.id === relatedSong.id ))
     
     return(
     <div className="searchContainer">
@@ -50,23 +57,22 @@ function SearchBar({onSongSelect}){
         </div>
         {searchString != "" && dropdownOpen ?  (
             <div className="searchResults">
-                {artistsResults.length === 0 && songResults.length === 0 ? (
+                {artistsResults.length === 0 && songResults.length === 0 && albumResults.length === 0 && songRelatedResults.length === 0 ? (
                     <p>No results found</p>
                 ) :
                     <>
-                    {artistsResults.length === 0 ? (
-                            <></>
-                    ) : 
-                        <>
-                        <b>Artists</b>
-                        {artistsResults.map(artist =>(
-                            <div key={artist.id} className="searchResult" onClick={() => handleArtistClick(artist.id)}>
-                                <p>{artist.name}</p>
-                            </div>
-                        ))}
-                        </>
-                    }
-                    <>
+                        {artistsResults.length === 0 ? (
+                                <></>
+                        ) : 
+                            <>
+                            <b>Artists</b>
+                            {artistsResults.map(artist =>(
+                                <div key={artist.id} className="searchResult" onClick={() => handleNavigationClick("artist", artist.id)}>
+                                    <p>{artist.name}</p>
+                                </div>
+                            ))}
+                            </>
+                        }
                         {songResults.length === 0  && songRelatedResults.length === 0 ?(
                             <></>
                         ) :
@@ -78,7 +84,7 @@ function SearchBar({onSongSelect}){
                                     <p className="searchTag">{song.name}</p>
                                 </div>
                             ))}
-                            {songRelatedResults.map(song =>(
+                            {filteredRelatedResults.map(song =>(
                                 <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
                                     <p>{song.title}</p>
                                     <p className="searchTag">{song.name}</p>
@@ -86,7 +92,19 @@ function SearchBar({onSongSelect}){
                             ))}
                         </>
                         }
-                    </>
+                        {albumResults.length == 0 ? (
+                            <></>
+                        ):
+                        <>
+                            <p>Albums</p>
+                            {albumResults.map(album => (
+                                <div className="searchResult" key={album.id} onClick={() => handleNavigationClick("album", album.id)}>
+                                    <p>{album.title}</p>
+                                    <p className="searchTag">{album.artist_name}</p>
+                                </div>
+                            ))}
+                        </>
+                        }
                     </>
                 }
             </div>

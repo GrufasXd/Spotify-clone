@@ -478,3 +478,12 @@ body {
   width: 180px;
   height: 180px;
 }
+
+.albumArtistName{
+  font-weight: bold;
+}
+
+.albumArtistName:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}

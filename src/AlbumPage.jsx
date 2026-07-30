@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 
 
 
 function AlbumPage({onSongSelect}){
+    const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
     const [albumData, setAlbumData] = useState(null)
@@ -55,7 +56,7 @@ function AlbumPage({onSongSelect}){
                     <img className="albumCoverInPage" src={`http://localhost:3001${albumData.cover_url}`}/>
                     <div className="albumInfo">
                         <p className="albumTitle">{albumData.title}</p>
-                        <p>{albumData.artist_name}</p>
+                        <p className="albumArtistName" onClick={() => navigate(`/artist/${albumData.artist_id}`)}>{albumData.artist_name}</p>
                         <p>{albumSongs.length} songs, {durationToText(albumDuration)}</p>
                     </div>
                 </div>
