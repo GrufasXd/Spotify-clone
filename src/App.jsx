@@ -12,6 +12,7 @@ import SidebarLeft from "./SidebarLeft"
 import MainContent from "./MainContent"
 import SidebarRight from "./SidebarRight"
 import SongBottomLine from "./SongBottomLine"
+import PlaylistPage from "./PlaylistPage"
 
 
 function App() {
@@ -51,14 +52,21 @@ function App() {
                 <ArtistPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
-              }/>
-              <Route path="/album/:id" element={
+            }/>
+            <Route path="/album/:id" element={
               <div className="contentArea">
                 <SidebarLeft/>
                 <AlbumPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
-              }/>
+            }/>
+            <Route path="/playlist/:id" element={
+              <div className="contentArea">
+                <SidebarLeft/>
+                <PlaylistPage onSongSelect={handleSongSelect}/>
+                <SidebarRight/>
+              </div>
+            }/>
           </Routes>
           <div>
             <SongBottomLine currentSong={currentSong}/>

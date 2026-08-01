@@ -94,6 +94,7 @@ app.get('/api/albums/:id/songs', (req, res) => {
   res.json(albumSongs)
 })
 
+// Gauti dainas kurios yra playliste
 app.get('/api/playlists/:id/songs', (req,res) => {
   const playlist_id = req.params.id
 
@@ -106,14 +107,16 @@ app.get('/api/playlists/:id/songs', (req,res) => {
 // Naujo playlisto sukurimas
 app.post('/api/playlists', (req,res) => {
   const name = req.body.name
+  const description = req.body.description
 
   const playlist = db.prepare(
-    'INSERT INTO playlists (name) VALUES (?)'
-  ).run(name)
+    'INSERT INTO playlists (name, description) VALUES (?,?)'
+  ).run(name, description)
 
   res.json({
     id: playlist.lastInsertRowid,
-    name: name
+    name: name,
+    description: description
   })
 })
 
@@ -137,6 +140,12 @@ app.post('/api/playlists/:id/songs', (req,res) => {
 //Istrinti playlista
 app.delete('/api/playlists/:id', (req,res) => {
   const playlist_id = req.params.id
+
+  db.prepare(
+    'DELETE FROM playlist_songs WHERE playlist_id = ?'
+  ).run(
+    playlist_id
+  )
 
   db.prepare(
     'DELETE FROM playlists WHERE id = ?'

@@ -184,6 +184,14 @@ body {
 .playlistItem{
   display: flex;
   align-items: center;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+.playlistItem:hover{
+  background-color: rgb(74, 73, 73);
+  cursor: pointer;
+  transition: 0.5s;
 }
 
 .playlistItemText{
