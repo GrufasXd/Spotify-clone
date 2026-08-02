@@ -2,6 +2,7 @@
   --topbarHeight: 72px;
   --sidebarWidth: 260px;
   --bottomLineHeight: 72px;
+  --mainThemeBackground: rgb(37, 37, 37);
 }
 
 * {
@@ -163,6 +164,13 @@ body {
   background-color: rgba(56, 55, 55, 0.655);
   border-radius: 50px;
   border: none;
+  transition: 0.5s;
+}
+
+.plusIcon:hover{
+  cursor: pointer;
+  transition: 0.5s;
+  background-color: rgb(74, 73, 73);
 }
 
 .playlists{
@@ -494,4 +502,73 @@ body {
 .albumArtistName:hover{
   text-decoration: underline;
   cursor: pointer;
+}
+
+.overlay{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.playlistCreationWindow{
+  background-color: var(--mainThemeBackground);
+  position: fixed;
+  inset: 0px;
+  width: 30rem;
+  height: 25rem;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  padding: 20px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.playlistCreationTitle{
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.playlistDescriptionInput, .playlistInput{
+  background-color: hsl(0, 1%, 33%, 0.6);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.playlistInput{
+  height: 2rem;
+}
+
+.playlistButtonRow{
+  display: flex;
+  justify-content: space-between;
+}
+
+.createButton{
+  align-self: flex-end;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+}
+
+.cancelButton{
+  align-self: flex-start;
+  background-color: black;
+  color: white;
+}
+
+.createButton, .cancelButton{
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1.3em;
+  padding: 10px;
 }
