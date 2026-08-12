@@ -37,10 +37,10 @@ body {
   flex-direction: column;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
   overflow-y: auto;
-  overflow-x: hidden;
   border-radius: 5px;
   padding: 0 20px 20px;
 }
+
 
 .spotifyLogo{
   height: 60px;
@@ -441,6 +441,7 @@ body {
 }
 
 .artistSong{
+  position: relative;
   margin-bottom: 20px;
   padding-left: 20px;
   height: 40px;
@@ -571,4 +572,28 @@ body {
   cursor: pointer;
   font-size: 1.3em;
   padding: 10px;
+}
+
+.songOptions{
+  padding-right: 10px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 20px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.songOptionsList{
+  position: absolute;
+  left: 95%;
+  background-color: rgb(14, 14, 14);
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 12px;
+  z-index: 1;
+  cursor: pointer;
+  white-space: nowrap;
 }
