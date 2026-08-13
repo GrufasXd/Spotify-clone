@@ -13,6 +13,7 @@ body {
   margin: 0;
   background-color: black;
   overflow: hidden;
+  font-family: sans-serif;
 }
 
 #root {
@@ -37,10 +38,10 @@ body {
   flex-direction: column;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
   overflow-y: auto;
+  overflow-x: auto;
   border-radius: 5px;
   padding: 0 20px 20px;
 }
-
 
 .spotifyLogo{
   height: 60px;
@@ -133,7 +134,6 @@ body {
   flex: 0 0 var(--sidebarWidth);
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
   color: white;
-  font-family: sans-serif;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
   justify-content: flex-start;
@@ -145,7 +145,6 @@ body {
   color: white;
   flex: 0 0 var(--sidebarWidth);
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
-  font-family: sans-serif;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
   align-items: center;
@@ -220,7 +219,6 @@ body {
   display: flex;
   align-items: flex-start;
   color: white;
-  font-family: sans-serif;
   gap: 0.4em;
   padding: 8px;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
@@ -346,7 +344,6 @@ body {
   gap: 8px;
   align-items: center;
   justify-content: center;
-  font-family: sans-serif;
 }
 
 .songBottomLineProgress{
@@ -374,7 +371,6 @@ body {
   justify-content: flex-start;
   margin-left: 20px;
   color: white;
-  font-family: sans-serif;
 }
 
 .songName b{
@@ -394,7 +390,6 @@ body {
 .searchResults{
   background-color: rgba(56, 55, 55, 1);
   color: white;
-  font-family: sans-serif;
   position: absolute;
   top: 100%;
   margin-top: 3px;
@@ -541,7 +536,6 @@ body {
   border-radius: 10px;
   width: 100%;
   box-sizing: border-box;
-  font-family: sans-serif;
 }
 
 .playlistInput{
@@ -588,12 +582,34 @@ body {
 
 .songOptionsList{
   position: absolute;
-  left: 95%;
-  background-color: rgb(14, 14, 14);
+  right: 0;
+  top: -100%;
+  background-color: rgb(25, 25, 25);
   border-radius: 10px;
   padding: 5px;
   font-size: 12px;
   z-index: 1;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.playlistsWindow{
+  position: absolute;
+  background-color: rgb(25, 25, 25);
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 12px;
+  z-index: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  right: 13%;
+  top: -100%;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.playlistInWindow{
+  padding: 10px;
+  text-align: left;
 }

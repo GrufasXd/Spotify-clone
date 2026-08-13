@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
+import SongBlock from "./SongBlock"
+
 
 function ArtistPage({onSongSelect}){
     const navigate = useNavigate()
@@ -9,12 +11,8 @@ function ArtistPage({onSongSelect}){
     const [artistData, setArtistData] = useState(null)
     const [artistSongs, setArtistSongs] = useState([])
     const [artistAlbums, setArtistAlbums] = useState([])
+    const [playlists, setPlaylists] = useState([])
 
-    function durationConverter(duration){
-        const mins = Math.floor(duration / 60)
-        const secs = Math.floor(duration % 60)
-        return (`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`)
-    }
     useEffect(() => {
             fetch(`http://localhost:3001/api/artists/${artistId}`)
             .then(res => res.json())
@@ -25,6 +23,9 @@ function ArtistPage({onSongSelect}){
             fetch(`http://localhost:3001/api/artists/${artistId}/albums`)
             .then(res => res.json())
             .then(data => setArtistAlbums(data))
+            fetch(`http://localhost:3001/api/playlists`)
+            .then(res => res.json())
+            .then(data => setPlaylists(data))
     }, [artistId])
     
     return(
@@ -40,10 +41,7 @@ function ArtistPage({onSongSelect}){
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map(song => (
-                        <div className="artistSong" key={song.id} onClick={() => onSongSelect(song)}>
-                            <p>{song.title}</p>
-                            <p className="songDuration">{durationConverter(song.duration)}</p>
-                        </div>
+                        <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists}/>
                     ))}
                 </div>
                 <b className="albumTag">Albums</b>

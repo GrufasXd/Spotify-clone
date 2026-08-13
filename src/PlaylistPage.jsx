@@ -2,24 +2,20 @@ import { useEffect, useState } from "react"
 import { useParams} from "react-router-dom"
 import { IoMusicalNotesOutline } from "react-icons/io5";
 
+import SongBlock from "./SongBlock"
+
 function PlaylistPage({onSongSelect}){
     let params = useParams()
     const playlistId = params.id
     let playlistDuration = 0
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
-
+    const [playlists, setPlaylists] = useState([])
     const [playlistData, setPlaylistData] = useState([])
     const [playlistSongs, setPlaylistSongs] = useState([])
 
     playlistSongs.forEach(song => {
         playlistDuration += song.duration
     });
-
-    function durationConverter(duration){
-        const mins = Math.floor(duration / 60)
-        const secs = Math.floor(duration % 60)
-        return (`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`)
-    }
 
     function durationToText(duration){
         const hours = Math.floor(duration / 3600)
@@ -35,11 +31,6 @@ function PlaylistPage({onSongSelect}){
         }
     }
 
-    function openSongOptions(e, songId){
-        e.stopPropagation()
-        setSongOptionsWindow(songId)
-    }
-
     useEffect(() => {
         fetch(`http://localhost:3001/api/playlists/${playlistId}`)
         .then(res => res.json())
@@ -47,6 +38,9 @@ function PlaylistPage({onSongSelect}){
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`)
         .then(res => res.json())
         .then(data => setPlaylistSongs(data))
+        fetch(`http://localhost:3001/api/playlists`)
+        .then(res => res.json())
+        .then(data => setPlaylists(data))
     }, [playlistId])
 
     return(
@@ -61,18 +55,7 @@ function PlaylistPage({onSongSelect}){
                     </div>
                 </div>
                 {playlistSongs.map(song => (
-                    <div className="artistSong" key={song.id} onClick={() => onSongSelect(song)}>
-                        <p>{song.title}</p>
-                        <p className="songDuration">{durationConverter(song.duration)}</p>
-                        <button className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
-                        {songOptionsWindow === song.id ? (
-                            <div className="songOptionsList">
-                                <p className="addSongToPlaylistButton">Add to playlist</p>
-                            </div>
-                        ) : 
-                        <></>
-                        }
-                    </div>
+                    <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists}/>
                 ))}
             </div>
         </>
