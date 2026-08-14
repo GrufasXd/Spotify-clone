@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoIosBrowsers } from "react-icons/io";
 import { useNavigate } from "react-router-dom"
@@ -12,6 +12,7 @@ function SearchBar({onSongSelect}){
     const [songRelatedResults, setSongRelatedResults] = useState([])
     const [albumResults, setAlbumResults] = useState([])
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const searchContainerRef = useRef(null)
 
     function handleSearch(event){
         setSearchString(event.target.value)
@@ -45,10 +46,24 @@ function SearchBar({onSongSelect}){
         }
     },[searchString])
 
+    useEffect(() => {
+        function handleClickOutside(e){
+            if(!searchContainerRef.current.contains(e.target)){
+                setDropdownOpen(false)
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside)
+
+        return(() => {
+            document.removeEventListener('click', handleClickOutside)
+        })
+    }, [])
+
     const filteredRelatedResults = songRelatedResults.filter(relatedSong => !songResults.find(song => song.id === relatedSong.id ))
     
     return(
-    <div className="searchContainer">
+    <div className="searchContainer" ref={searchContainerRef}>
         <div className="searchWrapper">
             <CiSearch className="searchIcon"/>
             <input type="text" value={searchString} onChange={handleSearch} className="searchBar" placeholder="What do you want to play?"/>
@@ -65,7 +80,7 @@ function SearchBar({onSongSelect}){
                                 <></>
                         ) : 
                             <>
-                            <b>Artists</b>
+                            <b className="searchSection">Artists</b>
                             {artistsResults.map(artist =>(
                                 <div key={artist.id} className="searchResult" onClick={() => handleNavigationClick("artist", artist.id)}>
                                     <p>{artist.name}</p>
@@ -77,7 +92,7 @@ function SearchBar({onSongSelect}){
                             <></>
                         ) :
                         <>
-                            <b>Songs</b>
+                            <b className="searchSection">Songs</b>
                             {songResults.map(song =>(
                                 <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
                                     <p>{song.title}</p>
@@ -96,7 +111,7 @@ function SearchBar({onSongSelect}){
                             <></>
                         ):
                         <>
-                            <p>Albums</p>
+                            <p className="searchSection">Albums</p>
                             {albumResults.map(album => (
                                 <div className="searchResult" key={album.id} onClick={() => handleNavigationClick("album", album.id)}>
                                     <p>{album.title}</p>

@@ -8,7 +8,6 @@ function PlaylistPage({onSongSelect}){
     let params = useParams()
     const playlistId = params.id
     let playlistDuration = 0
-    const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlists, setPlaylists] = useState([])
     const [playlistData, setPlaylistData] = useState([])
     const [playlistSongs, setPlaylistSongs] = useState([])
@@ -43,6 +42,17 @@ function PlaylistPage({onSongSelect}){
         .then(data => setPlaylists(data))
     }, [playlistId])
 
+    function removeSongFromPlaylist(e, songId){
+        e.stopPropagation()
+        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${songId}`, {
+            method: "DELETE",
+        })
+        .then(res => res.json())
+        .then(() => {
+            setPlaylistSongs(prev => prev.filter(song => song.id !== songId))
+        })
+    }
+
     return(
         <>
             <div className="mainContent">
@@ -55,7 +65,7 @@ function PlaylistPage({onSongSelect}){
                     </div>
                 </div>
                 {playlistSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists}/>
+                    <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
                 ))}
             </div>
         </>

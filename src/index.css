@@ -412,10 +412,15 @@ body {
 }
 
 .searchResult{
-  padding-left: 10px;
+  padding: 0.01em;
   transition: 0.5s;
   border-radius: 10px;
-  padding: auto;
+  margin-bottom: 5px;
+}
+
+.searchSection{
+  display: block;
+  margin-bottom: 5px;
 }
 
 .searchResult:hover, .artistAlbum:hover{
@@ -602,14 +607,28 @@ body {
   z-index: 1;
   cursor: pointer;
   white-space: nowrap;
+  text-wrap: auto;
   text-align: center;
   right: 13%;
   top: -100%;
   overflow-y: auto;
   max-height: 200px;
+  max-width: 200px;
 }
 
 .playlistInWindow{
   padding: 10px;
   text-align: left;
+}
+
+.removeSongFromPlaylistButton, .addSongToPlaylistButton, .playlistInWindow{
+  padding: 5px;
+  gap: 10px;
+  transition: 0.5s;
+}
+
+.removeSongFromPlaylistButton:hover, .addSongToPlaylistButton:hover, .playlistInWindow:hover{
+  background-color: rgb(56, 56, 56);
+  transition: 0.5s;
+  border-radius: 10px;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 
-function SongBlock({song,onSongSelect,playlists}){
+function SongBlock({song,onSongSelect,playlists,isPlaylistPage, removeSongFromPlaylist}){
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
 
@@ -58,8 +58,17 @@ function SongBlock({song,onSongSelect,playlists}){
                 <button className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (
                 <>
-                    <div className="songOptionsList" onClick={(e) => openPlaylistOptions(e, song.id)}>
-                        <p className="addSongToPlaylistButton">Add to playlist</p>
+                    <div className="songOptionsList">
+                        <div className="addSongToPlaylistButton" onClick={(e) => openPlaylistOptions(e, song.id)}>
+                            <p>Add to playlist</p>
+                        </div>
+                        {isPlaylistPage === true ? (
+                            <div className="removeSongFromPlaylistButton" onClick={(e) => removeSongFromPlaylist(e, song.id)}>
+                                <p>Remove from playlist</p>
+                            </div>
+                        ):
+                        <></>
+                        }
                     </div>
                     {playlistsWindow === song.id ? (
                         <div className="playlistsWindow" onClick={(e) => e.stopPropagation()}>
