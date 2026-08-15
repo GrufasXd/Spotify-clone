@@ -25,14 +25,15 @@ function App() {
   }
 
   function removePlaylistFromSidebar(playlistId){
-        setPlaylistData(prev => prev.filter(playlist => playlist.id !== playlistId))
-    }
+    console.log("REMOVING:", playlistId)
+    setPlaylistData(prev => prev.filter(playlist => playlist.id != playlistId))
+  }
 
-    useEffect(() => {
-        fetch(`http://localhost:3001/api/playlists`)
-        .then(res => res.json())
-        .then(data => setPlaylistData(data))
-    }, [])
+  useEffect(() => {
+      fetch(`http://localhost:3001/api/playlists`)
+      .then(res => res.json())
+      .then(data => setPlaylistData(data))
+  }, [])
 
   return(<>
           <div className="mainTheme">

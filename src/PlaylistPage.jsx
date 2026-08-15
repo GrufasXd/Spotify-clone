@@ -74,7 +74,6 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
         fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
             method: "DELETE",
         })
-        .then(res => res.json())
         .then(() => removePlaylistFromSidebar(playlistId))
         .then(() => navigate(`/`))
     }

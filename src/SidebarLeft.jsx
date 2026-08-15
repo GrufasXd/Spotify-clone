@@ -5,8 +5,8 @@ import PlaylistItem from "./PlaylistItem";
 function SidebarLeft({playlistData, setPlaylistData}){
     let navigate = useNavigate()
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
-    const [playlistTitle, setPlaylistTitle] = useState(null)
-    const [playlistDescription, setPlaylistDescription] = useState(null)
+    const [playlistTitle, setPlaylistTitle] = useState("")
+    const [playlistDescription, setPlaylistDescription] = useState("")
 
     function playlistCreation(e, playlistTitle, playlistDescription){
         e.preventDefault()
@@ -24,8 +24,8 @@ function SidebarLeft({playlistData, setPlaylistData}){
             .then(res => res.json())
             .then(data => {
                 setPlaylistData(prev => [...prev, data]);
-                setPlaylistTitle(null);
-                setPlaylistDescription(null);
+                setPlaylistTitle("");
+                setPlaylistDescription("");
                 setplaylistCreationWindow(false);
             })
         }
