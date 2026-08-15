@@ -391,6 +391,7 @@ body {
   background-color: rgba(56, 55, 55, 1);
   color: white;
   position: absolute;
+  z-index: 1;
   top: 100%;
   margin-top: 3px;
   width: 467px;
@@ -480,14 +481,35 @@ body {
 
 .albumPageTop{
   display: flex;
+  position: relative;
   flex-direction: row;
   padding: 20px;
   gap: 0px 30px;
 }
 
 .albumInfo{
-  display: flex;
   flex-direction: column;
+}
+
+.albumOptions{
+  margin-top: 45px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
+  transition: 0.5s;
+}
+
+.albumOptions:hover{
+  transition: 0.5s;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.playlistOptionsWrapper {
+  margin-left: auto;
+  position: relative;
 }
 
 .albumCoverInPage{
@@ -585,7 +607,7 @@ body {
   cursor: pointer;
 }
 
-.songOptionsList{
+.songOptionsList, .playlistOptionsList{
   position: absolute;
   right: 0;
   top: -100%;
@@ -596,6 +618,11 @@ body {
   z-index: 1;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.playlistOptionsList{
+  top: 20%;
+  right: 100%;
 }
 
 .playlistsWindow{
@@ -621,14 +648,14 @@ body {
   text-align: left;
 }
 
-.removeSongFromPlaylistButton, .addSongToPlaylistButton, .playlistInWindow{
+.removeSongFromPlaylistButton, .addSongToPlaylistButton, .playlistInWindow, .deletePlaylist, .editPlaylist{
   padding: 5px;
   gap: 10px;
   transition: 0.5s;
+  border-radius: 10px;
 }
 
-.removeSongFromPlaylistButton:hover, .addSongToPlaylistButton:hover, .playlistInWindow:hover{
+.removeSongFromPlaylistButton:hover, .addSongToPlaylistButton:hover, .playlistInWindow:hover, .deletePlaylist:hover, .editPlaylist:hover{
   background-color: rgb(56, 56, 56);
   transition: 0.5s;
-  border-radius: 10px;
 }

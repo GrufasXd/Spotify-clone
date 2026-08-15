@@ -2,18 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import PlaylistItem from "./PlaylistItem";
 
-function SidebarLeft(){
+function SidebarLeft({playlistData, setPlaylistData}){
     let navigate = useNavigate()
-    const [playlistData, setPlaylistData] = useState([])
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
     const [playlistTitle, setPlaylistTitle] = useState(null)
     const [playlistDescription, setPlaylistDescription] = useState(null)
-
-    useEffect(() => {
-        fetch(`http://localhost:3001/api/playlists`)
-        .then(res => res.json())
-        .then(data => setPlaylistData(data))
-    }, [])
 
     function playlistCreation(e, playlistTitle, playlistDescription){
         e.preventDefault()

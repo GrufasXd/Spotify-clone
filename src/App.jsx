@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
@@ -18,11 +18,21 @@ import PlaylistPage from "./PlaylistPage"
 function App() {
   let navigate = useNavigate()
   const [currentSong, setCurrentSong] = useState(null)
+  const [playlistData, setPlaylistData] = useState([])
 
   function handleSongSelect(song){
     setCurrentSong(song)
   }
 
+  function removePlaylistFromSidebar(playlistId){
+        setPlaylistData(prev => prev.filter(playlist => playlist.id !== playlistId))
+    }
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/playlists`)
+        .then(res => res.json())
+        .then(data => setPlaylistData(data))
+    }, [])
 
   return(<>
           <div className="mainTheme">
@@ -41,29 +51,29 @@ function App() {
           <Routes>
             <Route path="/" element={
               <div className="contentArea">
-                <SidebarLeft/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <MainContent onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
             }/>
             <Route path="/artist/:id" element={
               <div className="contentArea">
-                <SidebarLeft/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <ArtistPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
             }/>
             <Route path="/album/:id" element={
               <div className="contentArea">
-                <SidebarLeft/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <AlbumPage onSongSelect={handleSongSelect}/>
                 <SidebarRight/>
               </div>
             }/>
             <Route path="/playlist/:id" element={
               <div className="contentArea">
-                <SidebarLeft/>
-                <PlaylistPage onSongSelect={handleSongSelect}/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
+                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar}/>
                 <SidebarRight/>
               </div>
             }/>

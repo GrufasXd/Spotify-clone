@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react"
-import { useParams} from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { useParams, useNavigate} from "react-router-dom"
 import { IoMusicalNotesOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 
-function PlaylistPage({onSongSelect}){
+function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
     let params = useParams()
     const playlistId = params.id
+    let navigate = useNavigate()
     let playlistDuration = 0
     const [playlists, setPlaylists] = useState([])
     const [playlistData, setPlaylistData] = useState([])
     const [playlistSongs, setPlaylistSongs] = useState([])
+    const [openPlaylistOptions, setOpenPlaylistOptions] = useState(false)
+    const playlistRef = useRef(null)
 
     playlistSongs.forEach(song => {
         playlistDuration += song.duration
@@ -42,6 +45,20 @@ function PlaylistPage({onSongSelect}){
         .then(data => setPlaylists(data))
     }, [playlistId])
 
+    useEffect(() => {
+        function handleClickOutside(e){
+            if(!playlistRef.current.contains(e.target)){
+                setOpenPlaylistOptions(false)
+            }
+        }
+
+        document.addEventListener('click', handleClickOutside)
+
+        return(() => {
+            document.removeEventListener('click', handleClickOutside)
+        })
+    }, [])
+
     function removeSongFromPlaylist(e, songId){
         e.stopPropagation()
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${songId}`, {
@@ -53,6 +70,15 @@ function PlaylistPage({onSongSelect}){
         })
     }
 
+    function deletePlaylist(){
+        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+            method: "DELETE",
+        })
+        .then(res => res.json())
+        .then(() => removePlaylistFromSidebar(playlistId))
+        .then(() => navigate(`/`))
+    }
+
     return(
         <>
             <div className="mainContent">
@@ -62,6 +88,17 @@ function PlaylistPage({onSongSelect}){
                         <p className="albumTitle">{playlistData.name}</p>
                         <p>{playlistData.description}</p>
                         <p>{playlistSongs.length} songs, {durationToText(playlistDuration)}</p>
+                    </div>
+                    <div className="playlistOptionsWrapper" ref={playlistRef}>
+                        <button className="albumOptions" onClick={() => setOpenPlaylistOptions(true)}>...</button>
+                        {openPlaylistOptions === true ? (
+                            <div className="playlistOptionsList">
+                                <p className="deletePlaylist" onClick={() => deletePlaylist()}>Delete playlist</p>
+                                <p className="editPlaylist">Edit playlist details</p>
+                            </div>
+                        ) :
+                        <></>
+                        }
                     </div>
                 </div>
                 {playlistSongs.map(song => (
