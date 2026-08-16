@@ -4,7 +4,7 @@ import { IoMusicalNotesOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 
-function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
+function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -13,7 +13,10 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
     const [playlistData, setPlaylistData] = useState([])
     const [playlistSongs, setPlaylistSongs] = useState([])
     const [openPlaylistOptions, setOpenPlaylistOptions] = useState(false)
+    const [playlistEditWindow, setPlaylistEditWindow] = useState(false)
     const playlistRef = useRef(null)
+    const [playlistTitle, setPlaylistTitle] = useState("")
+    const [playlistDescription, setPlaylistDescription] = useState("")
 
     playlistSongs.forEach(song => {
         playlistDuration += song.duration
@@ -78,8 +81,55 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
         .then(() => navigate(`/`))
     }
 
+    function updatePlaylist(e, playlistTitle, playlistDescription){
+        e.preventDefault()
+
+        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: playlistTitle,
+                description: playlistDescription
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const updatedPlaylist = {
+                ...playlistData,
+                name: playlistTitle,
+                description: playlistDescription
+            }
+            setPlaylistData(updatedPlaylist)
+            updatePlaylistInSidebar(updatedPlaylist)
+            setPlaylistEditWindow(false)
+        })
+    }
+
     return(
         <>
+            {playlistEditWindow == false ? (
+                <></>
+            ):
+            <div className="overlay">
+                <div className="playlistCreationWindow">
+                    <p className="playlistCreationTitle">Edit your playlist</p>
+                    <form onSubmit={(e) => updatePlaylist(e, playlistTitle, playlistDescription)}>
+                        <label htmlFor="playlistTitle">Playlist title:</label><br/><br/>
+                        <input className="playlistInput" type="text" name="playlistTitle" value={playlistTitle} onChange={(e) => setPlaylistTitle(e.target.value)}/><br/><br/>
+                        <label htmlFor="playlistDescriptionInput">Playlist description:</label><br/><br/>
+                        <textarea className="playlistDescriptionInput" name="playlistDescriptionInput" value={playlistDescription} onChange={(e) => setPlaylistDescription(e.target.value)} cols={"15"} rows={"5"}/><br/><br/>
+                        <div className="playlistButtonRow">
+                            <button type="button" onClick={() => {
+                                setPlaylistEditWindow(false);
+                            }} className="cancelButton">Cancel</button>
+                            <button type="submit" className="createButton">Update playlist</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            }
             <div className="mainContent">
                 <div className="albumPageTop">
                     <IoMusicalNotesOutline className="albumCoverInPage"/>
@@ -93,7 +143,11 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar}){
                         {openPlaylistOptions === true ? (
                             <div className="playlistOptionsList">
                                 <p className="deletePlaylist" onClick={() => deletePlaylist()}>Delete playlist</p>
-                                <p className="editPlaylist">Edit playlist details</p>
+                                <p className="editPlaylist" onClick={() => {setPlaylistEditWindow(true);
+                                    setOpenPlaylistOptions(false);
+                                    setPlaylistTitle(playlistData.name);
+                                    setPlaylistDescription(playlistData.description);
+                                    }}>Edit playlist details</p>
                             </div>
                         ) :
                         <></>

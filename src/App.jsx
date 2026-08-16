@@ -25,8 +25,15 @@ function App() {
   }
 
   function removePlaylistFromSidebar(playlistId){
-    console.log("REMOVING:", playlistId)
     setPlaylistData(prev => prev.filter(playlist => playlist.id != playlistId))
+  }
+
+  function updatePlaylistInSidebar(updatedPlaylist){
+    setPlaylistData(prev => 
+      prev.map(playlist => 
+        playlist.id == updatedPlaylist.id ? updatedPlaylist : playlist
+      )
+    )
   }
 
   useEffect(() => {
@@ -74,7 +81,7 @@ function App() {
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar}/>
+                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar}/>
                 <SidebarRight/>
               </div>
             }/>

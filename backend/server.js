@@ -102,7 +102,7 @@ app.get('/api/playlists/:id/songs', (req,res) => {
   res.json(playlistData)
 })
 
-// **********************************  POST **********************************
+// ********************************** POST **********************************
 
 // Naujo playlisto sukurimas
 app.post('/api/playlists', (req,res) => {
@@ -135,7 +135,23 @@ app.post('/api/playlists/:id/songs', (req,res) => {
 })
 
 
-// **********************************  DELETE **********************************
+// ********************************** UPDATE **********************************
+app.put('/api/playlists/:id', (req, res) => {
+  const playlist_id = req.params.id
+  const name = req.body.name
+  const description = req.body.description
+
+  db.prepare(
+    'UPDATE playlists SET name = ?, description = ? WHERE id = ?'
+  ).run(name, description, playlist_id)
+
+  res.json({
+    message: "Playlist updated"
+  })
+})
+
+
+// ********************************** DELETE **********************************
 
 //Istrinti playlista
 app.delete('/api/playlists/:id', (req,res) => {
