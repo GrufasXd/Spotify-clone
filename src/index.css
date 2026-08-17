@@ -537,7 +537,7 @@ body {
   z-index: 1;
 }
 
-.playlistCreationWindow{
+.playlistCreationWindow, .playlistDeletionWindow{
   background-color: var(--mainThemeBackground);
   position: fixed;
   inset: 0px;
@@ -549,6 +549,10 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-sizing: border-box;
+}
+
+.playlistDeletionWindow{
+  height: 12rem;
 }
 
 .playlistCreationTitle{

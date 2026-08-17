@@ -4,16 +4,16 @@ import { IoMusicalNotesOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 
-function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar}){
+function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, playlists, setPlaylists}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
     let playlistDuration = 0
-    const [playlists, setPlaylists] = useState([])
-    const [playlistData, setPlaylistData] = useState([])
+    const [playlistData, setPlaylistData] = useState({})
     const [playlistSongs, setPlaylistSongs] = useState([])
     const [openPlaylistOptions, setOpenPlaylistOptions] = useState(false)
     const [playlistEditWindow, setPlaylistEditWindow] = useState(false)
+    const [playlistDeletionConfirmation, setPlaylistDeletionConfirmation] = useState(false)
     const playlistRef = useRef(null)
     const [playlistTitle, setPlaylistTitle] = useState("")
     const [playlistDescription, setPlaylistDescription] = useState("")
@@ -43,9 +43,6 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`)
         .then(res => res.json())
         .then(data => setPlaylistSongs(data))
-        fetch(`http://localhost:3001/api/playlists`)
-        .then(res => res.json())
-        .then(data => setPlaylists(data))
     }, [playlistId])
 
     useEffect(() => {
@@ -130,6 +127,19 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                 </div>
             </div>
             }
+            {playlistDeletionConfirmation && (
+                <div className="overlay">
+                <div className="playlistDeletionWindow">
+                    <p className="playlistCreationTitle">Are you sure you want to delete this playlist?</p>
+                    <div className="playlistButtonRow">
+                        <button type="button" onClick={() => {
+                            setPlaylistDeletionConfirmation(false);
+                        }} className="cancelButton">Cancel</button>
+                        <button type="submit" className="createButton" onClick={() => deletePlaylist()}>Delete playlist</button>
+                    </div>
+                </div>
+            </div>
+            )}
             <div className="mainContent">
                 <div className="albumPageTop">
                     <IoMusicalNotesOutline className="albumCoverInPage"/>
@@ -142,7 +152,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                         <button className="albumOptions" onClick={() => setOpenPlaylistOptions(true)}>...</button>
                         {openPlaylistOptions === true ? (
                             <div className="playlistOptionsList">
-                                <p className="deletePlaylist" onClick={() => deletePlaylist()}>Delete playlist</p>
+                                <p className="deletePlaylist" onClick={() => {setPlaylistDeletionConfirmation(true); setOpenPlaylistOptions(false);}}>Delete playlist</p>
                                 <p className="editPlaylist" onClick={() => {setPlaylistEditWindow(true);
                                     setOpenPlaylistOptions(false);
                                     setPlaylistTitle(playlistData.name);

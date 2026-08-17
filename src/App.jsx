@@ -81,7 +81,7 @@ function App() {
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar}/>
+                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} playlists={playlistData} setPlaylists={setPlaylistData}/>
                 <SidebarRight/>
               </div>
             }/>
