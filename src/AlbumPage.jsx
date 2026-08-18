@@ -62,7 +62,7 @@ function AlbumPage({onSongSelect}){
                     </div>
                 </div>
                 {albumSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists}/>
+                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, albumSongs)} playlists={playlists}/>
                 ))}
             </div>
             }

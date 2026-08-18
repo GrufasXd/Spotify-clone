@@ -19,9 +19,18 @@ function App() {
   let navigate = useNavigate()
   const [currentSong, setCurrentSong] = useState(null)
   const [playlistData, setPlaylistData] = useState([])
+  const [queue, setQueue] = useState([])
 
-  function handleSongSelect(song){
+  function handleSongSelect(song, songList){
     setCurrentSong(song)
+    setQueue(songList)
+  }
+
+  function nextSong(){
+    let currentIndex = queue.findIndex((song) => song.id === currentSong.id)
+    if(currentIndex !== queue.length - 1){
+      setCurrentSong(queue[currentIndex+1])
+    }
   }
 
   function removePlaylistFromSidebar(playlistId){

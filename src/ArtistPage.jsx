@@ -41,7 +41,7 @@ function ArtistPage({onSongSelect}){
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map(song => (
-                        <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists}/>
+                        <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, artistSongs)} playlists={playlists}/>
                     ))}
                 </div>
                 <b className="albumTag">Albums</b>

@@ -15,6 +15,8 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
     const [playlistEditWindow, setPlaylistEditWindow] = useState(false)
     const [playlistDeletionConfirmation, setPlaylistDeletionConfirmation] = useState(false)
     const playlistRef = useRef(null)
+    const playlistDeletionRef = useRef(null)
+    const playlistEditRef = useRef(null)
     const [playlistTitle, setPlaylistTitle] = useState("")
     const [playlistDescription, setPlaylistDescription] = useState("")
 
@@ -49,6 +51,12 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
         function handleClickOutside(e){
             if(!playlistRef.current.contains(e.target)){
                 setOpenPlaylistOptions(false)
+            }
+            if(playlistDeletionRef.current && !playlistDeletionRef.current.contains(e.target)){
+                setPlaylistDeletionConfirmation(false)
+            }
+            if(playlistEditRef.current && !playlistEditRef.current.contains(e.target)){
+                setPlaylistEditWindow(false)
             }
         }
 
@@ -110,7 +118,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                 <></>
             ):
             <div className="overlay">
-                <div className="playlistCreationWindow">
+                <div className="playlistCreationWindow" ref={playlistEditRef}>
                     <p className="playlistCreationTitle">Edit your playlist</p>
                     <form onSubmit={(e) => updatePlaylist(e, playlistTitle, playlistDescription)}>
                         <label htmlFor="playlistTitle">Playlist title:</label><br/><br/>
@@ -129,7 +137,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
             }
             {playlistDeletionConfirmation && (
                 <div className="overlay">
-                <div className="playlistDeletionWindow">
+                <div className="playlistDeletionWindow" ref={playlistDeletionRef}>
                     <p className="playlistCreationTitle">Are you sure you want to delete this playlist?</p>
                     <div className="playlistButtonRow">
                         <button type="button" onClick={() => {
@@ -152,8 +160,9 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                         <button className="albumOptions" onClick={() => setOpenPlaylistOptions(true)}>...</button>
                         {openPlaylistOptions === true ? (
                             <div className="playlistOptionsList">
-                                <p className="deletePlaylist" onClick={() => {setPlaylistDeletionConfirmation(true); setOpenPlaylistOptions(false);}}>Delete playlist</p>
-                                <p className="editPlaylist" onClick={() => {setPlaylistEditWindow(true);
+                                <p className="deletePlaylist" onClick={(e) => {e.stopPropagation();setPlaylistDeletionConfirmation(true); setOpenPlaylistOptions(false);}}>Delete playlist</p>
+                                <p className="editPlaylist" onClick={(e) => {e.stopPropagation(); 
+                                    setPlaylistEditWindow(true);
                                     setOpenPlaylistOptions(false);
                                     setPlaylistTitle(playlistData.name);
                                     setPlaylistDescription(playlistData.description);
@@ -165,7 +174,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                     </div>
                 </div>
                 {playlistSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={onSongSelect} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
+                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, playlistSongs)} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
                 ))}
             </div>
         </>
