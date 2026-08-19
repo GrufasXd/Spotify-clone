@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 
 
-function SongBlock({song,onSongSelect,playlists,isPlaylistPage, removeSongFromPlaylist}){
+function SongBlock({song,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue}){
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
+    const [showQueueMessage, setShowQueueMessage] = useState(false)
 
     useEffect(() => {
         function handleClickOutside(){
@@ -50,8 +51,26 @@ function SongBlock({song,onSongSelect,playlists,isPlaylistPage, removeSongFromPl
         setPlaylistsWindow(null)})
     }
 
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function addingSongToQueue(e, song){
+        e.stopPropagation() 
+        addSongToQueue(song)
+        setSongOptionsWindow(null)
+        setShowQueueMessage(true)
+        await wait(2500)
+        setShowQueueMessage(false)
+    }
+
     return(
         <>
+            {showQueueMessage &&(
+                <div className="queueMessage">
+                    <p>Added to queue</p>
+                </div>
+            )}
             <div className="artistSong" onClick={() => onSongSelect(song)}>
                 <p>{song.title}</p>
                 <p className="songDuration">{durationConverter(song.duration)}</p>
@@ -61,6 +80,9 @@ function SongBlock({song,onSongSelect,playlists,isPlaylistPage, removeSongFromPl
                     <div className="songOptionsList">
                         <div className="addSongToPlaylistButton" onClick={(e) => openPlaylistOptions(e, song.id)}>
                             <p>Add to playlist</p>
+                        </div>
+                        <div className="addSongToQueueButton" onClick={(e) => addingSongToQueue(e, song)}>
+                            <p>Add song to queue</p>
                         </div>
                         {isPlaylistPage === true ? (
                             <div className="removeSongFromPlaylistButton" onClick={(e) => removeSongFromPlaylist(e, song.id)}>

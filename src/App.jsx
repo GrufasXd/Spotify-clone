@@ -19,17 +19,33 @@ function App() {
   let navigate = useNavigate()
   const [currentSong, setCurrentSong] = useState(null)
   const [playlistData, setPlaylistData] = useState([])
-  const [queue, setQueue] = useState([])
+  const [pageContextQueue, setPageContextQueue] = useState([])
+  const [userQueue, setUserQueue] = useState([])
 
   function handleSongSelect(song, songList){
     setCurrentSong(song)
-    setQueue(songList)
+    setPageContextQueue(songList)
+  }
+
+  function addSongToQueue(song){
+    setUserQueue(prev => [...prev, song])
   }
 
   function nextSong(){
-    let currentIndex = queue.findIndex((song) => song.id === currentSong.id)
-    if(currentIndex !== queue.length - 1){
-      setCurrentSong(queue[currentIndex+1])
+    let currentIndex = pageContextQueue.findIndex((song) => song.id === currentSong.id)
+    if(userQueue.length != 0){
+      setCurrentSong(userQueue[0])
+      setUserQueue(prev => prev.slice(1))
+    }
+    else if(currentIndex !== pageContextQueue.length - 1){
+      setCurrentSong(pageContextQueue[currentIndex+1])
+    }
+  }
+
+  function previousSong(){
+    let currentIndex = pageContextQueue.findIndex((song) => song.id === currentSong.id)
+    if(currentIndex > 0){
+      setCurrentSong(pageContextQueue[currentIndex-1])
     }
   }
 
@@ -76,27 +92,27 @@ function App() {
             <Route path="/artist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <ArtistPage onSongSelect={handleSongSelect}/>
+                <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
                 <SidebarRight/>
               </div>
             }/>
             <Route path="/album/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <AlbumPage onSongSelect={handleSongSelect}/>
+                <AlbumPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
                 <SidebarRight/>
               </div>
             }/>
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} playlists={playlistData} setPlaylists={setPlaylistData}/>
+                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} setPlaylists={setPlaylistData}/>
                 <SidebarRight/>
               </div>
             }/>
           </Routes>
           <div>
-            <SongBottomLine currentSong={currentSong}/>
+            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong}/>
           </div>
         </>)
 }

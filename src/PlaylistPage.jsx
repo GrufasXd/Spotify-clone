@@ -4,7 +4,7 @@ import { IoMusicalNotesOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 
-function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, playlists, setPlaylists}){
+function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, setPlaylists}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -174,7 +174,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                     </div>
                 </div>
                 {playlistSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, playlistSongs)} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
+                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
                 ))}
             </div>
         </>

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import SongBlock from "./SongBlock"
 
 
-function ArtistPage({onSongSelect}){
+function ArtistPage({onSongSelect, addSongToQueue}){
     const navigate = useNavigate()
     let params = useParams()
     const artistId = params.id
@@ -41,7 +41,7 @@ function ArtistPage({onSongSelect}){
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map(song => (
-                        <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, artistSongs)} playlists={playlists}/>
+                        <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, artistSongs)} addSongToQueue={addSongToQueue} playlists={playlists}/>
                     ))}
                 </div>
                 <b className="albumTag">Albums</b>

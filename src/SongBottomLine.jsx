@@ -4,7 +4,7 @@ import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { useRef, useEffect, useState, useDebugValue } from "react";
 
-function SongBottomLine({currentSong}){
+function SongBottomLine({currentSong, nextSong, previousSong}){
     const [isPlaying, setIsPlaying] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
@@ -75,17 +75,17 @@ function SongBottomLine({currentSong}){
                 src={`http://localhost:3001${currentSong?.file_url}`}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
+                onEnded={() => {setIsPlaying(false); nextSong()}}
             />
             <div className="songBottomControls">
                 <div className="songBottomButtons">
-                    <FaStepBackward className="previousSongButton"/>
+                    <FaStepBackward className="previousSongButton" onClick={previousSong}/>
                     {isPlaying ? (
                         <IoPauseOutline className="pauseButton" onClick={handlePlayClick}/>
                     ) : (
                         <CgPlayButton className="playButton" onClick={handlePlayClick}/>
                     )}
-                    <FaStepForward className="nextSongButton"/>
+                    <FaStepForward className="nextSongButton" onClick={nextSong}/>
                 </div>
                 <div className="songBottomInfo">
                     <span>{currentTimeDisplay}</span>

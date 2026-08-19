@@ -45,10 +45,12 @@ db.exec(`
 const count = db.prepare('SELECT COUNT(*) as c FROM songs').get()
 if (count.c === 0) {
   const artist = db.prepare(`INSERT INTO artists (name, monthly_listeners) VALUES(?,?)`)
+  const snow = artist.run('Snow strippers', 113000).lastInsertRowid
   const yeat = artist.run('Yeat', 23000000).lastInsertRowid
   const shy = artist.run('Jessica Shy', 243237).lastInsertRowid
   const kanye = artist.run('Kanye West', 64000000).lastInsertRowid
   const album = db.prepare(`INSERT INTO albums (title, artist_id, cover_url) VALUES(?,?,?)`)
+  const april = album.run('April mixtape 3', snow, '/album_covers/april.jfif').lastInsertRowid
   const adl = album.run('ADL', yeat, '/album_covers/adl.jfif').lastInsertRowid
   const lifestyle = album.run('LIFESTYLE', yeat, '/album_covers/lifestyle.png').lastInsertRowid
   const _2093 = album.run('2093', yeat, '/album_covers/2093.png').lastInsertRowid
@@ -57,6 +59,8 @@ if (count.c === 0) {
   song.run('Naked', yeat, adl, 95, '/songs/Naked.mp3')
   song.run('Heliman', yeat, adl, 192, '/songs/HeliMAn 4.mp3')
   song.run('30 hours', kanye, pablo, 323, '/songs/30 Hours 4.mp3')
+  song.run('Under your spell', snow, april, 256, '/songs/Under your spell (slowed + reverb) 4.mp3')
+  song.run('You could be the one', snow, april, 141, '/songs/You Could Be The One 4.mp3')
   const playlist = db.prepare('INSERT INTO playlists (name, description) VALUES (?,?)')
   const test_playlist = playlist.run('test playlist', 'my test playlist')
   const kanye_playlist = playlist.run('kanye list', 'my kanye playlist')
