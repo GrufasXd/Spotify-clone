@@ -56,6 +56,7 @@ if (count.c === 0) {
   const _2093 = album.run('2093', yeat, '/album_covers/2093.png').lastInsertRowid
   const pablo = album.run('The Life of Pablo', kanye, '/album_covers/pablo.jfif').lastInsertRowid
   const song = db.prepare('INSERT INTO songs (title, artist_id, album_id, duration, file_url) VALUES (?, ?, ?, ?, ?)')
+  song.run('Purpose general', yeat, adl, 205, '/songs/Purpose General.mp3')
   song.run('Naked', yeat, adl, 95, '/songs/Naked.mp3')
   song.run('Heliman', yeat, adl, 192, '/songs/HeliMAn 4.mp3')
   song.run('30 hours', kanye, pablo, 323, '/songs/30 Hours 4.mp3')

@@ -21,10 +21,12 @@ function App() {
   const [playlistData, setPlaylistData] = useState([])
   const [pageContextQueue, setPageContextQueue] = useState([])
   const [userQueue, setUserQueue] = useState([])
+  const [currentIndex, setCurrentIndex] = useState(null)
 
   function handleSongSelect(song, songList){
     setCurrentSong(song)
     setPageContextQueue(songList)
+    setCurrentIndex(songList.findIndex((songInList) => songInList.id === song.id))
   }
 
   function addSongToQueue(song){
@@ -32,20 +34,20 @@ function App() {
   }
 
   function nextSong(){
-    let currentIndex = pageContextQueue.findIndex((song) => song.id === currentSong.id)
     if(userQueue.length != 0){
       setCurrentSong(userQueue[0])
       setUserQueue(prev => prev.slice(1))
     }
     else if(currentIndex !== pageContextQueue.length - 1){
       setCurrentSong(pageContextQueue[currentIndex+1])
+      setCurrentIndex(currentIndex + 1)
     }
   }
 
   function previousSong(){
-    let currentIndex = pageContextQueue.findIndex((song) => song.id === currentSong.id)
     if(currentIndex > 0){
       setCurrentSong(pageContextQueue[currentIndex-1])
+      setCurrentIndex(currentIndex - 1)
     }
   }
 
