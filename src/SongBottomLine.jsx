@@ -10,6 +10,7 @@ function SongBottomLine({currentSong, nextSong, previousSong}){
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
+    const [songArtist, setSongArtist] = useState(null)
     const audioRef = useRef(null)
 
     useEffect(() => {
@@ -37,6 +38,14 @@ function SongBottomLine({currentSong, nextSong, previousSong}){
         }
     }, [])
 
+    useEffect(() => {
+        if(!currentSong) return
+
+        fetch(`http://localhost:3001/api/artists/${currentSong.artist_id}`)
+        .then(res => res.json())
+        .then(data => setSongArtist(data))
+    }, [currentSong])
+
     function handlePlayClick(){
         const audio = audioRef.current
 
@@ -62,7 +71,9 @@ function SongBottomLine({currentSong, nextSong, previousSong}){
             {currentSong != null ? (
                 <div className="songName">
                     <b>{currentSong.title}</b>
-                    <p>{currentSong.artist}</p>
+                    {songArtist &&
+                        <p>{songArtist.name}</p>
+                    }
                 </div>
             ) : 
                 <div className="songName">

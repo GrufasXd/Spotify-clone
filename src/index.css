@@ -147,7 +147,12 @@ body {
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
-  align-items: center;
+  padding: 15px;
+  gap: 20px;
+}
+
+.sidebarRightTitle{
+  gap: 30px;
 }
 
 .sidebarHeader{

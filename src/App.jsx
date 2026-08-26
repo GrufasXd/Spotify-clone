@@ -88,28 +88,28 @@ function App() {
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <MainContent onSongSelect={handleSongSelect}/>
-                <SidebarRight/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
               </div>
             }/>
             <Route path="/artist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
-                <SidebarRight/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
               </div>
             }/>
             <Route path="/album/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <AlbumPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
-                <SidebarRight/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
               </div>
             }/>
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} setPlaylists={setPlaylistData}/>
-                <SidebarRight/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
               </div>
             }/>
           </Routes>

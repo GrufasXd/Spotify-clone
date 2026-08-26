@@ -59,7 +59,7 @@ app.get('/api/albums/search', (req, res) => {
   res.json(searchedString)
 })
 
-// Gauti artisto duomenis is backendo
+// Gauti artisto duomenis is id
 app.get('/api/artists/:id', (req, res) => {
   const neededId = req.params.id
   const artistData = db.prepare('SELECT * FROM artists WHERE id = ?').get(neededId)
