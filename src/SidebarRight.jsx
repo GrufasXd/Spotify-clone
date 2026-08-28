@@ -1,15 +1,7 @@
 import {useEffect, useState} from "react";
+import RecentCard from "./RecentCard"
 
-function SidebarRight({currentSong, userQueue}){
-    const [songArtist, setSongArtist] = useState(null)
-
-    useEffect(() => {
-        if(!currentSong) return
-
-        fetch(`http://localhost:3001/api/artists/${currentSong.artist_id}`)
-        .then(res => res.json())
-        .then(data => setSongArtist(data))
-    }, [currentSong])
+function SidebarRight({currentSong, userQueue, onSongSelect, playlistData, addSongToQueue}){
 
     return(
     <div className="sidebarRight">
@@ -17,12 +9,14 @@ function SidebarRight({currentSong, userQueue}){
         {currentSong != null ? (
         <>
             <b>Now playing</b>
-            <div>
-                <b>{currentSong.title}</b>
-                {songArtist && (
-                <p>{songArtist.name}</p>
-                )}
-            </div>
+            <RecentCard
+                key={currentSong.id}
+                title={currentSong.title}
+                song={currentSong}
+                onSongSelect={onSongSelect}
+                playlistData={playlistData}
+                addSongToQueue={addSongToQueue}
+            />
         </>
         ): 
         <>
@@ -33,10 +27,14 @@ function SidebarRight({currentSong, userQueue}){
             <>
                 <b>Next in queue</b>
                 {userQueue.map(song => (
-                    <div>
-                        <b>{song.title}</b>
-                        <p>{song.artist_name}</p>
-                    </div>
+                    <RecentCard
+                        key={song.id}
+                        title={song.title}
+                        song={song}
+                        onSongSelect={onSongSelect}
+                        playlistData={playlistData}
+                        addSongToQueue={addSongToQueue}
+                    />
                 ))}
             </>
         ) : 

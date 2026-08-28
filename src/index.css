@@ -137,6 +137,7 @@ body {
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
   justify-content: flex-start;
+  overflow-y: auto;
 }
 
 .sidebarRight{
@@ -149,6 +150,8 @@ body {
   border-radius: 5px;
   padding: 15px;
   gap: 20px;
+  min-width: 0;
+  overflow-y: auto;
 }
 
 .sidebarRightTitle{
@@ -232,18 +235,28 @@ body {
 
 .recentlyViewedCards{
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 10px;
-
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .recentCard{
   display: flex;
   flex-direction: row;
   background-color: hsl(0, 1%, 33%, 0.6);
-  width: 23vw;
+  align-self: stretch;
   border-radius: 5px;
   transition: 0.5s;
+}
+
+.recentCardText{
+  flex-direction: column;
+  text-align: left;
+  font-weight: bold;
+}
+
+.recentCardArtistName{
+  font-size: 12px;
+  text-align: left;
 }
 
 .recentCard:hover, .artistSong:hover{
@@ -606,7 +619,7 @@ body {
 
 .songOptions{
   padding-right: 10px;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   display: flex;
   font-size: 20px;
@@ -614,6 +627,13 @@ body {
   border: none;
   color: white;
   cursor: pointer;
+}
+
+.songOptionsWrapper{
+  margin-left: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .songOptionsList, .playlistOptionsList{

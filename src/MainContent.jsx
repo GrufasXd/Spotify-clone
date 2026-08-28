@@ -2,7 +2,7 @@ import RecentCard from "./RecentCard"
 import AlbumSongSection from "./AlbumSongSection"
 import { useState, useEffect } from "react"
 
-function MainContent({onSongSelect}){
+function MainContent({onSongSelect, playlistData, addSongToQueue}){
     const [songs, setSongs] = useState([])
 
     useEffect(() => {
@@ -20,7 +20,9 @@ function MainContent({onSongSelect}){
                         key={song.id}
                         title={song.title}
                         song={song}
-                        onSongSelect={onSongSelect}
+                        onSongSelect={(song) => onSongSelect(song, songs)}
+                        playlistData={playlistData}
+                        addSongToQueue={addSongToQueue}
                     />
                 ))}
             </div>

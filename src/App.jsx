@@ -87,29 +87,29 @@ function App() {
             <Route path="/" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <MainContent onSongSelect={handleSongSelect}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
+                <MainContent onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
               </div>
             }/>
             <Route path="/artist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
               </div>
             }/>
             <Route path="/album/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <AlbumPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
               </div>
             }/>
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
                 <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} setPlaylists={setPlaylistData}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue}/>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
               </div>
             }/>
           </Routes>
