@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import RecentCard from "./RecentCard"
 
-function SidebarRight({currentSong, userQueue, onSongSelect, playlistData, addSongToQueue}){
+function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue}){
 
     return(
     <div className="sidebarRight">
@@ -24,16 +24,22 @@ function SidebarRight({currentSong, userQueue, onSongSelect, playlistData, addSo
         </>
         }
         {userQueue.length != 0 ? (
-            <>
-                <b>Next in queue</b>
-                {userQueue.map(song => (
+            <>  
+                <div className="sidebarRightTextWrapper">
+                    <b>Next in queue</b>
+                    <p className="clearQueueButton" onClick={() => clearQueue()}>Clear queue</p>
+                </div>
+                {userQueue.map(queueItem => (
                     <RecentCard
-                        key={song.id}
-                        title={song.title}
-                        song={song}
-                        onSongSelect={onSongSelect}
+                        key={queueItem.queueItemId}
+                        title={queueItem.song.title}
+                        song={queueItem.song}
+                        queueItem={queueItem}
+                        queueItemClick={queueItemClick}
                         playlistData={playlistData}
                         addSongToQueue={addSongToQueue}
+                        isSidebar={true}
+                        setUserQueue={setUserQueue}
                     />
                 ))}
             </>

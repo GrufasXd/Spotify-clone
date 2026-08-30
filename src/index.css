@@ -677,14 +677,14 @@ body {
   text-align: left;
 }
 
-.removeSongFromPlaylistButton, .addSongToPlaylistButton, .playlistInWindow, .deletePlaylist, .editPlaylist, .addSongToQueueButton{
+.removeSongFromPlaylistButton, .addSongToPlaylistButton, .playlistInWindow, .deletePlaylist, .editPlaylist, .addSongToQueueButton, .removeSongFromQueueButton{
   padding: 5px;
   gap: 10px;
   transition: 0.5s;
   border-radius: 10px;
 }
 
-.removeSongFromPlaylistButton:hover, .addSongToPlaylistButton:hover, .playlistInWindow:hover, .deletePlaylist:hover, .editPlaylist:hover, .addSongToQueueButton:hover{
+.removeSongFromPlaylistButton:hover, .addSongToPlaylistButton:hover, .playlistInWindow:hover, .deletePlaylist:hover, .editPlaylist:hover, .addSongToQueueButton:hover, .removeSongFromQueueButton:hover{
   background-color: rgb(56, 56, 56);
   transition: 0.5s;
 }
@@ -699,4 +699,18 @@ body {
   left: 45%;
   bottom: 100px;
   white-space: nowrap;
+}
+
+.sidebarRightTextWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+}
+
+.clearQueueButton{
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: auto;
 }

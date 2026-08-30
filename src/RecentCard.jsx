@@ -2,7 +2,7 @@ import { MdMusicNote } from "react-icons/md";
 import {useEffect, useState} from "react";
 
 
-function RecentCard({title, song, onSongSelect, playlistData, addSongToQueue}){
+function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue}){
 
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -46,6 +46,11 @@ function RecentCard({title, song, onSongSelect, playlistData, addSongToQueue}){
         setSongOptionsWindow(null)
     }
 
+    function removingSongFromQueue(e, queueItemId){
+        e.stopPropagation()
+        setUserQueue(prev => prev.filter(queueItem => queueItem.queueItemId !== queueItemId))
+    }
+
     function addSongToPlaylist(e, playlistId, songId){
         e.preventDefault()
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
@@ -62,8 +67,18 @@ function RecentCard({title, song, onSongSelect, playlistData, addSongToQueue}){
         setPlaylistsWindow(null)})
     }
 
+    function recentCardClick(){
+        if (isSidebar == true){
+            queueItemClick(queueItem)
+        }
+        else{
+            onSongSelect(song)
+        }
+    }
+
     return(
-        <div className="recentCard" onClick={() => onSongSelect(song)}>
+        <>
+        <div className="recentCard" onClick={() => recentCardClick()}>
             <MdMusicNote className="recentCardImage"/>
             <div className="recentCardText">
                 <p>{title}</p>
@@ -82,6 +97,11 @@ function RecentCard({title, song, onSongSelect, playlistData, addSongToQueue}){
                         <div className="addSongToQueueButton" onClick={(e) => addingSongToQueue(e, song)}>
                             <p>Add song to queue</p>
                         </div>
+                        {isSidebar && (
+                           <div className="removeSongFromQueueButton" onClick={(e) => removingSongFromQueue(e, queueItem.queueItemId)}>
+                                <p>Remove song from queue</p>
+                            </div> 
+                        )}
                     </div>
                     {playlistsWindow === song.id ? (
                         <div className="playlistsWindow" onClick={(e) => e.stopPropagation()}>
@@ -101,6 +121,7 @@ function RecentCard({title, song, onSongSelect, playlistData, addSongToQueue}){
                 }
             </div>
         </div>
+        </>
     )
 }
 
