@@ -7,13 +7,23 @@
 
 * {
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 body {
   margin: 0;
   background-color: black;
   overflow: hidden;
-  font-family: sans-serif;
+}
+
+::-webkit-scrollbar{
+  width: 8px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background: white;
+  border-radius: 100px;
 }
 
 #root {
@@ -119,13 +129,6 @@ body {
   color: white;
   transition: 0.5s;
   font-size: 2.9em;
-}
-
-.searchEnd{
-  text-align: end;
-  font-size: 1em;
-  color: white;
-  margin-left: 10px;
 }
 
 .sidebarLeft{

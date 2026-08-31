@@ -26,10 +26,6 @@ function MainContent({onSongSelect, playlistData, addSongToQueue}){
                     />
                 ))}
             </div>
-            <AlbumSongSection sectionTitle="Jump back in"/>
-            <AlbumSongSection sectionTitle="Made for you"/>
-            <AlbumSongSection sectionTitle="Recents"/>
-            <AlbumSongSection sectionTitle="Albums featuring songs you like"/>
         </div>
     )
 }

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { IoIosBrowsers } from "react-icons/io";
 import { useNavigate } from "react-router-dom"
 
 
@@ -67,8 +66,6 @@ function SearchBar({onSongSelect}){
         <div className="searchWrapper">
             <CiSearch className="searchIcon"/>
             <input type="text" value={searchString} onChange={handleSearch} className="searchBar" placeholder="What do you want to play?"/>
-            <p className="searchEnd">|</p>
-            <IoIosBrowsers className="browseIcon"/>
         </div>
         {searchString != "" && dropdownOpen ?  (
             <div className="searchResults">

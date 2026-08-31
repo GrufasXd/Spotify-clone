@@ -136,7 +136,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
             </div>
             }
             {playlistDeletionConfirmation && (
-                <div className="overlay">
+            <div className="overlay">
                 <div className="playlistDeletionWindow" ref={playlistDeletionRef}>
                     <p className="playlistCreationTitle">Are you sure you want to delete this playlist?</p>
                     <div className="playlistButtonRow">

@@ -64,7 +64,6 @@ if (count.c === 0) {
   song.run('You could be the one', snow, april, 141, '/songs/You Could Be The One 4.mp3')
   const playlist = db.prepare('INSERT INTO playlists (name, description) VALUES (?,?)')
   const test_playlist = playlist.run('test playlist', 'my test playlist')
-  const kanye_playlist = playlist.run('kanye list', 'my kanye playlist')
 }
 
 module.exports = db
