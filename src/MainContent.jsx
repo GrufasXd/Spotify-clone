@@ -1,5 +1,4 @@
 import RecentCard from "./RecentCard"
-import AlbumSongSection from "./AlbumSongSection"
 import { useState, useEffect } from "react"
 
 function MainContent({onSongSelect, playlistData, addSongToQueue}){

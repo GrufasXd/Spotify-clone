@@ -226,6 +226,13 @@ body {
   font-size: 12px;
 }
 
+.playlistPlayButton{
+  background-color: #7AC757;
+  padding: 40px;
+  border-radius: 100px;
+  color: black;
+}
+
 .contentArea{
   display: flex;
   align-items: flex-start;
@@ -266,6 +273,14 @@ body {
   background-color: hsl(0, 1%, 33%, 0.9);
   transition: 0.5s;
   cursor: pointer;
+}
+
+.artistSong:hover .songNumber{
+  display: none;
+}
+
+.artistSong:hover .playIcon{
+  display: block;
 }
 
 .recentCard p{
@@ -435,6 +450,7 @@ body {
 
 .searchResult{
   padding: 0.01em;
+  padding-left: 10px;
   transition: 0.5s;
   border-radius: 10px;
   margin-bottom: 5px;
@@ -464,14 +480,31 @@ body {
 
 .artistSong{
   position: relative;
-  margin-bottom: 20px;
-  padding-left: 20px;
-  height: 40px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  height: 48px;
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
   transition: 0.5s;
+}
+
+.songNumberWrapper{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.songNumber{
+  color: grey;
+}
+
+.playIcon{
+  display: none;
+  color: white;
+  font-size: 12px;
 }
 
 .songDuration{

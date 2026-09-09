@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate} from "react-router-dom"
 import { IoMusicalNotesOutline } from "react-icons/io5";
+import { FaPlay } from "react-icons/fa";
 
 import SongBlock from "./SongBlock"
 
@@ -172,9 +173,12 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                         <></>
                         }
                     </div>
+                    <div>
+                        <FaPlay className="playlistPlayButton" />
+                    </div>
                 </div>
-                {playlistSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
+                {playlistSongs.map((song, index) => ( 
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
                 ))}
             </div>
         </>
