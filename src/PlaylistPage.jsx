@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate} from "react-router-dom"
-import { IoMusicalNotesOutline } from "react-icons/io5";
-import { FaPlay } from "react-icons/fa";
+import { IoMusicalNotesOutline, IoPauseOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
+import { CgPlayButton } from "react-icons/cg";
 
-function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, setPlaylists}){
+function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, setPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -113,6 +113,17 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
         })
     }
 
+
+    function handlePlaylistPlay(){
+        
+        if(pageContextQueue !== playlistSongs || currentSong == null){
+            onSongSelect(playlistSongs[0], playlistSongs)
+        }
+        else{
+            handlePlayClick()
+        }
+    }
+
     return(
         <>
             {playlistEditWindow == false ? (
@@ -173,12 +184,16 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                         <></>
                         }
                     </div>
-                    <div>
-                        <FaPlay className="playlistPlayButton" />
+                    <div className="playlistPlayButtonWrapper">
+                        {isPlaying && pageContextQueue == playlistSongs ? (
+                            <IoPauseOutline className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
+                        ) : (
+                            <CgPlayButton className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
+                        )}
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
+                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
                 ))}
             </div>
         </>

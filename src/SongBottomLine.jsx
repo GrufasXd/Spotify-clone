@@ -4,19 +4,16 @@ import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { useRef, useEffect, useState, useDebugValue } from "react";
 
-function SongBottomLine({currentSong, nextSong, previousSong}){
-    const [isPlaying, setIsPlaying] = useState(false)
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
     const [songArtist, setSongArtist] = useState(null)
-    const audioRef = useRef(null)
 
     useEffect(() => {
         if(currentSong && audioRef.current){
             audioRef.current.play()
-            setIsPlaying(true)
         }
     }, [currentSong])
 
@@ -45,21 +42,6 @@ function SongBottomLine({currentSong, nextSong, previousSong}){
         .then(res => res.json())
         .then(data => setSongArtist(data))
     }, [currentSong])
-
-    function handlePlayClick(){
-        const audio = audioRef.current
-
-        if(!audio) return
-
-        if(audio.paused){
-            audio.play()
-            setIsPlaying(true)
-        }
-        else{
-            audio.pause()
-            setIsPlaying(false)
-        }
-    }
 
     function handleProgressClick(e){
         var placeToMoveBar = ((e.clientX - e.currentTarget.getBoundingClientRect().left)  * audioRef.current.duration) / e.currentTarget.offsetWidth

@@ -228,9 +228,29 @@ body {
 
 .playlistPlayButton{
   background-color: #7AC757;
-  padding: 40px;
-  border-radius: 100px;
+  border-radius: 50%;
+  font-size: 64px;
   color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.playlistPlayButton:hover{
+  background-color: #8be163;
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+
+.playlistPlayButtonWrapper{
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contentArea{
@@ -538,7 +558,7 @@ body {
   position: relative;
   flex-direction: row;
   padding: 20px;
-  gap: 0px 30px;
+  gap: 30px;
 }
 
 .albumInfo{

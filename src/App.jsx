@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
@@ -22,6 +22,21 @@ function App() {
   const [pageContextQueue, setPageContextQueue] = useState([])
   const [userQueue, setUserQueue] = useState([])
   const [currentIndex, setCurrentIndex] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const audioRef = useRef(null)
+
+  function handlePlayClick(){
+    const audio = audioRef.current
+
+    if(!audio) return
+
+    if(audio.paused){
+      audio.play()
+    }
+    else{
+      audio.pause()
+    }
+  }
 
   function handleSongSelect(song, songList){
     setCurrentSong(song)
@@ -121,13 +136,13 @@ function App() {
             <Route path="/playlist/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} setPlaylists={setPlaylistData}/>
+                <PlaylistPage onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} setPlaylists={setPlaylistData} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue}/>
                 <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
               </div>
             }/>
           </Routes>
           <div>
-            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong}/>
+            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef}/>
           </div>
         </>)
 }
