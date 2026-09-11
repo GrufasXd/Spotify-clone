@@ -2,9 +2,11 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import SongBlock from "./SongBlock"
+import { CgPlayButton } from "react-icons/cg";
+import { IoPauseOutline } from "react-icons/io5";
 
 
-function AlbumPage({onSongSelect, addSongToQueue}){
+function AlbumPage({onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue}){
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
@@ -43,6 +45,16 @@ function AlbumPage({onSongSelect, addSongToQueue}){
             .then(data => setPlaylists(data))
     }, [albumId])
 
+    function handleAlbumPlay(){
+        
+        if(pageContextQueue !== albumSongs || currentSong == null){
+            onSongSelect(albumSongs[0], albumSongs)
+        }
+        else{
+            handlePlayClick()
+        }
+    }
+
     return(
         <>
             {albumData === null ? (
@@ -59,6 +71,13 @@ function AlbumPage({onSongSelect, addSongToQueue}){
                         <p className="albumTitle">{albumData.title}</p>
                         <p className="albumArtistName" onClick={() => navigate(`/artist/${albumData.artist_id}`)}>{albumData.artist_name}</p>
                         <p>{albumSongs.length} songs, {durationToText(albumDuration)}</p>
+                    </div>
+                    <div className="playlistPlayButtonWrapper">
+                        {isPlaying && pageContextQueue == albumSongs ? (
+                            <IoPauseOutline className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
+                        ) : (
+                            <CgPlayButton className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
+                        )}
                     </div>
                 </div>
                 {albumSongs.map(song => (

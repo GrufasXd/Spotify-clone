@@ -129,7 +129,7 @@ function App() {
             <Route path="/album/:id" element={
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData}/>
-                <AlbumPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
+                <AlbumPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue}/>
                 <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
               </div>
             }/>

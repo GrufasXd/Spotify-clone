@@ -6,6 +6,7 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
+    const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
 
     useEffect(() => {
         function handleClickOutside(){
@@ -48,8 +49,11 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
                 }
         })
         .then(res => res.json())
-        .then(() => {setSongOptionsWindow(null)
-        setPlaylistsWindow(null)})
+        .then(async () => {setSongOptionsWindow(null)
+        setPlaylistsWindow(null)
+        setShowPlaylistMessage(true)
+        await wait(2500)
+        setShowPlaylistMessage(false)})
     }
 
     function wait(ms) {
@@ -67,6 +71,11 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
 
     return(
         <>
+            {showPlaylistMessage && (
+                <div className="queueMessage">
+                    <p>Added to playlist</p>
+                </div>
+            )}
             {showQueueMessage &&(
                 <div className="queueMessage">
                     <p>Added to queue</p>

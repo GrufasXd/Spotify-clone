@@ -6,6 +6,8 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
 
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
+    const [showQueueMessage, setShowQueueMessage] = useState(false)
+    const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
 
     const [songArtist, setSongArtist] = useState(null)
 
@@ -63,8 +65,11 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
                 }
         })
         .then(res => res.json())
-        .then(() => {setSongOptionsWindow(null)
-        setPlaylistsWindow(null)})
+        .then(async () => {setSongOptionsWindow(null)
+        setPlaylistsWindow(null)
+        setShowPlaylistMessage(true)
+        await wait(2500)
+        setShowPlaylistMessage(false)})
     }
 
     function recentCardClick(){
@@ -76,8 +81,31 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
         }
     }
 
+    function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function addingSongToQueue(e, song){
+        e.stopPropagation() 
+        addSongToQueue(song)
+        setSongOptionsWindow(null)
+        setShowQueueMessage(true)
+        await wait(2500)
+        setShowQueueMessage(false)
+    }
+
     return(
         <>
+        {showPlaylistMessage && (
+            <div className="queueMessage">
+                <p>Added to playlist</p>
+            </div>
+        )}
+        {showQueueMessage &&(
+            <div className="queueMessage">
+                <p>Added to queue</p>
+            </div>
+        )}
         <div className="recentCard" onClick={() => recentCardClick()}>
             <MdMusicNote className="recentCardImage"/>
             <div className="recentCardText">
