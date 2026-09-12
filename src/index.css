@@ -1,7 +1,7 @@
 :root {
   --topbarHeight: 72px;
   --sidebarWidth: 260px;
-  --bottomLineHeight: 72px;
+  --bottomLineHeight: 90px;
   --mainThemeBackground: rgb(37, 37, 37);
 }
 
@@ -13,7 +13,6 @@
 body {
   margin: 0;
   background-color: black;
-  overflow: hidden;
 }
 
 ::-webkit-scrollbar{
@@ -51,6 +50,7 @@ body {
   overflow-x: auto;
   border-radius: 5px;
   padding: 0 20px 20px;
+  scrollbar-gutter: stable;
 }
 
 .spotifyLogo{
@@ -151,9 +151,10 @@ body {
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
-  padding: 15px;
+  padding: 15px 15px 30px;
   gap: 20px;
   min-width: 0;
+  min-height: 0;
   overflow-y: auto;
 }
 
@@ -258,9 +259,8 @@ body {
   align-items: flex-start;
   color: white;
   gap: 0.4em;
-  padding: 8px;
+  padding: 0px;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
-  overflow: hidden;
 }
 
 .recentlyViewedCards{
@@ -273,7 +273,6 @@ body {
   display: flex;
   flex-direction: row;
   background-color: hsl(0, 1%, 33%, 0.6);
-  align-self: stretch;
   border-radius: 5px;
   transition: 0.5s;
 }
@@ -357,9 +356,11 @@ body {
 }
 
 .songBottomLine{
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
+  height: var(--bottomLineHeight);
   border: none;
   background-color: black;
   padding: 12px 20px; 
@@ -367,7 +368,6 @@ body {
   grid-template-columns: 1fr 3fr 1fr;
   gap: 12px;
   align-items: center;
-  justify-content: space-between;
 }
 
 .songBottomButtons{
@@ -501,13 +501,30 @@ body {
 .artistSong{
   position: relative;
   margin-bottom: 10px;
-  padding: 0 10px;
-  height: 48px;
+  padding: 10px;
   border-radius: 5px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   align-items: center;
   transition: 0.5s;
+}
+
+.songBlockTextWrapper{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 10px;
+  color: white;
+}
+
+.songBlockTextWrapper p{
+  font-size: 12px;
+  color: rgb(176, 176, 176);
+}
+
+.activeSong{
+  color: rgb(73, 194, 73);
 }
 
 .songNumberWrapper{
@@ -518,7 +535,7 @@ body {
 }
 
 .songNumber{
-  color: grey;
+  color: rgb(176, 176, 176);
 }
 
 .playIcon{

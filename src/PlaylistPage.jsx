@@ -193,7 +193,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist}/>
+                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong}/>
                 ))}
             </div>
         </>

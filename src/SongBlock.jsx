@@ -2,11 +2,12 @@ import { useEffect, useState } from "react"
 import { FaPlay } from "react-icons/fa";
 
 
-function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue}){
+function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue, currentSong}){
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
     const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
+    const [artistData, setArtistData] = useState({})
 
     useEffect(() => {
         function handleClickOutside(){
@@ -20,6 +21,12 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
             document.removeEventListener('click', handleClickOutside)
         })
     }, [])
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/artists/${song.artist_id}`)
+        .then(res => res.json())
+        .then(data => setArtistData(data))
+    }, [song.artist_id])
 
     function durationConverter(duration){
         const mins = Math.floor(duration / 60)
@@ -81,12 +88,17 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
                     <p>Added to queue</p>
                 </div>
             )}
-            <div className="artistSong" onClick={() => onSongSelect(song)}>
+            <div className="artistSong" onClick={() => {onSongSelect(song)}}>
                 <div className="songNumberWrapper">
                     <p className="songNumber">{songNumber}</p>
                     <FaPlay className="playIcon"/>
                 </div> 
-                <p>{song.title}</p>
+                <div className="songBlockTextWrapper">
+                    <b className={currentSong?.id === song.id ? "activeSong" : ""}>
+                        {song.title}
+                    </b>
+                    <p>{artistData.name}</p>
+                </div>
                 <p className="songDuration">{durationConverter(song.duration)}</p>
                 <button className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (
