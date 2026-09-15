@@ -5,7 +5,7 @@ import { IoMusicalNotesOutline, IoPauseOutline } from "react-icons/io5";
 import SongBlock from "./SongBlock"
 import { CgPlayButton } from "react-icons/cg";
 
-function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, setPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
+function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -193,7 +193,7 @@ function PlaylistPage({onSongSelect, removePlaylistFromSidebar, updatePlaylistIn
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} onSongSelect={(song) => onSongSelect(song, playlistSongs)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong}/>
+                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong}/>
                 ))}
             </div>
         </>

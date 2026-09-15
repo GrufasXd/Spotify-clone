@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { FaPlay } from "react-icons/fa";
 
 
-function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue, currentSong}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue}){
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
@@ -94,7 +94,7 @@ function SongBlock({song,songNumber,onSongSelect,playlists,isPlaylistPage,remove
                     <FaPlay className="playIcon"/>
                 </div> 
                 <div className="songBlockTextWrapper">
-                    <b className={currentSong?.id === song.id ? "activeSong" : ""}>
+                    <b className={songIndex === currentIndex ? "activeSong" : ""}>
                         {song.title}
                     </b>
                     <p>{artistData.name}</p>

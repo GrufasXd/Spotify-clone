@@ -88,6 +88,9 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                         <div className="songBottomLineProgressFill"
                             style={{ width: `${(currentTime / duration) * 100}%`}} 
                         />
+                        <div className="songBottomLineThumb"
+                            style={{ left: `${(currentTime / duration) * 100}%`}} 
+                        />
                     </div>
                     <span>{durationDisplay}</span>
                 </div>

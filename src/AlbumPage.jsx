@@ -6,7 +6,7 @@ import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 
 
-function AlbumPage({onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue}){
+function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue}){
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
@@ -80,8 +80,8 @@ function AlbumPage({onSongSelect, addSongToQueue, currentSong,isPlaying,handlePl
                         )}
                     </div>
                 </div>
-                {albumSongs.map(song => (
-                    <SongBlock key={song.id} song={song} onSongSelect={(song) => onSongSelect(song, albumSongs)} addSongToQueue={addSongToQueue} playlists={playlists}/>
+                {albumSongs.map((song,index) => (
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists}/>
                 ))}
             </div>
             }
