@@ -4,7 +4,7 @@ import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { useRef, useEffect, useState, useDebugValue } from "react";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -13,9 +13,10 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
 
     useEffect(() => {
         if(currentSong && audioRef.current){
+            audioRef.current.currentTime = 0
             audioRef.current.play()
         }
-    }, [currentSong])
+    }, [currentSong, currentIndex])
 
     useEffect(() => {
         const audio = audioRef.current
