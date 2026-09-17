@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import PlaylistItem from "./PlaylistItem";
 
-function SidebarLeft({playlistData, setPlaylistData}){
+function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth, setLeftSidebarWidth}){
     let navigate = useNavigate()
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
     const [playlistTitle, setPlaylistTitle] = useState("")
     const [playlistDescription, setPlaylistDescription] = useState("")
+    const [isResizing, setIsResizing] = useState(false)
+
+    function startResize(e){
+        e.preventDefault()
+        setIsResizing(true)
+    }
 
     function playlistCreation(e, playlistTitle, playlistDescription){
         e.preventDefault()
@@ -30,6 +36,30 @@ function SidebarLeft({playlistData, setPlaylistData}){
             })
         }
     }
+
+    useEffect(() => {
+        function resize(e){
+            if(!isResizing) return
+
+            const newWidth = e.clientX
+
+            if(newWidth >= 180 && newWidth <= 450){
+                setLeftSidebarWidth(newWidth)
+            }
+        }
+
+        function stopResize(){
+            setIsResizing(false)
+        }
+
+        window.addEventListener("mousemove", resize)
+        window.addEventListener("mouseup", stopResize)
+
+        return () => {
+            window.removeEventListener("mousemove", resize)
+            window.removeEventListener("mouseup", stopResize)
+        }
+    }, [isResizing])
 
     return(
         <>
@@ -56,7 +86,8 @@ function SidebarLeft({playlistData, setPlaylistData}){
                 </div>
             </div>
             }
-            <div className="sidebarLeft">
+            <div className="sidebarLeft"
+                 style={{ width: `${leftSidebarWidth}px` }}>
                 <div className="sidebarHeader">
                     <b>Your Library</b>
                     <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
@@ -68,6 +99,7 @@ function SidebarLeft({playlistData, setPlaylistData}){
                         </li>
                     ))}
                 </ul>
+                <div className="resizeHandle" onMouseDown={startResize}></div>
             </div>
         </>
     )
