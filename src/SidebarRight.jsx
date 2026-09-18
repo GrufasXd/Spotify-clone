@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import RecentCard from "./RecentCard"
 
-function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue}){
+function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue, rightSidebarWidth}){
 
     const [queueClearConfirmation, setQueueClearConfirmation] = useState(false)
     const queueClearRef = useRef(null)
@@ -35,7 +35,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
         </div>
     </div>
     )}
-    <div className="sidebarRight">
+    <div className="sidebarRight" style={{width: `${rightSidebarWidth}px`}}>
         <b className="sidebarRightTitle">Queue</b>
         {currentSong != null ? (
         <>

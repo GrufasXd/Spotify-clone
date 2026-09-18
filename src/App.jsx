@@ -25,6 +25,9 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef(null)
   const [leftSidebarWidth, setLeftSidebarWidth] = useState(260)
+  const [rightSidebarWidth, setRightSidebarWidth] = useState(260)
+  const [resizeSide, setResizeSide] = useState(null)
+  const [isResizing, setIsResizing] = useState(false)
 
   function handlePlayClick(){
     const audio = audioRef.current
@@ -93,6 +96,38 @@ function App() {
   }
 
   useEffect(() => {
+    function resize(e){
+      if(!isResizing) return
+
+      if(resizeSide === "left"){
+        const newWidth = e.clientX
+        if(newWidth >= 180 && newWidth <= 450){
+          setLeftSidebarWidth(newWidth)
+        }
+      }
+      else{
+        const newWidth = window.innerWidth - e.clientX
+        if(newWidth >= 180 && newWidth <= 450){
+          setRightSidebarWidth(newWidth)
+        }
+      }
+    }
+
+    function stopResize(){
+      setIsResizing(false)
+      setResizeSide(null)
+    }
+
+    window.addEventListener("mousemove", resize)
+    window.addEventListener("mouseup", stopResize)
+
+    return () => {
+        window.removeEventListener("mousemove", resize)
+        window.removeEventListener("mouseup", stopResize)
+    }
+  }, [isResizing, resizeSide])
+
+  useEffect(() => {
       fetch(`http://localhost:3001/api/playlists`)
       .then(res => res.json())
       .then(data => setPlaylistData(data))
@@ -115,30 +150,38 @@ function App() {
           <Routes>
             <Route path="/" element={
               <div className="contentArea">
-                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth} setLeftSidebarWidth={setLeftSidebarWidth}/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
                 <MainContent onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth}/>
               </div>
             }/>
             <Route path="/artist/:id" element={
               <div className="contentArea">
-                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth} setLeftSidebarWidth={setLeftSidebarWidth}/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
                 <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth}/>
               </div>
             }/>
             <Route path="/album/:id" element={
               <div className="contentArea">
-                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth} setLeftSidebarWidth={setLeftSidebarWidth}/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
                 <AlbumPage currentIndex={currentIndex} onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth}/>
               </div>
             }/>
             <Route path="/playlist/:id" element={
               <div className="contentArea">
-                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth} setLeftSidebarWidth={setLeftSidebarWidth}/>
+                <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
                 <PlaylistPage currentIndex={currentIndex} onSongSelect={handleSongSelect} removePlaylistFromSidebar={removePlaylistFromSidebar} updatePlaylistInSidebar={updatePlaylistInSidebar} addSongToQueue={addSongToQueue} playlists={playlistData} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue}/>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue}/>
+                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth}/>
               </div>
             }/>
           </Routes>

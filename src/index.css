@@ -4,6 +4,7 @@
   --bottomLineHeight: 90px;
   --mainThemeBackground: rgb(37, 37, 37);
   --greySupportingColor: rgb(176, 176, 176);
+  --iconHoverColor: rgb(74, 73, 73);
 }
 
 * {
@@ -141,32 +142,32 @@ body {
   color: white;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
-  justify-content: flex-start;
   overflow-y: auto;
-}
-
-.resizeHandle{
-  position: absolute;
-  top: 0;
-  right: -3px;
-  width: 6px;
-  height: 100%;
-  cursor: col-resize;
 }
 
 .sidebarRight{
   display: flex;
   flex-direction: column;
-  color: white;
-  flex: 0 0 var(--sidebarWidth);
+  flex: 0 0 auto;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  color: white;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
   padding: 15px 15px 30px;
-  gap: 20px;
-  min-width: 0;
-  min-height: 0;
   overflow-y: auto;
+}
+
+.resizeHandle{
+  flex: 0 0 6px;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  transition: 0.5s;
+}
+
+.resizeHandle:hover{
+  background-color:var(--iconHoverColor);
+  transition: 0.5s;
 }
 
 .sidebarRightTitle{
@@ -192,7 +193,7 @@ body {
 .plusIcon:hover{
   cursor: pointer;
   transition: 0.5s;
-  background-color: rgb(74, 73, 73);
+  background-color: var(--iconHoverColor);
 }
 
 .playlists{
@@ -222,7 +223,7 @@ body {
 }
 
 .playlistItem:hover{
-  background-color: rgb(74, 73, 73);
+  background-color: var(--iconHoverColor);
   cursor: pointer;
   transition: 0.5s;
 }
@@ -275,8 +276,8 @@ body {
   display: flex;
   align-items: flex-start;
   color: white;
-  gap: 0.4em;
-  padding: 0px;
+  gap: 0.1em;
+  padding: 2px;
   height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
 }
 
@@ -520,7 +521,7 @@ body {
 }
 
 .searchResult:hover, .artistAlbum:hover{
-  background-color: rgb(74, 73, 73);
+  background-color: var(--iconHoverColor);
   cursor: pointer;
   transition: 0.5s;
 }
