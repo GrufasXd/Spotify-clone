@@ -47,11 +47,11 @@ body {
   flex: 1 1 0;
   min-width: 0;
   flex-direction: column;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
   overflow-y: auto;
   overflow-x: auto;
   border-radius: 5px;
-  padding: 0 20px 20px;
+  padding: 0 20px 0;
   scrollbar-gutter: stable;
 }
 
@@ -138,10 +138,11 @@ body {
   flex-direction: column;
   position: relative;
   flex: 0 0 auto;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
   color: white;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
+  padding: 15px 15px 0;
   overflow-y: auto;
 }
 
@@ -149,11 +150,12 @@ body {
   display: flex;
   flex-direction: column;
   flex: 0 0 auto;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight));
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
   color: white;
   background-color: rgb(37, 37, 37);
   border-radius: 5px;
-  padding: 15px 15px 30px;
+  gap: 20px;
+  padding: 15px 15px 0;
   overflow-y: auto;
 }
 
@@ -199,7 +201,9 @@ body {
 .playlists{
   list-style-type: none;
   padding: 0;
-  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .playlistIcon{
@@ -207,17 +211,19 @@ body {
   font-size: 3em;
   background-color: rgb(24, 24, 179);
   border-radius: 5px;
-  margin-right: 20px;
-  text-align: end;
   display: flex;
-  margin-left: 10px;
-  min-width: fit-content;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
 }
 
 .playlistItem{
   display: flex;
   align-items: center;
+  gap: 18px;
   border-radius: 5px;
+  padding: 5px;
   transition: 0.5s;
   min-width: 0;
 }
@@ -231,14 +237,11 @@ body {
 .playlistItemText{
   display: flex;
   flex-direction: column;
+  justify-content: center;
   min-width: 0;
+  padding-top: 10px;
   overflow-wrap: anywhere;
   padding-right: 20px;
-}
-
-.playlistName{
-  padding-top: 15px;
-  display: flex;
 }
 
 .playlistDescription{
