@@ -1,7 +1,9 @@
 import {useEffect, useRef, useState} from "react";
 import RecentCard from "./RecentCard"
+import { LuPanelLeftOpen } from "react-icons/lu";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 
-function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue, rightSidebarWidth}){
+function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
 
     const [queueClearConfirmation, setQueueClearConfirmation] = useState(false)
     const queueClearRef = useRef(null)
@@ -35,8 +37,16 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
         </div>
     </div>
     )}
-    <div className="sidebarRight" style={{width: `${rightSidebarWidth}px`}}>
-        <b className="sidebarRightTitle">Queue</b>
+    {sidebarRightClosed ? (
+        <div className="sidebarRightClosed">
+            <MdKeyboardArrowLeft className="openSidebarButton" onClick={() => setSidebarRightClosed(false)}/>
+        </div>
+    ) : 
+        <div className="sidebarRight" style={{width: `${rightSidebarWidth}px`}}>
+        <div className="sidebarRightTitleWrapper">
+            <LuPanelLeftOpen className="hideSidebarButton" onClick={() => setSidebarRightClosed(true)}/>
+            <b className="sidebarRightTitle">Queue</b>
+        </div>
         {currentSong != null ? (
         <>
             <b>Now playing</b>
@@ -75,11 +85,12 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                 ))}
             </>
         ) : 
-        <>
-            <p>No songs in queue</p>
-        </>
+            <>
+                <p>No songs in queue</p>
+            </>
         }
     </div>
+    }
     </>
     )
 }

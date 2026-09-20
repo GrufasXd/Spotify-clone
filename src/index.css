@@ -159,6 +159,59 @@ body {
   overflow-y: auto;
 }
 
+.sidebarRightClosed{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
+  color: white;
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  overflow-y: auto;
+  font-size: 40px;
+}
+
+.sidebarRight .hideSidebarButton {
+  display: none;
+  transition: 0.5s;
+}
+
+.sidebarLeft .hideSidebarButton {
+  display: none;
+  transition: 0.5s;
+}
+
+.sidebarRight:hover .hideSidebarButton {
+  display: block;
+  transition: 0.5s;
+}
+
+.sidebarLeft:hover .hideSidebarButton {
+  display: block;
+  transition: 0.5s;
+}
+
+.hideSidebarButton:hover, .openSidebarButton:hover{
+  cursor: pointer;
+}
+
+.sidebarRightTextWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+}
+
+.sidebarRightTitleWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
 .resizeHandle{
   flex: 0 0 6px;
   width: 10px;
@@ -172,12 +225,7 @@ body {
   transition: 0.5s;
 }
 
-.sidebarRightTitle{
-  gap: 30px;
-}
-
 .sidebarHeader{
-  padding: 10px;
   display: flex;
   justify-content: space-between;
 }
@@ -216,6 +264,7 @@ body {
   justify-content: center;
   width: 54px;
   height: 54px;
+  min-width: fit-content;
 }
 
 .playlistItem{
@@ -238,10 +287,13 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 0;
-  padding-top: 10px;
+  gap: 10px;
   overflow-wrap: anywhere;
-  padding-right: 20px;
+}
+
+.playlistName,
+.playlistDescription{
+  margin: 0;
 }
 
 .playlistDescription{
@@ -307,6 +359,8 @@ body {
 .recentCardArtistName{
   font-size: 12px;
   text-align: left;
+  font-weight: normal;
+  color: var(--greySupportingColor);
 }
 
 .recentCard:hover, .artistSong:hover{
@@ -532,6 +586,8 @@ body {
 .artistName, .albumTitle{
   font-size: 2.5em;
   font-weight: bold;
+  overflow-wrap: anywhere;
+
 }
 
 .popularTag, .albumTag{
@@ -828,14 +884,6 @@ body {
   left: 45%;
   bottom: 100px;
   white-space: nowrap;
-}
-
-.sidebarRightTextWrapper{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 30px;
-  text-align: center;
 }
 
 .clearQueueButton{

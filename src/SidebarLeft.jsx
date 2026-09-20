@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import PlaylistItem from "./PlaylistItem";
+import { LuPanelLeftClose } from "react-icons/lu";
+import { MdKeyboardArrowRight } from "react-icons/md";
 
 function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
     let navigate = useNavigate()
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
     const [playlistTitle, setPlaylistTitle] = useState("")
     const [playlistDescription, setPlaylistDescription] = useState("")
+    const [sidebarLeftClosed, setSidebarLeftClosed] = useState(false)
 
     function playlistCreation(e, playlistTitle, playlistDescription){
         e.preventDefault()
@@ -56,9 +59,15 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                 </div>
             </div>
             }
+            {sidebarLeftClosed ? (
+                <div className="sidebarRightClosed">
+                    <MdKeyboardArrowRight className="openSidebarButton" onClick={() => setSidebarLeftClosed(false)}/>
+                </div>
+            ) : 
             <div className="sidebarLeft"
                  style={{ width: `${leftSidebarWidth}px` }}>
                 <div className="sidebarHeader">
+                    <LuPanelLeftClose className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
                     <b>Your Library</b>
                     <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
                 </div>
@@ -70,6 +79,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                     ))}
                 </ul>
             </div>
+            }
         </>
     )
 }
