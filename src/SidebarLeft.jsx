@@ -66,9 +66,9 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
             ) : 
             <div className="sidebarLeft"
                  style={{ width: `${leftSidebarWidth}px` }}>
-                <div className="sidebarHeader">
+                <div className="sidebarLeftTitleWrapper">
                     <LuPanelLeftClose className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
-                    <b>Your Library</b>
+                    <b className="sidebarTitle">Your Library</b>
                     <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
                 </div>
                 <ul className="playlists">

@@ -43,53 +43,53 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
         </div>
     ) : 
         <div className="sidebarRight" style={{width: `${rightSidebarWidth}px`}}>
-        <div className="sidebarRightTitleWrapper">
-            <LuPanelLeftOpen className="hideSidebarButton" onClick={() => setSidebarRightClosed(true)}/>
-            <b className="sidebarRightTitle">Queue</b>
-        </div>
-        {currentSong != null ? (
-        <>
-            <b>Now playing</b>
-            <RecentCard
-                key={currentSong.id}
-                title={currentSong.title}
-                song={currentSong}
-                onSongSelect={onSongSelect}
-                playlistData={playlistData}
-                addSongToQueue={addSongToQueue}
-            />
-        </>
-        ): 
-        <>
-            <p>Play a song to show it here</p>
-        </>
-        }
-        {userQueue.length != 0 ? (
-            <>  
-                <div className="sidebarRightTextWrapper">
-                    <b>Next in queue</b>
-                    <p className="clearQueueButton" onClick={(e) => {setQueueClearConfirmation(true); e.stopPropagation()}}>Clear queue</p>
-                </div>
-                {userQueue.map(queueItem => (
-                    <RecentCard
-                        key={queueItem.queueItemId}
-                        title={queueItem.song.title}
-                        song={queueItem.song}
-                        queueItem={queueItem}
-                        queueItemClick={queueItemClick}
-                        playlistData={playlistData}
-                        addSongToQueue={addSongToQueue}
-                        isSidebar={true}
-                        setUserQueue={setUserQueue}
-                    />
-                ))}
-            </>
-        ) : 
+            <div className="sidebarRightTitleWrapper">
+                <LuPanelLeftOpen className="hideSidebarButton" onClick={() => setSidebarRightClosed(true)}/>
+                <b className="sidebarTitle">Queue</b>
+            </div>
+            {currentSong != null ? (
             <>
-                <p>No songs in queue</p>
+                <b>Now playing</b>
+                <RecentCard
+                    key={currentSong.id}
+                    title={currentSong.title}
+                    song={currentSong}
+                    onSongSelect={onSongSelect}
+                    playlistData={playlistData}
+                    addSongToQueue={addSongToQueue}
+                />
             </>
-        }
-    </div>
+            ): 
+            <>
+                <p>Play a song to show it here</p>
+            </>
+            }
+            {userQueue.length != 0 ? (
+                <>  
+                    <div className="sidebarRightTextWrapper">
+                        <b>Next in queue</b>
+                        <p className="clearQueueButton" onClick={(e) => {setQueueClearConfirmation(true); e.stopPropagation()}}>Clear queue</p>
+                    </div>
+                    {userQueue.map(queueItem => (
+                        <RecentCard
+                            key={queueItem.queueItemId}
+                            title={queueItem.song.title}
+                            song={queueItem.song}
+                            queueItem={queueItem}
+                            queueItemClick={queueItemClick}
+                            playlistData={playlistData}
+                            addSongToQueue={addSongToQueue}
+                            isSidebar={true}
+                            setUserQueue={setUserQueue}
+                        />
+                    ))}
+                </>
+            ) : 
+                <>
+                    <p>No songs in queue</p>
+                </>
+            }
+        </div>
     }
     </>
     )

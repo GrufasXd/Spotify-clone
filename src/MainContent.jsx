@@ -12,7 +12,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue}){
 
     return(
         <div className="mainContent">
-            <h2>Good morning!</h2>
+            <h2 className="greetingText">Good morning!</h2>
             <div className="recentlyViewedCards">
                 {songs.map (song => (
                     <RecentCard 

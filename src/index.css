@@ -41,18 +41,108 @@ body {
   padding: 0 12px;
 }
 
-.mainContent{
-  background-color: rgb(37, 37, 37);
+.sidebarLeft, .sidebarRight, .mainContent{
   display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 0 0 auto;
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
+  color: white;
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  gap: 20px;
+  padding: 15px 15px 0;
+  overflow-y: auto;
+}
+
+.mainContent {
   flex: 1 1 0;
   min-width: 0;
-  flex-direction: column;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
-  overflow-y: auto;
   overflow-x: auto;
-  border-radius: 5px;
-  padding: 0 20px 0;
   scrollbar-gutter: stable;
+}
+
+.greetingText{
+  margin: 0;
+  transform: translateY(5px);
+}
+
+.sidebarRightClosed{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
+  color: white;
+  background-color: rgb(37, 37, 37);
+  border-radius: 5px;
+  overflow-y: auto;
+  font-size: 40px;
+}
+
+.openSidebarButton{
+  cursor: pointer;
+}
+
+.hideSidebarButton {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.sidebarRight:hover .hideSidebarButton,
+.sidebarLeft:hover .hideSidebarButton {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.sidebarRightTextWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+}
+
+.sidebarRightTitleWrapper,
+.sidebarLeftTitleWrapper{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+}
+
+.sidebarRightTitleWrapper{
+  justify-content: flex-start;
+}
+
+.sidebarLeftTitleWrapper{
+  justify-content: space-between;
+}
+
+.sidebarTitle{
+  transition: margin 0.5s;
+}
+
+.sidebarRight:hover .sidebarTitle,
+.sidebarLeft:hover .sidebarTitle{
+  margin-left: 30px;
+}
+
+.resizeHandle{
+  flex: 0 0 6px;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  transition: 0.5s;
+}
+
+.resizeHandle:hover{
+  background-color:var(--iconHoverColor);
+  transition: 0.5s;
 }
 
 .spotifyLogo{
@@ -131,103 +221,6 @@ body {
   color: white;
   transition: 0.5s;
   font-size: 2.9em;
-}
-
-.sidebarLeft{
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  flex: 0 0 auto;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
-  color: white;
-  background-color: rgb(37, 37, 37);
-  border-radius: 5px;
-  padding: 15px 15px 0;
-  overflow-y: auto;
-}
-
-.sidebarRight{
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
-  color: white;
-  background-color: rgb(37, 37, 37);
-  border-radius: 5px;
-  gap: 20px;
-  padding: 15px 15px 0;
-  overflow-y: auto;
-}
-
-.sidebarRightClosed{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  height: calc(100vh - var(--topbarHeight) - var(--bottomLineHeight) - 2px); /*2px is the padding bottom of contentArea (father element)*/
-  color: white;
-  background-color: rgb(37, 37, 37);
-  border-radius: 5px;
-  overflow-y: auto;
-  font-size: 40px;
-}
-
-.sidebarRight .hideSidebarButton {
-  display: none;
-  transition: 0.5s;
-}
-
-.sidebarLeft .hideSidebarButton {
-  display: none;
-  transition: 0.5s;
-}
-
-.sidebarRight:hover .hideSidebarButton {
-  display: block;
-  transition: 0.5s;
-}
-
-.sidebarLeft:hover .hideSidebarButton {
-  display: block;
-  transition: 0.5s;
-}
-
-.hideSidebarButton:hover, .openSidebarButton:hover{
-  cursor: pointer;
-}
-
-.sidebarRightTextWrapper{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 30px;
-  text-align: center;
-}
-
-.sidebarRightTitleWrapper{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
-}
-
-.resizeHandle{
-  flex: 0 0 6px;
-  width: 10px;
-  height: 100%;
-  cursor: col-resize;
-  transition: 0.5s;
-}
-
-.resizeHandle:hover{
-  background-color:var(--iconHoverColor);
-  transition: 0.5s;
-}
-
-.sidebarHeader{
-  display: flex;
-  justify-content: space-between;
 }
 
 .plusIcon{
