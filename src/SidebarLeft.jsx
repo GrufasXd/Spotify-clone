@@ -59,18 +59,20 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                 </div>
             </div>
             }
-            {sidebarLeftClosed ? (
-                <div className="sidebarRightClosed">
-                    <MdKeyboardArrowRight className="openSidebarButton" onClick={() => setSidebarLeftClosed(false)}/>
-                </div>
-            ) : 
-            <div className="sidebarLeft"
-                 style={{ width: `${leftSidebarWidth}px` }}>
+            <div className={`sidebarLeft ${sidebarLeftClosed ? 'sidebarRightClosed' : ''}`}
+                style={{ width: sidebarLeftClosed ? '50px' : `${leftSidebarWidth}px` }}>
                 <div className="sidebarLeftTitleWrapper">
-                    <LuPanelLeftClose className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
-                    <b className="sidebarTitle">Your Library</b>
-                    <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
+                    {sidebarLeftClosed ? (
+                        <MdKeyboardArrowRight className="openSidebarButton" onClick={() => setSidebarLeftClosed(false)}/>
+                    ) : (
+                        <>
+                            <LuPanelLeftClose className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
+                            <b className="sidebarTitle">Your Library</b>
+                            <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
+                        </>
+                    )}
                 </div>
+                {!sidebarLeftClosed && (
                 <ul className="playlists">
                     {playlistData.map(playlist => (
                         <li onClick={() => navigate(`/playlist/${playlist.id}`)} key={playlist.id}>
@@ -78,8 +80,8 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         </li>
                     ))}
                 </ul>
+                )}
             </div>
-            }
         </>
     )
 }

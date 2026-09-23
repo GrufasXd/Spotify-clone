@@ -2,9 +2,10 @@ import { CgPlayButton } from "react-icons/cg";
 import { FaStepForward } from "react-icons/fa";
 import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
-import { useRef, useEffect, useState, useDebugValue } from "react";
+import { IoShuffle } from "react-icons/io5";
+import {useEffect, useState} from "react";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -73,6 +74,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
             />
             <div className="songBottomControls">
                 <div className="songBottomButtons">
+                    <IoShuffle className={shuffle ? "shuffleButton active" : "shuffleButton"} onClick={toggleShuffle}/>
                     <FaStepBackward className="previousSongButton" onClick={previousSong}/>
                     {isPlaying ? (
                         <IoPauseOutline className="pauseButton" onClick={handlePlayClick}/>
