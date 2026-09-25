@@ -14,12 +14,12 @@ function MainContent({onSongSelect, playlistData, addSongToQueue}){
         <div className="mainContent">
             <h2 className="greetingText">Good morning!</h2>
             <div className="recentlyViewedCards">
-                {songs.map (song => (
+                {songs.map ((song, index) => (
                     <RecentCard 
                         key={song.id}
                         title={song.title}
                         song={song}
-                        onSongSelect={(song) => onSongSelect(song, songs)}
+                        onSongSelect={(song) => onSongSelect(song, songs, index)}
                         playlistData={playlistData}
                         addSongToQueue={addSongToQueue}
                     />

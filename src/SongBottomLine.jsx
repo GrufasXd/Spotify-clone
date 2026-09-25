@@ -4,8 +4,10 @@ import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { IoShuffle } from "react-icons/io5";
 import {useEffect, useState} from "react";
+import { BsRepeat } from "react-icons/bs";
+import { BsRepeat1 } from "react-icons/bs";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -70,7 +72,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 src={`http://localhost:3001${currentSong?.file_url}`}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
-                onEnded={() => {setIsPlaying(false); nextSong()}}
+                onEnded={() => {setIsPlaying(false); nextSong(true)}}
             />
             <div className="songBottomControls">
                 <div className="songBottomButtons">
@@ -81,7 +83,12 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                     ) : (
                         <CgPlayButton className="playButton" onClick={handlePlayClick}/>
                     )}
-                    <FaStepForward className="nextSongButton" onClick={nextSong}/>
+                    <FaStepForward className="nextSongButton" onClick={() => {nextSong(), setRepeat("")}}/>
+                    {repeat === "Infinite" ? (
+                        <BsRepeat className="repeatButton active" onClick={toggleRepeat}/>
+                    ) : (
+                        <BsRepeat1 className={repeat === "Once" ? "repeatButton active" : "repeatButton"} onClick={toggleRepeat}/>
+                    )}
                 </div>
                 <div className="songBottomInfo">
                     <span>{currentTimeDisplay}</span>
@@ -99,7 +106,6 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
-
             </div>
         </div>
     )

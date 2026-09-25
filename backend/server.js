@@ -102,6 +102,12 @@ app.get('/api/playlists/:id/songs', (req,res) => {
   res.json(playlistData)
 })
 
+app.get('/api/songs/random', (req, res) =>{
+  const currentSongId = req.query.exclude
+  const randomSong = db.prepare('SELECT * FROM songs WHERE id != ? ORDER BY RANDOM() LIMIT 1').get(currentSongId)
+  res.json(randomSong)
+})
+
 // ********************************** POST **********************************
 
 // Naujo playlisto sukurimas

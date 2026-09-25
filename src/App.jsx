@@ -30,6 +30,7 @@ function App() {
   const [isResizing, setIsResizing] = useState(false)
   const [sidebarRightClosed, setSidebarRightClosed] = useState(false)
   const [shuffle, setShuffle] = useState(false)
+  const [repeat, setRepeat] = useState("")
 
   function handlePlayClick(){
     const audio = audioRef.current
@@ -67,24 +68,47 @@ function App() {
     setUserQueue(prev => [...prev, queueItem])
   }
 
-  function nextSong(){
-    if(userQueue.length != 0){
-      setCurrentSong(userQueue[0].song)
-      setUserQueue(prev => prev.slice(1))
+  function restartSong(){
+    audioRef.current.currentTime = 0
+    audioRef.current.play()
+  }
+
+  function nextSong(endedItself = false){
+    if(repeat === "Once" && endedItself){
+      restartSong()
+      setRepeat("")
     }
-    else if(shuffle){
-      let randomSongNumber
-      do{
-        randomSongNumber = Math.floor(Math.random() * (pageContextQueue.length))
-      } while(
-        pageContextQueue.length > 1 && randomSongNumber === currentIndex
-      )
-      setCurrentSong(pageContextQueue[randomSongNumber])
-      setCurrentIndex(randomSongNumber)
+    else if (repeat === "Infinite" && endedItself){
+      restartSong()
     }
-    else if(currentIndex !== pageContextQueue.length - 1){
-      setCurrentSong(pageContextQueue[currentIndex+1])
-      setCurrentIndex(currentIndex + 1)
+    else{
+      if(userQueue.length != 0){
+        setCurrentSong(userQueue[0].song)
+        setUserQueue(prev => prev.slice(1))
+      }
+      else if(shuffle){
+        let randomSongNumber
+        do{
+          randomSongNumber = Math.floor(Math.random() * (pageContextQueue.length))
+        } while(
+          pageContextQueue.length > 1 && randomSongNumber === currentIndex
+        )
+        setCurrentSong(pageContextQueue[randomSongNumber])
+        setCurrentIndex(randomSongNumber)
+      }
+      else if(currentIndex !== pageContextQueue.length - 1){
+        setCurrentSong(pageContextQueue[currentIndex + 1])
+        setCurrentIndex(currentIndex + 1)
+      }
+      else{
+        fetch(`http://localhost:3001/api/songs/random?exclude=${currentSong.id}`)
+          .then(res => res.json())
+          .then(randomSong => {
+            setPageContextQueue(prev => [...prev, randomSong])
+            setCurrentSong(randomSong)
+            setCurrentIndex(pageContextQueue.length)
+          })
+      }
     }
   }
 
@@ -97,6 +121,13 @@ function App() {
 
  function toggleShuffle(){
     setShuffle(prev => !prev)
+  }
+
+  const repeatModes = ["", "Once", "Infinite"]
+
+  function toggleRepeat(){
+    const repeatIndex = repeatModes.indexOf(repeat)
+    setRepeat(repeatModes[(repeatIndex + 1) % repeatModes.length])
   }
 
   function removePlaylistFromSidebar(playlistId){
@@ -142,6 +173,7 @@ function App() {
         window.removeEventListener("mouseup", stopResize)
     }
   }, [isResizing, resizeSide])
+
 
   useEffect(() => {
       fetch(`http://localhost:3001/api/playlists`)
@@ -202,7 +234,7 @@ function App() {
             }/>
           </Routes>
           <div>
-            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle}/>
+            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat}/>
           </div>
         </>)
 }
