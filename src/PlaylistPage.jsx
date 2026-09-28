@@ -4,6 +4,7 @@ import { IoMusicalNotesOutline, IoPauseOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 import { CgPlayButton } from "react-icons/cg";
+import { Tooltip } from 'react-tooltip'
 
 function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
     let params = useParams()
@@ -117,7 +118,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     function handlePlaylistPlay(){
         
         if(pageContextQueue !== playlistSongs || currentSong == null){
-            onSongSelect(playlistSongs[0], playlistSongs)
+            onSongSelect(playlistSongs[0], playlistSongs,0)
         }
         else{
             handlePlayClick()
@@ -169,7 +170,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                         <p>{playlistSongs.length} songs, {durationToText(playlistDuration)}</p>
                     </div>
                     <div className="playlistOptionsWrapper" ref={playlistRef}>
-                        <button className="albumOptions" onClick={() => setOpenPlaylistOptions(true)}>...</button>
+                        <button data-tooltip-id="playlist-tooltip" data-tooltip-content="Playlist options" className="albumOptions" onClick={() => setOpenPlaylistOptions(true)}>...</button>
                         {openPlaylistOptions === true ? (
                             <div className="playlistOptionsList">
                                 <p className="deletePlaylist" onClick={(e) => {e.stopPropagation();setPlaylistDeletionConfirmation(true); setOpenPlaylistOptions(false);}}>Delete playlist</p>
@@ -186,15 +187,16 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                     </div>
                     <div className="playlistPlayButtonWrapper">
                         {isPlaying && pageContextQueue == playlistSongs ? (
-                            <IoPauseOutline className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
+                            <IoPauseOutline data-tooltip-id="playlist-tooltip" data-tooltip-content="Pause" className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
                         ) : (
-                            <CgPlayButton className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
+                            <CgPlayButton data-tooltip-id="playlist-tooltip" data-tooltip-content="Play" className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
                         )}
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
                     <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
                 ))}
+                <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>
         </>
     )

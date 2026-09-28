@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { FaPlay } from "react-icons/fa";
+import { Tooltip } from 'react-tooltip'
 
 
 function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList}){
+    const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
@@ -100,7 +102,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                     <p>{artistData.name}</p>
                 </div>
                 <p className="songDuration">{durationConverter(song.duration)}</p>
-                <button className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
+                <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (
                 <>
                     <div className="songOptionsList">
@@ -135,6 +137,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                 <></>
                 }
             </div>
+            <Tooltip id={songTooltipId} place="top" positionStrategy="fixed" middlewares={[]} className="tooltips"/>
         </>
     )
 }

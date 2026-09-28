@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import PlaylistItem from "./PlaylistItem";
 import { LuPanelLeftClose } from "react-icons/lu";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import { Tooltip } from "react-tooltip";
 
 function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
     let navigate = useNavigate()
@@ -66,9 +67,9 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         <MdKeyboardArrowRight className="openSidebarButton" onClick={() => setSidebarLeftClosed(false)}/>
                     ) : (
                         <>
-                            <LuPanelLeftClose className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
+                            <LuPanelLeftClose data-tooltip-id="sidebar-left-tooltip" data-tooltip-content="Hide playlists" className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
                             <b className="sidebarTitle">Your Library</b>
-                            <button className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
+                            <button data-tooltip-id="sidebar-left-tooltip" data-tooltip-content="Create playlist" className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
                         </>
                     )}
                 </div>
@@ -82,6 +83,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                 </ul>
                 )}
             </div>
+            <Tooltip id="sidebar-left-tooltip" place="top-start" positionStrategy="fixed" middlewares={[]} className="tooltips"/>
         </>
     )
 }

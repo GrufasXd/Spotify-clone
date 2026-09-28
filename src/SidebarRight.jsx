@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import RecentCard from "./RecentCard"
 import { LuPanelLeftOpen } from "react-icons/lu";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { Tooltip } from 'react-tooltip'
 
 function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
 
@@ -44,8 +45,9 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                     <MdKeyboardArrowLeft className="openSidebarButton" onClick={() => setSidebarRightClosed(false)}/>
                 ) : (
                     <>
-                        <LuPanelLeftOpen className="hideSidebarButton" onClick={() => setSidebarRightClosed(true)}/>
+                        <LuPanelLeftOpen data-tooltip-id="sidebar-right-tooltip" data-tooltip-content="Hide queue" className="hideSidebarButton" onClick={() => setSidebarRightClosed(true)}/>
                         <b className="sidebarTitle">Queue</b>
+                        <Tooltip id="sidebar-right-tooltip" place="top" positionStrategy="fixed"/>
                     </>
                 )}
             </div>

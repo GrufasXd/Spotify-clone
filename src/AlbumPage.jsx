@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-
 import SongBlock from "./SongBlock"
+import { Tooltip } from 'react-tooltip'
 import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 
@@ -48,7 +48,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
     function handleAlbumPlay(){
         
         if(pageContextQueue !== albumSongs || currentSong == null){
-            onSongSelect(albumSongs[0], albumSongs)
+            onSongSelect(albumSongs[0], albumSongs, 0)
         }
         else{
             handlePlayClick()
@@ -74,10 +74,11 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                     <div className="playlistPlayButtonWrapper">
                         {isPlaying && pageContextQueue == albumSongs ? (
-                            <IoPauseOutline className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
+                            <IoPauseOutline data-tooltip-id="playlist-tooltip" data-tooltip-content="Pause" className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
                         ) : (
-                            <CgPlayButton className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
+                            <CgPlayButton data-tooltip-id="playlist-tooltip" data-tooltip-content="Play" className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
                         )}
+                        <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (

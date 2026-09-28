@@ -901,4 +901,15 @@ body {
   cursor: pointer;
   font-size: 12px;
   margin-left: auto;
+  transition: 0.5s;
+}
+
+.clearQueueButton:hover{
+  transform: scale(1.1);
+  font-weight: bold;
+  transition: 0.5s;
+}
+
+.tooltips{
+  z-index: 1;
 }

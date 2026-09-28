@@ -1,9 +1,9 @@
 import { MdMusicNote } from "react-icons/md";
-import {useEffect, useState} from "react";
-
+import {useEffect, useState, useId} from "react";
+import { Tooltip } from 'react-tooltip'
 
 function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue}){
-
+    const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
@@ -115,7 +115,7 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
                 )}
             </div>
             <div className="songOptionsWrapper" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
+                <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" type="button" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (
                 <>
                     <div className="songOptionsList">
@@ -149,6 +149,7 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
                 }
             </div>
         </div>
+        <Tooltip id={songTooltipId} place="top" positionStrategy="fixed" middlewares={[]} className="tooltips"/>
         </>
     )
 }

@@ -6,6 +6,7 @@ import { IoShuffle } from "react-icons/io5";
 import {useEffect, useState} from "react";
 import { BsRepeat } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
+import { Tooltip } from 'react-tooltip'
 
 function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat}){
     const [currentTime, setCurrentTime] = useState(0)
@@ -76,19 +77,20 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
             />
             <div className="songBottomControls">
                 <div className="songBottomButtons">
-                    <IoShuffle className={shuffle ? "shuffleButton active" : "shuffleButton"} onClick={toggleShuffle}/>
-                    <FaStepBackward className="previousSongButton" onClick={previousSong}/>
+                    <IoShuffle data-tooltip-id="player-tooltip" data-tooltip-content={shuffle ? "Disable shuffle" : "Enable shuffle"} className={shuffle ? "shuffleButton active" : "shuffleButton"} onClick={toggleShuffle}/>
+                    <FaStepBackward data-tooltip-id="player-tooltip" data-tooltip-content="Previous" className="previousSongButton" onClick={previousSong}/>
                     {isPlaying ? (
-                        <IoPauseOutline className="pauseButton" onClick={handlePlayClick}/>
+                        <IoPauseOutline data-tooltip-id="player-tooltip" data-tooltip-content="Pause" className="pauseButton" onClick={handlePlayClick}/>
                     ) : (
-                        <CgPlayButton className="playButton" onClick={handlePlayClick}/>
+                        <CgPlayButton data-tooltip-id="player-tooltip" data-tooltip-content="Play" className="playButton" onClick={handlePlayClick}/>
                     )}
-                    <FaStepForward className="nextSongButton" onClick={() => {nextSong(), setRepeat("")}}/>
+                    <FaStepForward data-tooltip-id="player-tooltip" data-tooltip-content="Next" className="nextSongButton" onClick={() => {nextSong(), setRepeat("")}}/>
                     {repeat === "Infinite" ? (
-                        <BsRepeat className="repeatButton active" onClick={toggleRepeat}/>
+                        <BsRepeat data-tooltip-id="player-tooltip" data-tooltip-content="Disable repeat" className="repeatButton active" onClick={toggleRepeat}/>
                     ) : (
-                        <BsRepeat1 className={repeat === "Once" ? "repeatButton active" : "repeatButton"} onClick={toggleRepeat}/>
+                        <BsRepeat1 data-tooltip-id="player-tooltip" data-tooltip-content={repeat === "Once" ? "Repeat infinite" : "Repeat once"} className={repeat === "Once" ? "repeatButton active"  : "repeatButton"} onClick={toggleRepeat}/>
                     )}
+                    <Tooltip id="player-tooltip" place="top" className="projectTooltip" />
                 </div>
                 <div className="songBottomInfo">
                     <span>{currentTimeDisplay}</span>
