@@ -143,6 +143,18 @@ function App() {
     )
   }
 
+  const previousVolume = useRef(1)
+
+  function toggleMute(){
+    if(volume != 0){
+      previousVolume.current = volume
+      setVolume(0)
+    }
+    else{
+      setVolume(previousVolume.current)
+    }
+  }
+
   useEffect(() => {
     function resize(e){
       if(!isResizing) return
@@ -242,7 +254,7 @@ function App() {
             }/>
           </Routes>
           <div>
-            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat} volume={volume} setVolume={setVolume}/>
+            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat} volume={volume} setVolume={setVolume} toggleMute={toggleMute}/>
           </div>
         </>)
 }

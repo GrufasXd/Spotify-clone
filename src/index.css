@@ -564,14 +564,11 @@ body {
   background: transparent;
 }
 
-.volumeSlider:hover{
-  accent-color: white;
-}
-
 .volumeSlider::-webkit-slider-runnable-track{
   height: 6px;
   border-radius: 3px;
   width: 100%;
+  background: transparent;
 }
 
 .volumeSlider::-webkit-slider-thumb {
@@ -584,7 +581,7 @@ body {
 }
 
 .volumeSlider:hover::-webkit-slider-runnable-track{
-  accent-color: var(--activeIcon);
+  background: linear-gradient(to right, var(--activeIcon) var(--volume-level), transparent var(--volume-level));
 }
 
 

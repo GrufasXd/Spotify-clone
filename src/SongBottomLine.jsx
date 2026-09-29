@@ -8,13 +8,18 @@ import { BsRepeat } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
 import { FaVolumeUp } from "react-icons/fa";
+import { FaVolumeDown } from "react-icons/fa";
+import { FaVolumeMute } from "react-icons/fa";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
     const [songArtist, setSongArtist] = useState(null)
+
+    const VolumeIcon = volume === 0 ? FaVolumeMute :
+    volume < 0.5 ? FaVolumeDown : FaVolumeUp
 
     useEffect(() => {
         if(currentSong && audioRef.current){
@@ -109,8 +114,8 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
-                <FaVolumeUp className="volumeIcon"/>
-                <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => setVolume(Number(e.target.value))} />
+                <VolumeIcon className="volumeIcon" onClick={toggleMute}/>
+                <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} style={{ "--volume-level": `${volume * 100}%` }} onChange={(e) => {setVolume(Number(e.target.value)); e.stopPropagation()}} />
             </div>
         </div>
     )
