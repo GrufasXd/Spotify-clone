@@ -24,6 +24,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef(null)
+  const [volume, setVolume] = useState(1)
   const [leftSidebarWidth, setLeftSidebarWidth] = useState(260)
   const [rightSidebarWidth, setRightSidebarWidth] = useState(260)
   const [resizeSide, setResizeSide] = useState(null)
@@ -174,6 +175,13 @@ function App() {
     }
   }, [isResizing, resizeSide])
 
+  useEffect(() => {
+    const audio = audioRef.current
+    if(audio){
+      audio.volume = volume
+    }
+  }, [volume])
+
 
   useEffect(() => {
       fetch(`http://localhost:3001/api/playlists`)
@@ -234,7 +242,7 @@ function App() {
             }/>
           </Routes>
           <div>
-            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat}/>
+            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat} volume={volume} setVolume={setVolume}/>
           </div>
         </>)
 }

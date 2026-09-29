@@ -7,8 +7,9 @@ import {useEffect, useState} from "react";
 import { BsRepeat } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
+import { FaVolumeUp } from "react-icons/fa";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -108,6 +109,8 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
+                <FaVolumeUp className="volumeIcon"/>
+                <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} onChange={(e) => setVolume(Number(e.target.value))} />
             </div>
         </div>
     )

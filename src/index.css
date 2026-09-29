@@ -462,7 +462,7 @@ body {
   font-size: 2em;
 }
 
-.nextSongButton, .previousSongButton, .shuffleButton, .repeatButton{
+.nextSongButton, .previousSongButton, .shuffleButton, .repeatButton, .volumeIcon{
   font-size: 1.3em;
   color: grey;
   cursor: pointer;
@@ -547,6 +547,46 @@ body {
   flex-direction: column;
   gap: 24px;
 }
+
+.songBottomRight{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  color: rgb(176, 176, 176);
+}
+
+.volumeSlider{
+  width: 100px;
+  height: 6px;
+  cursor: pointer;
+  accent-color: white;
+  background: transparent;
+}
+
+.volumeSlider:hover{
+  accent-color: white;
+}
+
+.volumeSlider::-webkit-slider-runnable-track{
+  height: 6px;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: white;
+  margin-top: -5px;
+}
+
+.volumeSlider:hover::-webkit-slider-runnable-track{
+  accent-color: var(--activeIcon);
+}
+
 
 .searchResults{
   background-color: rgba(56, 55, 55, 1);
@@ -913,3 +953,4 @@ body {
 .tooltips{
   z-index: 1;
 }
+
