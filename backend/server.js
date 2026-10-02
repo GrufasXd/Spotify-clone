@@ -4,10 +4,16 @@ const db = require('./database')
 const path = require('path')
 
 const app = express()
+const bcrypt = require('bcrypt');
 app.use(cors())
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
+async function hashPassword(password){
+  const salt = await bcrypt.genSalt()
+  const passwordHash = await bcrypt.hash(password,salt)
+  return passwordHash
+}
 
 
 // **********************************  GET **********************************
@@ -138,6 +144,38 @@ app.post('/api/playlists/:id/songs', (req,res) => {
   res.json({
     message: "Song added"
   })
+})
+
+app.post('/api/auth/register', async (req,res) => {
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
+
+  if(!username || !email || !password){
+    return res.status(400).json({
+      status: 'error',
+      message: 'Bad Request.'
+    });
+  }
+  const existingUser = db.prepare(
+    'SELECT username, email FROM users WHERE username = ? OR email = ?'
+  ).get(username, email)
+
+  if(existingUser){
+    const duplicateField = existingUser.username === username ? 'username' : 'email'
+    return res.status(409).json({
+      status: 'error',
+      message: `A user already exists with that ${duplicateField}`
+    })
+  }
+  else{
+    const hashedPassword = await hashPassword(password)
+    db.prepare('INSERT INTO users (username, email, password_hash) VALUES (?,?,?)').run(username, email, hashedPassword)
+    return res.status(201).json({
+      status: 'success',
+      message: 'User registered successfully'
+    })
+  }
 })
 
 

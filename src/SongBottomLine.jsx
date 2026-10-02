@@ -114,7 +114,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
-                <VolumeIcon className="volumeIcon" onClick={toggleMute}/>
+                <VolumeIcon data-tooltip-id="player-tooltip" data-tooltip-content="Toggle mute" className="volumeIcon" onClick={toggleMute}/>
                 <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} style={{ "--volume-level": `${volume * 100}%` }} onChange={(e) => {setVolume(Number(e.target.value)); e.stopPropagation()}} />
             </div>
         </div>
