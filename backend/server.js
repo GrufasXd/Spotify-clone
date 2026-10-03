@@ -9,10 +9,16 @@ app.use(cors())
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
+
 async function hashPassword(password){
   const salt = await bcrypt.genSalt()
   const passwordHash = await bcrypt.hash(password,salt)
   return passwordHash
+}
+
+async function comparePassword(userPassword, passwordHash){
+  const result = await bcrypt.compare(userPassword, passwordHash)
+  return result
 }
 
 
@@ -178,6 +184,38 @@ app.post('/api/auth/register', async (req,res) => {
   }
 })
 
+app.post('/api/auth/login', async (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+
+  const existingUser = db.prepare(
+    'SELECT email FROM users WHERE email = ?'
+  ).get(email)
+
+  if(!existingUser){
+    return res.status(401).json({
+      status: 'error',
+      message: `There is no user with that email address`
+    })
+  }
+  else{
+    const passwordFromDb = db.prepare(
+      'SELECT password_hash FROM users email = ?'
+    ).get(email)
+    if(!comparePassword(password, passwordFromDb)){
+    return res.status(401).json({
+      status: 'error',
+      message: `Incorrect password`
+    })
+  }
+  else{
+    return res.status(200).json({
+      status: 'success',
+      message: 'User logged in successfully'
+    })
+  }
+  }
+})
 
 // ********************************** UPDATE **********************************
 app.put('/api/playlists/:id', (req, res) => {
