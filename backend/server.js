@@ -2,13 +2,16 @@ const express = require('express')
 const cors = require('cors')
 const db = require('./database')
 const path = require('path')
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const app = express()
-const bcrypt = require('bcrypt');
 app.use(cors())
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
+app.use(cookieParser())
 
 async function hashPassword(password){
   const salt = await bcrypt.genSalt()
@@ -120,6 +123,33 @@ app.get('/api/songs/random', (req, res) =>{
   res.json(randomSong)
 })
 
+app.get('/api/auth/me', (req, res) => {
+  const session_token = req.cookies.session_token
+
+  if(!session_token){
+    return res.status(401).json({
+      status: 'error',
+      message: `User not logged in`
+    })
+  }
+
+  const userObject= db.prepare(
+    'SELECT user_id FROM sessions WHERE session_token = ?'
+  ).get(session_token)
+
+  if(!userObject){
+    return res.status(401).json({
+      status: 'error',
+      message: `Session doensn't exist`
+    })
+  }
+
+  const session_user = db.prepare(
+    'SELECT id,username,email FROM users WHERE id = ?'
+  ).get(userObject.user_id)
+  res.json(session_user)
+})
+
 // ********************************** POST **********************************
 
 // Naujo playlisto sukurimas
@@ -189,7 +219,7 @@ app.post('/api/auth/login', async (req, res) => {
   const password = req.body.password
 
   const existingUser = db.prepare(
-    'SELECT email FROM users WHERE email = ?'
+    'SELECT id, email, password_hash FROM users WHERE email = ?'
   ).get(email)
 
   if(!existingUser){
@@ -198,22 +228,25 @@ app.post('/api/auth/login', async (req, res) => {
       message: `There is no user with that email address`
     })
   }
-  else{
-    const passwordFromDb = db.prepare(
-      'SELECT password_hash FROM users email = ?'
-    ).get(email)
-    if(!comparePassword(password, passwordFromDb)){
+  if(! await comparePassword(password, existingUser.password_hash)){
     return res.status(401).json({
       status: 'error',
       message: `Incorrect password`
     })
   }
   else{
+    const sessionToken = crypto.randomBytes(32).toString('hex');
+    db.prepare('INSERT INTO sessions (user_id, session_token) VALUES (?,?)').run(existingUser.id, sessionToken)
+    res.cookie('session_token', sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000,   // Cookie expiration time in milliseconds (e.g., 1 day)
+    });
     return res.status(200).json({
       status: 'success',
       message: 'User logged in successfully'
     })
-  }
   }
 })
 
