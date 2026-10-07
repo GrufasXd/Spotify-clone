@@ -250,6 +250,23 @@ app.post('/api/auth/login', async (req, res) => {
   }
 })
 
+app.post('/api/auth/logout', (req, res) => {
+  const session_token = req.cookies.session_token
+
+  if(!session_token){
+    return res.status(401).json({
+      status: 'error',
+      message: 'User is not logged in'
+    })
+  }
+  db.prepare('DELETE FROM sessions WHERE session_token = ?').run(session_token)
+  res.clearCookie('session_token');
+  return res.status(200).json({
+    status: 'success',
+    message: 'User logged out successfully'
+  })
+})
+
 // ********************************** UPDATE **********************************
 app.put('/api/playlists/:id', (req, res) => {
   const playlist_id = req.params.id

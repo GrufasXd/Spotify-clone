@@ -32,6 +32,7 @@ function App() {
   const [sidebarRightClosed, setSidebarRightClosed] = useState(false)
   const [shuffle, setShuffle] = useState(false)
   const [repeat, setRepeat] = useState("")
+  const [currentUser, setCurrentUser] = useState(null)
 
   function handlePlayClick(){
     const audio = audioRef.current
@@ -193,6 +194,27 @@ function App() {
       audio.volume = volume
     }
   }, [volume])
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/api/auth/me`, {
+        credentials: "include"
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      setCurrentUser(null)
+    })
+    .then(data => {
+      if (data) {
+          setCurrentUser(data)
+      }
+    })
+    .catch(error => {
+      console.error(error)
+      setCurrentUser(null)
+    })
+}, [])
 
 
   useEffect(() => {
