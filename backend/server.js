@@ -7,7 +7,10 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 const app = express()
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))

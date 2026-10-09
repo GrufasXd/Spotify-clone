@@ -3,11 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
 import AlbumPage from "./AlbumPage"
-import SpotifyLogo from "./SpotifyLogo"
-import HomeButton from "./HomeButton"
-import SearchBar from "./SeachBar"
-import ProfileIcon from "./ProfileIcon"
-import NewsButton from "./NewsButton"
+import TopBar from "./TopBar"
 import SidebarLeft from "./SidebarLeft"
 import MainContent from "./MainContent"
 import SidebarRight from "./SidebarRight"
@@ -207,7 +203,7 @@ function App() {
     })
     .then(data => {
       if (data) {
-          setCurrentUser(data)
+        setCurrentUser(data)
       }
     })
     .catch(error => {
@@ -224,19 +220,7 @@ function App() {
   }, [])
 
   return(<>
-          <div className="mainTheme">
-            <SpotifyLogo/>
-            <div className="topCenter">
-              <div className="homeButton" onClick={() => navigate(`/`)}>
-                <HomeButton/>
-              </div>
-              <SearchBar onSongSelect={handleSongSelect}/>
-            </div>
-            <div className="topRight">
-              <NewsButton/>
-              <ProfileIcon/>
-            </div>
-          </div>
+          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser}/>
           <Routes>
             <Route path="/" element={
               <div className="contentArea">

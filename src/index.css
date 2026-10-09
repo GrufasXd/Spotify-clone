@@ -35,9 +35,9 @@ body {
 
 .mainTheme{
   background-color: black;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   height: var(--topbarHeight);
   padding: 0 12px;
 }
@@ -163,11 +163,13 @@ body {
 .topCenter{
   align-items: center;
   display: flex;
+  justify-self: center;
 }
 
 .topRight{
   display: flex;
   justify-content: flex-end;
+  justify-self: end;
 }
 
 .homeBackground{
@@ -773,12 +775,13 @@ body {
   z-index: 1;
 }
 
-.playlistCreationWindow, .playlistDeletionWindow{
+.playlistCreationWindow, .playlistDeletionWindow, .authenticationWindow{
   background-color: var(--mainThemeBackground);
+  color: white;
   position: fixed;
   inset: 0px;
   width: 30rem;
-  height: 25rem;
+  height: fit-content;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -60%);
@@ -791,18 +794,23 @@ body {
   height: 12rem;
 }
 
-.playlistCreationTitle{
+.playlistCreationTitle, .authenticationTitle{
   text-align: center;
   font-size: 1.5em;
 }
 
-.playlistDescriptionInput, .playlistInput{
+.playlistDescriptionInput, .playlistInput, .emailInput, .usernameInput, .passwordInput{
   background-color: hsl(0, 1%, 33%, 0.6);
   border: none;
   color: white;
   border-radius: 10px;
   width: 100%;
   box-sizing: border-box;
+  height: 2rem;
+}
+
+.playlistDescriptionInput{
+  height: auto;
 }
 
 .playlistInput{
@@ -814,25 +822,33 @@ body {
   justify-content: space-between;
 }
 
-.createButton{
+.createButton, .logInButton, .authSubmitButton{
   align-self: flex-end;
   background-color: white;
   color: black;
-  font-weight: bold;
 }
 
-.cancelButton{
+.cancelButton, .signUpButton{
   align-self: flex-start;
   background-color: black;
   color: white;
 }
 
-.createButton, .cancelButton{
+.createButton, .cancelButton, .signUpButton, .logInButton, .authSubmitButton{
   border: none;
   border-radius: 30px;
   cursor: pointer;
   font-size: 1.3em;
   padding: 10px;
+}
+
+.signUpButton, .logInButton{
+  font-size: 1em;
+}
+
+.authenticationButtons{
+  display: flex;
+  gap: 20px;
 }
 
 .songOptions{
@@ -950,4 +966,3 @@ body {
 .tooltips{
   z-index: 1;
 }
-
