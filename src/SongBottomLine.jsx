@@ -55,7 +55,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
     }, [currentSong])
 
     function handleProgressClick(e){
-        var placeToMoveBar = ((e.clientX - e.currentTarget.getBoundingClientRect().left)  * audioRef.current.duration) / e.currentTarget.offsetWidth
+        let placeToMoveBar = ((e.clientX - e.currentTarget.getBoundingClientRect().left)  * audioRef.current.duration) / e.currentTarget.offsetWidth
         audioRef.current.currentTime = placeToMoveBar
     }
 

@@ -190,29 +190,7 @@ function App() {
       audio.volume = volume
     }
   }, [volume])
-
-  useEffect(() => {
-    fetch(`http://localhost:3001/api/auth/me`, {
-        credentials: "include"
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
-      }
-      setCurrentUser(null)
-    })
-    .then(data => {
-      if (data) {
-        setCurrentUser(data)
-      }
-    })
-    .catch(error => {
-      console.error(error)
-      setCurrentUser(null)
-    })
-}, [])
-
-
+  
   useEffect(() => {
       fetch(`http://localhost:3001/api/playlists`)
       .then(res => res.json())
@@ -220,7 +198,7 @@ function App() {
   }, [])
 
   return(<>
-          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser}/>
+          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
           <Routes>
             <Route path="/" element={
               <div className="contentArea">

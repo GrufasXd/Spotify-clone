@@ -48,7 +48,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         <input className="playlistInput" type="text" name="playlistTitle" value={playlistTitle} onChange={(e) => setPlaylistTitle(e.target.value)}/><br/><br/>
                         <label htmlFor="playlistDescriptionInput">Playlist description:</label><br/><br/>
                         <textarea className="playlistDescriptionInput" name="playlistDescriptionInput" value={playlistDescription} onChange={(e) => setPlaylistDescription(e.target.value)} cols={"15"} rows={"5"}/><br/><br/>
-                        <div className="playlistButtonRow">
+                        <div className="modalButtonRow">
                             <button type="button" onClick={() => {
                                 setPlaylistTitle(null);
                                 setPlaylistDescription(null);
@@ -67,7 +67,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         <MdKeyboardArrowRight className="openSidebarButton" onClick={() => setSidebarLeftClosed(false)}/>
                     ) : (
                         <>
-                            <LuPanelLeftClose data-tooltip-id="sidebar-left-tooltip" data-tooltip-content="Hide playlists" className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
+                            <LuPanelLeftClose data-tooltip-id="sidebar-left-close-tooltip" data-tooltip-content="Hide playlists" className="hideSidebarButton" onClick={() => setSidebarLeftClosed(true)}/>
                             <b className="sidebarTitle">Your Library</b>
                             <button data-tooltip-id="sidebar-left-tooltip" data-tooltip-content="Create playlist" className="plusIcon" onClick={() => setplaylistCreationWindow(true)}>+</button>
                         </>
@@ -83,7 +83,8 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                 </ul>
                 )}
             </div>
-            <Tooltip id="sidebar-left-tooltip" place="top-start" positionStrategy="fixed" middlewares={[]} className="tooltips"/>
+            <Tooltip id="sidebar-left-tooltip" place="top" className="tooltips"/>
+            <Tooltip id="sidebar-left-close-tooltip" place="top-start" className="tooltips"/>
         </>
     )
 }

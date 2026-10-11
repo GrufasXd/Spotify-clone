@@ -185,6 +185,7 @@ app.post('/api/playlists/:id/songs', (req,res) => {
   })
 })
 
+// Registracija
 app.post('/api/auth/register', async (req,res) => {
   const username = req.body.username
   const email = req.body.email
@@ -225,16 +226,11 @@ app.post('/api/auth/login', async (req, res) => {
     'SELECT id, email, password_hash FROM users WHERE email = ?'
   ).get(email)
 
-  if(!existingUser){
+
+  if(!existingUser || (! await comparePassword(password, existingUser.password_hash))){
     return res.status(401).json({
       status: 'error',
-      message: `There is no user with that email address`
-    })
-  }
-  if(! await comparePassword(password, existingUser.password_hash)){
-    return res.status(401).json({
-      status: 'error',
-      message: `Incorrect password`
+      message: `Incorrect email address or password`
     })
   }
   else{

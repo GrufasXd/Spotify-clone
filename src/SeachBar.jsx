@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from "react-router-dom"
+import { Tooltip } from "react-tooltip";
 
 
 function SearchBar({onSongSelect}){
@@ -64,7 +65,7 @@ function SearchBar({onSongSelect}){
     return(
     <div className="searchContainer" ref={searchContainerRef}>
         <div className="searchWrapper">
-            <CiSearch className="searchIcon"/>
+            <CiSearch data-tooltip-id="search-tooltip" data-tooltip-content="Search" className="searchIcon"/>
             <input type="text" value={searchString} onChange={handleSearch} className="searchBar" placeholder="What do you want to play?"/>
         </div>
         {searchString != "" && dropdownOpen ?  (
@@ -123,6 +124,7 @@ function SearchBar({onSongSelect}){
         ) : 
             <></>
         }
+        <Tooltip id="search-tooltip" place="bottom" className="tooltips"/>
     </div>
     )
 }

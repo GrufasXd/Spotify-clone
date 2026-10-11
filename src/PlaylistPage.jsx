@@ -138,7 +138,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                         <input className="playlistInput" type="text" name="playlistTitle" value={playlistTitle} onChange={(e) => setPlaylistTitle(e.target.value)}/><br/><br/>
                         <label htmlFor="playlistDescriptionInput">Playlist description:</label><br/><br/>
                         <textarea className="playlistDescriptionInput" name="playlistDescriptionInput" value={playlistDescription} onChange={(e) => setPlaylistDescription(e.target.value)} cols={"15"} rows={"5"}/><br/><br/>
-                        <div className="playlistButtonRow">
+                        <div className="modalButtonRow">
                             <button type="button" onClick={() => {
                                 setPlaylistEditWindow(false);
                             }} className="cancelButton">Cancel</button>
@@ -152,7 +152,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
             <div className="overlay">
                 <div className="playlistDeletionWindow" ref={playlistDeletionRef}>
                     <p className="playlistCreationTitle">Are you sure you want to delete this playlist?</p>
-                    <div className="playlistButtonRow">
+                    <div className="modalButtonRow">
                         <button type="button" onClick={() => {
                             setPlaylistDeletionConfirmation(false);
                         }} className="cancelButton">Cancel</button>

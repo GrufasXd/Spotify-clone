@@ -218,7 +218,7 @@ body {
   outline: none;
 }
 
-.searchIcon, .browseIcon, .userIcon, .newsIcon{
+.searchIcon, .browseIcon, .userIcon, .logoutButton, .passwordHidden, .passwordShown{
   color: rgb(201, 198, 198);
   font-size: 2.8em;
   cursor: pointer;
@@ -226,10 +226,19 @@ body {
   padding: 10px;
 }
 
-.searchIcon:hover, .browseIcon:hover, .userIcon:hover, .newsIcon:hover{
+.searchIcon:hover, .browseIcon:hover, .userIcon:hover, .logoutButton:hover{
   color: white;
   transition: 0.5s;
-  font-size: 2.9em;
+  transform: scale(1.1);
+}
+
+.searchIcon, .userIcon{
+  cursor: auto;
+}
+
+.passwordHidden, .passwordShown{
+  position: absolute;
+  z-index: 1;
 }
 
 .plusIcon{
@@ -462,6 +471,7 @@ body {
   border-radius: 50px;
   border: none;
   font-size: 2em;
+  cursor: pointer;
 }
 
 .nextSongButton, .previousSongButton, .shuffleButton, .repeatButton, .volumeIcon{
@@ -775,7 +785,7 @@ body {
   z-index: 1;
 }
 
-.playlistCreationWindow, .playlistDeletionWindow, .authenticationWindow{
+.playlistCreationWindow, .playlistDeletionWindow, .authenticationWindow, .logoutWindow{
   background-color: var(--mainThemeBackground);
   color: white;
   position: fixed;
@@ -794,7 +804,7 @@ body {
   height: 12rem;
 }
 
-.playlistCreationTitle, .authenticationTitle{
+.playlistCreationTitle, .authenticationTitle, .logoutConfirmationTitle{
   text-align: center;
   font-size: 1.5em;
 }
@@ -817,12 +827,12 @@ body {
   height: 2rem;
 }
 
-.playlistButtonRow{
+.modalButtonRow{
   display: flex;
   justify-content: space-between;
 }
 
-.createButton, .logInButton, .authSubmitButton{
+.createButton, .logInButton, .authSubmitButton, .logoutConfirmationButton{
   align-self: flex-end;
   background-color: white;
   color: black;
@@ -834,7 +844,7 @@ body {
   color: white;
 }
 
-.createButton, .cancelButton, .signUpButton, .logInButton, .authSubmitButton{
+.createButton, .cancelButton, .signUpButton, .logInButton, .authSubmitButton, .logoutConfirmationButton{
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -965,4 +975,34 @@ body {
 
 .tooltips{
   z-index: 1;
+}
+
+.authError{
+  color: #ff6b6b;
+  font-size: 14px;
+}
+
+.passwordInputWrapper{
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.passwordInputWrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 40px;
+}
+
+.passwordInputWrapper button{
+  position: absolute;
+  right: 10px;
+  font-size: 1.2em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--greySupportingColor);
+  display: flex;
+  align-items: center;
 }
