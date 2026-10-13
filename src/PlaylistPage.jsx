@@ -41,13 +41,25 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     }
 
     useEffect(() => {
-        fetch(`http://localhost:3001/api/playlists/${playlistId}`)
-        .then(res => res.json())
-        .then(data => setPlaylistData(data))
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`)
-        .then(res => res.json())
-        .then(data => setPlaylistSongs(data))
-    }, [playlistId])
+        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+            credentials: "include"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch playlist");
+                return res.json();
+            })
+            .then(data => setPlaylistData(data));
+
+        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
+            credentials: "include"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to fetch playlist songs");
+                return res.json();
+            })
+            .then(data => setPlaylistSongs(data))
+            .catch(console.error);
+    }, [playlistId]);
 
     useEffect(() => {
         function handleClickOutside(e){
@@ -73,19 +85,26 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
         e.stopPropagation()
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${songId}`, {
             method: "DELETE",
+            credentials: "include"
         })
-        .then(res => res.json())
-        .then(() => {
-            setPlaylistSongs(prev => prev.filter(song => song.id !== songId))
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to remove song");
+            setPlaylistSongs(prev => prev.filter(song => song.id !== songId));
         })
+        .catch(console.error);
     }
 
     function deletePlaylist(){
         fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
             method: "DELETE",
+            credentials: "include"
         })
-        .then(() => removePlaylistFromSidebar(playlistId))
-        .then(() => navigate(`/`))
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to delete playlist");
+            removePlaylistFromSidebar(playlistId);
+            navigate("/");
+        })
+        .catch(console.error);
     }
 
     function updatePlaylist(e, playlistTitle, playlistDescription){
@@ -93,6 +112,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
 
         fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
             method: "PUT",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -101,7 +121,10 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                 description: playlistDescription
             })
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to update playlist");
+            return res.json();
+        })
         .then(data => {
             const updatedPlaylist = {
                 ...playlistData,

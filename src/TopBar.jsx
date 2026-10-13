@@ -10,7 +10,7 @@ import AuthModal from "./AuthModal";
 import { useState } from "react";
 
 
-function TopBar({handleSongSelect, currentUser, setCurrentUser}){
+function TopBar({handleSongSelect, currentUser, setCurrentUser, setPlaylistData}){
     const navigate = useNavigate();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState("login");
@@ -30,6 +30,7 @@ function TopBar({handleSongSelect, currentUser, setCurrentUser}){
         })
         .then(data => {
             setLogoutModalOpen(false)
+            setPlaylistData([])
             setCurrentUser(null)
         })
         .catch(error => {

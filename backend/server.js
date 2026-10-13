@@ -27,6 +27,28 @@ async function comparePassword(userPassword, passwordHash){
   return result
 }
 
+function sessionCheck(req, res, next){
+  const session_token = req.cookies.session_token
+
+  if(!session_token){
+    return res.status(401).json({
+      status: 'error',
+      message: `User not logged in`
+    })
+  }
+  const session = db.prepare('SELECT user_id FROM sessions WHERE session_token = ?').get(session_token);
+
+  if (!session) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Invalid session'
+    });
+  }
+
+  req.userId = session.user_id;
+  next();
+}
+
 
 // **********************************  GET **********************************
 
@@ -36,15 +58,26 @@ app.get('/api/songs', (req, res) => {
   res.json(songs)
 })
 
-// Visi playlist'ai
-app.get('/api/playlists', (req, res) => {
-  const playlists = db.prepare('SELECT * FROM playlists').all()
+// Tik vartotojo playlist'ai
+app.get('/api/playlists', sessionCheck, (req, res) => {
+  const playlists = db.prepare('SELECT id, name, description FROM playlists WHERE user_id = ?').all(req.userId)
   res.json(playlists)
 })
 
 // Gauti viena playlista pagal id
-app.get('/api/playlists/:id', (req, res) => {
+app.get('/api/playlists/:id',  sessionCheck, (req, res) => {
   const playlist_id = req.params.id
+
+  const playlist = db.prepare(
+    'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
+  ).get(playlist_id, req.userId);
+
+  if (!playlist) {
+    return res.status(404).json({
+      message: 'Playlist not found'
+    });
+  }
+  
   const playlists = db.prepare('SELECT * FROM playlists WHERE id = ?').get(playlist_id)
   res.json(playlists)
 })
@@ -113,13 +146,24 @@ app.get('/api/albums/:id/songs', (req, res) => {
 })
 
 // Gauti dainas kurios yra playliste
-app.get('/api/playlists/:id/songs', (req,res) => {
+app.get('/api/playlists/:id/songs', sessionCheck, (req,res) => {
   const playlist_id = req.params.id
 
+  const playlist = db.prepare(
+    'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
+  ).get(playlist_id, req.userId);
+
+  if (!playlist) {
+    return res.status(404).json({
+      message: 'Playlist not found'
+    });
+  }
+
   const playlistData = db.prepare('SELECT s.* FROM songs AS s JOIN playlist_songs AS ps ON s.id = ps.song_id WHERE ps.playlist_id = ?').all(playlist_id)
-  res.json(playlistData)
+  return res.json(playlistData)
 })
 
+// Naujos atsitiktines dainos paemimas is db, kad pastoviai grotu dainos
 app.get('/api/songs/random', (req, res) =>{
   const currentSongId = req.query.exclude
   const randomSong = db.prepare('SELECT * FROM songs WHERE id != ? ORDER BY RANDOM() LIMIT 1').get(currentSongId)
@@ -156,31 +200,42 @@ app.get('/api/auth/me', (req, res) => {
 // ********************************** POST **********************************
 
 // Naujo playlisto sukurimas
-app.post('/api/playlists', (req,res) => {
+app.post('/api/playlists', sessionCheck, (req,res) => {
   const name = req.body.name
   const description = req.body.description
 
   const playlist = db.prepare(
-    'INSERT INTO playlists (name, description) VALUES (?,?)'
-  ).run(name, description)
+    'INSERT INTO playlists (name, description, user_id) VALUES (?,?,?)'
+  ).run(name, description, req.userId)
 
   res.json({
     id: playlist.lastInsertRowid,
     name: name,
-    description: description
+    description: description,
+    user_id: req.userId
   })
 })
 
 // Dainos pridejimas i playlista
-app.post('/api/playlists/:id/songs', (req,res) => {
+app.post('/api/playlists/:id/songs', sessionCheck, (req,res) => {
   const playlist_id = req.params.id
   const song_id = req.body.song_id
+
+  const playlist = db.prepare(
+    'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
+  ).get(playlist_id, req.userId);
+
+  if (!playlist) {
+    return res.status(404).json({
+      message: 'Playlist not found'
+    });
+  }
 
   db.prepare(
     'INSERT INTO playlist_songs (playlist_id, song_id) VALUES (?,?)'
   ).run(playlist_id, song_id)
 
-  res.json({
+  return res.json({
     message: "Song added"
   })
 })
@@ -218,6 +273,7 @@ app.post('/api/auth/register', async (req,res) => {
   }
 })
 
+// Prisijungimas
 app.post('/api/auth/login', async (req, res) => {
   const email = req.body.email
   const password = req.body.password
@@ -249,6 +305,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 })
 
+// Logoutas
 app.post('/api/auth/logout', (req, res) => {
   const session_token = req.cookies.session_token
 
@@ -267,14 +324,14 @@ app.post('/api/auth/logout', (req, res) => {
 })
 
 // ********************************** UPDATE **********************************
-app.put('/api/playlists/:id', (req, res) => {
+app.put('/api/playlists/:id', sessionCheck, (req, res) => {
   const playlist_id = req.params.id
   const name = req.body.name
   const description = req.body.description
 
   db.prepare(
-    'UPDATE playlists SET name = ?, description = ? WHERE id = ?'
-  ).run(name, description, playlist_id)
+    'UPDATE playlists SET name = ?, description = ? WHERE id = ? AND user_id = ?'
+  ).run(name, description, playlist_id, req.userId)
 
   res.json({
     message: "Playlist updated"
@@ -285,8 +342,18 @@ app.put('/api/playlists/:id', (req, res) => {
 // ********************************** DELETE **********************************
 
 //Istrinti playlista
-app.delete('/api/playlists/:id', (req,res) => {
+app.delete('/api/playlists/:id', sessionCheck, (req,res) => {
   const playlist_id = req.params.id
+
+  const playlist = db.prepare(
+    'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
+  ).get(playlist_id, req.userId);
+
+  if (!playlist) {
+    return res.status(404).json({
+      message: 'Playlist not found'
+    });
+  }
 
   db.prepare(
     'DELETE FROM playlist_songs WHERE playlist_id = ?'
@@ -295,26 +362,36 @@ app.delete('/api/playlists/:id', (req,res) => {
   )
 
   db.prepare(
-    'DELETE FROM playlists WHERE id = ?'
+    'DELETE FROM playlists WHERE id = ? AND user_id = ?'
   ).run(
-    playlist_id
+    playlist_id, req.userId
   )
 
-  res.json({
+  return res.json({
     message: "Playlist deleted"
   })
 })
 
 // Istrinti daina is playlisto
-app.delete('/api/playlists/:id/songs/:songId', (req,res) => {
+app.delete('/api/playlists/:id/songs/:songId', sessionCheck, (req,res) => {
   const playlist_id = req.params.id
   const song_id = req.params.songId
+
+  const playlist = db.prepare(
+    'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
+  ).get(playlist_id, req.userId)
+
+  if (!playlist) {
+    return res.status(404).json({
+      message: 'Playlist not found'
+    });
+  }
 
   db.prepare(
     'DELETE FROM playlist_songs WHERE playlist_id = ? AND song_id = ?'
   ).run(playlist_id, song_id)
 
-  res.json({
+  return res.json({
     message: "Song removed from playlist"
   })
 })

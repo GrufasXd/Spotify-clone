@@ -192,13 +192,48 @@ function App() {
   }, [volume])
   
   useEffect(() => {
-      fetch(`http://localhost:3001/api/playlists`)
-      .then(res => res.json())
-      .then(data => setPlaylistData(data))
-  }, [])
+    fetch("http://localhost:3001/api/auth/me", {
+      credentials: "include"
+    })
+      .then(res => {
+        if (res.status === 401) return null;
+        if (!res.ok) throw new Error("Failed to check the current user");
+        return res.json();
+      })
+      .then(user => {
+        if (user) setCurrentUser(user);
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!currentUser) {
+      setPlaylistData([]);
+      return;
+    }
+
+    let isCurrentRequest = true;
+    setPlaylistData([]);
+
+    fetch(`http://localhost:3001/api/playlists`, {
+        credentials: "include"
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch playlists");
+        return res.json();
+      })
+      .then(data => {
+        if (!Array.isArray(data)) throw new Error("Invalid playlists response");
+        if (isCurrentRequest) setPlaylistData(data);
+      })
+      .catch(console.error);
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [currentUser]);
 
   return(<>
-          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
+          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser} setCurrentUser={setCurrentUser} setPlaylistData={setPlaylistData}/>
           <Routes>
             <Route path="/" element={
               <div className="contentArea">

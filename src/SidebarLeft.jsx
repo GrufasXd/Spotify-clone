@@ -17,6 +17,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
         if(playlistTitle != null){
             fetch(`http://localhost:3001/api/playlists`, {
                 method: "POST",
+                credentials: "include",
                 body: JSON.stringify({
                     name: playlistTitle,
                     description: playlistDescription
@@ -25,7 +26,10 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                     "Content-type": "application/json; charset=UTF-8"
                 }
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to create playlist");
+                return res.json();
+            })
             .then(data => {
                 setPlaylistData(prev => [...prev, data]);
                 setPlaylistTitle("");
@@ -73,14 +77,14 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         </>
                     )}
                 </div>
-                {!sidebarLeftClosed && (
-                <ul className="playlists">
-                    {playlistData.map(playlist => (
+                {!sidebarLeftClosed && playlistData.length > 0 && (
+                    <ul className="playlists">
+                        {playlistData.map(playlist => (
                         <li onClick={() => navigate(`/playlist/${playlist.id}`)} key={playlist.id}>
                             <PlaylistItem playlistName={playlist.name} playlistDescription={playlist.description}/>
                         </li>
-                    ))}
-                </ul>
+                        ))}
+                    </ul>
                 )}
             </div>
             <Tooltip id="sidebar-left-tooltip" place="top" className="tooltips"/>

@@ -44,7 +44,9 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS playlists (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    description TEXT
+    description TEXT,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
   );
 
   CREATE TABLE IF NOT EXISTS playlist_songs(
@@ -76,8 +78,6 @@ if (count.c === 0) {
   song.run('30 hours', kanye, pablo, 323, '/songs/30 Hours 4.mp3')
   song.run('Under your spell', snow, april, 256, '/songs/Under your spell (slowed + reverb) 4.mp3')
   song.run('You could be the one', snow, april, 141, '/songs/You Could Be The One 4.mp3')
-  const playlist = db.prepare('INSERT INTO playlists (name, description) VALUES (?,?)')
-  const test_playlist = playlist.run('test playlist', 'my test playlist')
 }
 
 module.exports = db
