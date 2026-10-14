@@ -131,7 +131,7 @@ app.get('/api/artists/:id/albums', (req, res) => {
   res.json(artistAlbums)
 })
 
-// Gauti albuma pagal id
+// Gauti albuma pagal albumo id
 app.get('/api/albums/:id', (req, res) => {
   const albumId = req.params.id
   const albumData = db.prepare('SELECT a.*, art.name AS artist_name, art.id AS artist_id FROM albums AS a JOIN artists AS art ON art.id = a.artist_id WHERE a.id = ?').get(albumId)
@@ -143,6 +143,23 @@ app.get('/api/albums/:id/songs', (req, res) => {
   const albumId = req.params.id
   const albumSongs = db.prepare('SELECT * FROM songs WHERE album_id = ?').all(albumId)
   res.json(albumSongs)
+})
+
+// Gauti dainos albuma pagal dainos id
+app.get('/api/songs/:song_id/album', (req, res) => {
+  const albumData = db.prepare(`
+    SELECT albums.*, artists.name AS artist_name, artists.id AS artist_id
+    FROM songs
+    JOIN albums ON albums.id = songs.album_id
+    JOIN artists ON artists.id = albums.artist_id
+    WHERE songs.id = ?
+  `).get(req.params.song_id)
+
+  if (!albumData) {
+    return res.status(404).json({ message: 'Song or album not found' })
+  }
+
+  res.json(albumData)
 })
 
 // Gauti dainas kurios yra playliste

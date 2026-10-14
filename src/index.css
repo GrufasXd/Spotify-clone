@@ -457,6 +457,26 @@ body {
   align-items: center;
 }
 
+.songBottomTrackInfo{
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+}
+
+.songAlbumCover,
+.songAlbumCover img{
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
+  border-radius: 5px;
+}
+
+.songAlbumCover img{
+  display: block;
+  object-fit: cover;
+}
+
 .songBottomButtons{
   display: flex;
   align-items: center;
@@ -543,11 +563,40 @@ body {
   align-items: flex-start;
   justify-content: flex-start;
   margin-left: 20px;
+  min-width: 0;
   color: white;
 }
 
+.songName p{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .songName b{
+  display: block;
+  width: 100%;
+  overflow: hidden;
   font-size: 1em;
+  white-space: nowrap;
+}
+
+.songName b span{
+  display: inline-block;
+}
+
+.songName b:hover span{
+  animation: song-title-marquee var(--title-scroll-duration, 4s) ease-in-out infinite alternate;
+}
+
+@keyframes song-title-marquee{
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(var(--title-scroll-distance, 0));
+  }
 }
 
 .songName p{

@@ -3,7 +3,7 @@ import { FaStepForward } from "react-icons/fa";
 import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { IoShuffle } from "react-icons/io5";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { BsRepeat } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
@@ -17,6 +17,18 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
     const [songArtist, setSongArtist] = useState(null)
+    const [songAlbum, setSongAlbum] = useState(null)
+    const [songAlbumSongId, setSongAlbumSongId] = useState(null)
+    const [titleOverflow, setTitleOverflow] = useState(0)
+    const titleContainerRef = useRef(null)
+
+    function handleTitleMouseEnter(){
+        const title = titleContainerRef.current
+        if (!title) return
+
+        const overflow = title.scrollWidth - title.clientWidth
+        setTitleOverflow(Math.max(0, overflow))
+    }
 
     const VolumeIcon = volume === 0 ? FaVolumeMute :
     volume < 0.5 ? FaVolumeDown : FaVolumeUp
@@ -48,10 +60,34 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
 
     useEffect(() => {
         if(!currentSong) return
+        let isCurrentSong = true
 
         fetch(`http://localhost:3001/api/artists/${currentSong.artist_id}`)
-        .then(res => res.json())
-        .then(data => setSongArtist(data))
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to fetch song artist")
+            return res.json()
+        })
+        .then(data => {
+            if (isCurrentSong) setSongArtist(data)
+        })
+        .catch(console.error)
+
+        fetch(`http://localhost:3001/api/songs/${currentSong.id}/album`)
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to fetch song album")
+            return res.json()
+        })
+        .then(data => {
+            if (isCurrentSong) {
+                setSongAlbum(data)
+                setSongAlbumSongId(currentSong.id)
+            }
+        })
+        .catch(console.error)
+
+        return () => {
+            isCurrentSong = false
+        }
     }, [currentSong])
 
     function handleProgressClick(e){
@@ -62,11 +98,27 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
     return(
         <div className="songBottomLine">
             {currentSong != null ? (
-                <div className="songName">
-                    <b>{currentSong.title}</b>
-                    {songArtist &&
-                        <p>{songArtist.name}</p>
-                    }
+                <div className="songBottomTrackInfo">
+                    {songAlbumSongId === currentSong.id && songAlbum?.cover_url && (
+                        <div className="songAlbumCover">
+                            <img src={`http://localhost:3001${songAlbum.cover_url}`} alt={`${songAlbum.title} album cover`}/>
+                        </div>
+                    )}
+                    <div className="songName">
+                        <b
+                            ref={titleContainerRef}
+                            onMouseEnter={handleTitleMouseEnter}
+                            style={titleOverflow > 0 ? {
+                                "--title-scroll-distance": `-${titleOverflow}px`,
+                                "--title-scroll-duration": `${1.5}s`,
+                            } : undefined}
+                        >
+                            <span>{currentSong.title}</span>
+                        </b>
+                        {songArtist &&
+                            <p>{songArtist.name}</p>
+                        }
+                    </div>
                 </div>
             ) : 
                 <div className="songName">
