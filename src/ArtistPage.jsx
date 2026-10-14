@@ -23,7 +23,9 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
             fetch(`http://localhost:3001/api/artists/${artistId}/albums`)
             .then(res => res.json())
             .then(data => setArtistAlbums(data))
-            fetch(`http://localhost:3001/api/playlists`)
+            fetch(`http://localhost:3001/api/playlists`, {
+                credentials: "include"
+            })
             .then(res => res.json())
             .then(data => setPlaylists(data))
     }, [artistId])

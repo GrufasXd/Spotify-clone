@@ -57,6 +57,7 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
         e.preventDefault()
         fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
                 method: "POST",
+                credentials: "include",
                 body: JSON.stringify({
                     song_id: songId
                 }),
@@ -64,12 +65,18 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
                     "Content-type": "application/json; charset=UTF-8"
                 }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to add song to playlist")
+            return res.json()
+        })
         .then(async () => {setSongOptionsWindow(null)
         setPlaylistsWindow(null)
         setShowPlaylistMessage(true)
         await wait(2500)
         setShowPlaylistMessage(false)})
+        .catch(error => {
+            console.error(error)
+        })
     }
 
     function recentCardClick(){

@@ -40,7 +40,9 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
             fetch(`http://localhost:3001/api/albums/${albumId}/songs`)
             .then(res => res.json())
             .then(data => setAlbumSongs(data))
-            fetch(`http://localhost:3001/api/playlists`)
+            fetch(`http://localhost:3001/api/playlists`, {
+                credentials: "include"
+            })
             .then(res => res.json())
             .then(data => setPlaylists(data))
     }, [albumId])

@@ -38,19 +38,13 @@ The project recreates a Spotify-inspired music experience with a music catalog, 
 
 ### Home Page
 
-<!-- Add a screenshot of the main application interface here -->
-
 ![Home Page](docs/screenshots/home.png)
 
 ### Playlist View
 
-<!-- Add a screenshot of a playlist here -->
-
 ![Playlist View](docs/screenshots/playlist.png)
 
 ### Authentication
-
-<!-- Add a screenshot of the login or sign-up modal here -->
 
 ![Authentication](docs/screenshots/authentication.png)
 
