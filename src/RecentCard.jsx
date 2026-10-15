@@ -114,7 +114,11 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
             </div>
         )}
         <div className="recentCard" onClick={() => recentCardClick()}>
-            <MdMusicNote className="recentCardImage"/>
+            {song.cover_url ? (
+                <img className="recentCardCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+            ) : (
+                <MdMusicNote className="recentCardImage"/>
+            )}
             <div className="recentCardText">
                 <p>{title}</p>
                 {songArtist && (

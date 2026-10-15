@@ -93,14 +93,20 @@ function SearchBar({onSongSelect}){
                             <b className="searchSection">Songs</b>
                             {songResults.map(song =>(
                                 <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
-                                    <p>{song.title}</p>
-                                    <p className="searchTag">{song.name}</p>
+                                    <img className="searchResultCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+                                    <div>
+                                        <p>{song.title}</p>
+                                        <p className="searchTag">{song.name}</p>
+                                    </div>
                                 </div>
                             ))}
                             {filteredRelatedResults.map(song =>(
                                 <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
-                                    <p>{song.title}</p>
-                                    <p className="searchTag">{song.name}</p>
+                                    <img className="searchResultCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+                                    <div>
+                                        <p>{song.title}</p>
+                                        <p className="searchTag">{song.name}</p>
+                                    </div>
                                 </div>
                             ))}
                         </>
@@ -112,8 +118,11 @@ function SearchBar({onSongSelect}){
                             <p className="searchSection">Albums</p>
                             {albumResults.map(album => (
                                 <div className="searchResult" key={album.id} onClick={() => handleNavigationClick("album", album.id)}>
-                                    <p>{album.title}</p>
-                                    <p className="searchTag">{album.artist_name}</p>
+                                    <img className="searchResultCover" src={`http://localhost:3001${album.cover_url}`} alt={album.title}/>
+                                    <div>
+                                        <p>{album.title}</p>
+                                        <p className="searchTag">{album.artist_name}</p>
+                                    </div>
                                 </div>
                             ))}
                         </>

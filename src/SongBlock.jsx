@@ -3,7 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -101,7 +101,10 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                 <div className="songNumberWrapper">
                     <p className="songNumber">{songNumber}</p>
                     <FaPlay className="playIcon"/>
-                </div> 
+                </div>
+                {!hideCover && song.cover_url && (
+                    <img className="songBlockCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+                )}
                 <div className="songBlockTextWrapper">
                     <b className={songIndex === currentIndex && pageContextQueue === songList ? "activeSong" : ""}>
                         {song.title}

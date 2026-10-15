@@ -311,7 +311,7 @@ body {
   font-size: 12px;
 }
 
-.playlistPlayButton{
+.playlistPlayButton, .mainAlbumPlayButton{
   background-color: #7AC757;
   border-radius: 50%;
   font-size: 64px;
@@ -321,6 +321,27 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: 0.5s;
+}
+
+.mainAlbumPlayButton{
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 3em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mainAlbumObject:hover .mainAlbumPlayButton,
+.mainAlbumPlayButton.visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mainAlbumPlayButton:hover{
+  background-color: #8be163;
 }
 
 .playlistPlayButton:hover{
@@ -398,6 +419,16 @@ body {
   align-self: center;
   padding-left: 10px;
   font-size: 1.5em;
+}
+
+.recentCardCover{
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  align-self: center;
+  margin-left: 10px;
+  object-fit: cover;
+  border-radius: 4px;
 }
 
 .albumSongCard{
@@ -672,11 +703,22 @@ body {
 }
 
 .searchResult{
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 0.01em;
   padding-left: 10px;
   transition: 0.5s;
   border-radius: 10px;
   margin-bottom: 5px;
+}
+
+.searchResultCover{
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .searchSection{
@@ -715,6 +757,15 @@ body {
   transition: 0.5s;
 }
 
+.songBlockCover{
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 12px;
+}
+
 .songBlockTextWrapper{
   display: flex;
   justify-content: center;
@@ -735,6 +786,9 @@ body {
 .songNumberWrapper{
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 50px;
+  flex: 0 0 50px;
   padding: 10px;
   padding-right: 20px;
 }
@@ -745,6 +799,7 @@ body {
 
 .playIcon{
   display: none;
+  flex-shrink: 0;
   color: white;
   font-size: 12px;
 }
@@ -774,6 +829,56 @@ body {
   width: 160px;
   height: 160px;
   border-radius: 5px;
+}
+
+.mainAlbumCoverWrapper{
+  position: relative;
+  width: 100%;
+}
+
+.mainAlbumCover{
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.mainAlbums{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.mainAlbumObject{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-wrap: wrap;
+  padding: 10px 10px 0 10px;
+  width: 150px;
+  flex: 0 0 150px; 
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.mainAlbumObject p{
+  margin: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mainAlbumObject:hover{
+  background-color: var(--iconHoverColor);
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+.mainAlbumArtist{
+  color: var(--greySupportingColor);
+  font-size: 0.8em;
 }
 
 .albumPageTop{

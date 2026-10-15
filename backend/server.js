@@ -52,9 +52,15 @@ function sessionCheck(req, res, next){
 
 // **********************************  GET **********************************
 
+// Visi albumai
+app.get('/api/albums', (req, res) => {
+  const albums = db.prepare('SELECT alb.*, art.name AS artist_name FROM albums AS alb JOIN artists AS art ON alb.artist_id = art.id').all()
+  res.json(albums)
+})
+
 // Visos dainos
 app.get('/api/songs', (req, res) => {
-  const songs = db.prepare('SELECT * FROM songs').all()
+  const songs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id').all()
   res.json(songs)
 })
 
@@ -92,14 +98,14 @@ app.get('/api/artists/search', (req, res) => {
 // Tik searchintos dainos
 app.get('/api/songs/search', (req, res) => {
   const query = req.query.q
-  const searchedString = db.prepare('SELECT s.*, a.id AS artist_id, a.name FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE s.title LIKE ?').all('%' + query + '%')
+  const searchedString = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title, a.id AS artist_id, a.name FROM songs AS s JOIN artists AS a ON s.artist_id = a.id JOIN albums AS alb ON s.album_id = alb.id WHERE s.title LIKE ?').all('%' + query + '%')
   res.json(searchedString)
 })
 
 // Searchintu artistu dainos
 app.get('/api/artists/songs', (req, res) => {
   const query = req.query.q
-  const searchedString = db.prepare('SELECT s.*, a.id AS artist_id, a.name FROM songs AS s JOIN artists AS a ON s.artist_id = a.id WHERE a.name LIKE ?').all('%' + query + '%')
+  const searchedString = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title, a.id AS artist_id, a.name FROM songs AS s JOIN artists AS a ON s.artist_id = a.id JOIN albums AS alb ON s.album_id = alb.id WHERE a.name LIKE ?').all('%' + query + '%')
   res.json(searchedString)
 })
 
@@ -120,7 +126,7 @@ app.get('/api/artists/:id', (req, res) => {
 // Gauti artisto dainas pagal jo id
 app.get('/api/artists/:id/songs', (req, res) => {
   const artistId = req.params.id
-  const artistSongs = db.prepare('SELECT * FROM songs WHERE artist_id = ?').all(artistId)
+  const artistSongs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id WHERE s.artist_id = ?').all(artistId)
   res.json(artistSongs)
 })
 
@@ -141,7 +147,7 @@ app.get('/api/albums/:id', (req, res) => {
 // Gauti albumo dainas
 app.get('/api/albums/:id/songs', (req, res) => {
   const albumId = req.params.id
-  const albumSongs = db.prepare('SELECT * FROM songs WHERE album_id = ?').all(albumId)
+  const albumSongs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id WHERE alb.id = ?').all(albumId)
   res.json(albumSongs)
 })
 
@@ -176,14 +182,14 @@ app.get('/api/playlists/:id/songs', sessionCheck, (req,res) => {
     });
   }
 
-  const playlistData = db.prepare('SELECT s.* FROM songs AS s JOIN playlist_songs AS ps ON s.id = ps.song_id WHERE ps.playlist_id = ?').all(playlist_id)
+  const playlistData = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN playlist_songs AS ps ON s.id = ps.song_id JOIN albums AS alb ON s.album_id = alb.id WHERE ps.playlist_id = ?').all(playlist_id)
   return res.json(playlistData)
 })
 
 // Naujos atsitiktines dainos paemimas is db, kad pastoviai grotu dainos
 app.get('/api/songs/random', (req, res) =>{
   const currentSongId = req.query.exclude
-  const randomSong = db.prepare('SELECT * FROM songs WHERE id != ? ORDER BY RANDOM() LIMIT 1').get(currentSongId)
+  const randomSong = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id WHERE s.id != ? ORDER BY RANDOM() LIMIT 1').get(currentSongId)
   res.json(randomSong)
 })
 

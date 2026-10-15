@@ -6,13 +6,12 @@ import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 
 
-function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue}){
+function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists}){
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
     const [albumData, setAlbumData] = useState(null)
     const [albumSongs, setAlbumSongs] = useState([])
-    const [playlists, setPlaylists] = useState([])
     let albumDuration = 0
 
     albumSongs.forEach(song => {
@@ -40,11 +39,6 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
             fetch(`http://localhost:3001/api/albums/${albumId}/songs`)
             .then(res => res.json())
             .then(data => setAlbumSongs(data))
-            fetch(`http://localhost:3001/api/playlists`, {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => setPlaylists(data))
     }, [albumId])
 
     function handleAlbumPlay(){
@@ -84,7 +78,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} pageContextQueue={pageContextQueue} songList={albumSongs}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true}/>
                 ))}
             </div>
             }

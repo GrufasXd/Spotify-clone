@@ -4,14 +4,13 @@ import { useParams, useNavigate } from "react-router-dom"
 import SongBlock from "./SongBlock"
 
 
-function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue}){
+function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, playlists}){
     const navigate = useNavigate()
     let params = useParams()
     const artistId = params.id
     const [artistData, setArtistData] = useState(null)
     const [artistSongs, setArtistSongs] = useState([])
     const [artistAlbums, setArtistAlbums] = useState([])
-    const [playlists, setPlaylists] = useState([])
 
     useEffect(() => {
             fetch(`http://localhost:3001/api/artists/${artistId}`)
@@ -23,11 +22,6 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
             fetch(`http://localhost:3001/api/artists/${artistId}/albums`)
             .then(res => res.json())
             .then(data => setArtistAlbums(data))
-            fetch(`http://localhost:3001/api/playlists`, {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => setPlaylists(data))
     }, [artistId])
     
     return(
@@ -43,7 +37,7 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map((song,index) => (
-                        <SongBlock key={song.id} song={song} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} pageContextQueue={pageContextQueue} songList={artistSongs}/>
+                        <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} pageContextQueue={pageContextQueue} songList={artistSongs}/>
                     ))}
                 </div>
                 <b className="albumTag">Albums</b>
