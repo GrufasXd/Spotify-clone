@@ -844,11 +844,49 @@ body {
   border-radius: 5px;
 }
 
+.mainAlbumsWrapper{
+  position: relative;
+}
+
+.mainAlbumsScrollArrow{
+  display: flex;
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  font-size: 2em;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.mainAlbumsWrapper:hover .mainAlbumsScrollArrow{
+  transform: translateY(-80%) translateX(0);
+  opacity: 1;
+}
+
+.mainAlbumsScrollArrow:hover{
+  background-color: rgba(34, 34, 34, 1);
+}
+
+.mainAlbumsScrollArrow.right{
+  transform: translateY(-80%) translateX(8px);
+  right: 0;
+}
+
+.mainAlbumsScrollArrow.left{
+  transform: translateY(-80%) translateX(-8px);
+  left: 0;
+}
+
 .mainAlbums{
   display: flex;
+  overflow-x: auto;
   flex-direction: row;
   gap: 15px;
   margin-bottom: 10px;
+  scrollbar-width: none;
 }
 
 .mainAlbumObject{
