@@ -3,7 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -62,7 +62,8 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
             if (!res.ok) throw new Error("Failed to add song to playlist")
             return res.json()
         })
-        .then(async () => {setSongOptionsWindow(null)
+        .then(async () => {refreshPlaylists()
+        setSongOptionsWindow(null)
         setPlaylistsWindow(null)
         setShowPlaylistMessage(true)
         await wait(2500)

@@ -2,7 +2,7 @@ import { MdMusicNote } from "react-icons/md";
 import {useEffect, useState, useId} from "react";
 import { Tooltip } from 'react-tooltip'
 
-function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue}){
+function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue, refreshPlaylists}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -42,12 +42,6 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
         setPlaylistsWindow(songId)
     }
 
-    function addingSongToQueue(e, songToAdd){
-        e.stopPropagation()
-        addSongToQueue(songToAdd)
-        setSongOptionsWindow(null)
-    }
-
     function removingSongFromQueue(e, queueItemId){
         e.stopPropagation()
         setUserQueue(prev => prev.filter(queueItem => queueItem.queueItemId !== queueItemId))
@@ -69,7 +63,8 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
             if (!res.ok) throw new Error("Failed to add song to playlist")
             return res.json()
         })
-        .then(async () => {setSongOptionsWindow(null)
+        .then(async () => {refreshPlaylists()
+        setSongOptionsWindow(null)
         setPlaylistsWindow(null)
         setShowPlaylistMessage(true)
         await wait(2500)

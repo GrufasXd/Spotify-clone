@@ -16,6 +16,15 @@ app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
 app.use(cookieParser())
 
+const albumCoversQuery = db.prepare(`
+    SELECT DISTINCT alb.cover_url
+    FROM playlist_songs AS ps
+    JOIN songs AS s ON s.id = ps.song_id
+    JOIN albums AS alb ON alb.id = s.album_id
+    WHERE ps.playlist_id = ?
+    LIMIT 4
+  `)
+
 async function hashPassword(password){
   const salt = await bcrypt.genSalt()
   const passwordHash = await bcrypt.hash(password,salt)
@@ -67,7 +76,11 @@ app.get('/api/songs', (req, res) => {
 // Tik vartotojo playlist'ai
 app.get('/api/playlists', sessionCheck, (req, res) => {
   const playlists = db.prepare('SELECT id, name, description FROM playlists WHERE user_id = ?').all(req.userId)
-  res.json(playlists)
+  const playlistsWithCovers = playlists.map(playlist => ({
+    ...playlist,
+    covers: albumCoversQuery.all(playlist.id).map(row => row.cover_url)
+  }))
+  res.json(playlistsWithCovers)
 })
 
 // Gauti viena playlista pagal id

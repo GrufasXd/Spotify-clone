@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { useParams, useNavigate} from "react-router-dom"
-import { IoMusicalNotesOutline, IoPauseOutline } from "react-icons/io5";
+import { IoPauseOutline } from "react-icons/io5";
 
 import SongBlock from "./SongBlock"
 import { CgPlayButton } from "react-icons/cg";
 import { Tooltip } from 'react-tooltip'
+import PlaylistCover from "./PlaylistCover";
 
-function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
+function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -21,6 +22,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     const playlistEditRef = useRef(null)
     const [playlistTitle, setPlaylistTitle] = useState("")
     const [playlistDescription, setPlaylistDescription] = useState("")
+    const covers = [...new Set(playlistSongs.map(song => song.cover_url))]
 
     playlistSongs.forEach(song => {
         playlistDuration += song.duration
@@ -90,6 +92,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
         .then(res => {
             if (!res.ok) throw new Error("Failed to remove song");
             setPlaylistSongs(prev => prev.filter(song => song.id !== songId));
+            refreshPlaylists();
         })
         .catch(console.error);
     }
@@ -186,7 +189,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
             )}
             <div className="mainContent">
                 <div className="albumPageTop">
-                    <IoMusicalNotesOutline className="albumCoverInPage"/>
+                    <PlaylistCover covers={covers} className="albumCoverInPage"/>
                     <div className="albumInfo">
                         <p className="albumTitle">{playlistData.name}</p>
                         <p>{playlistData.description}</p>
@@ -217,7 +220,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
+                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

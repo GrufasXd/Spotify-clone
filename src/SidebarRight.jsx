@@ -4,7 +4,7 @@ import { LuPanelLeftOpen } from "react-icons/lu";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { Tooltip } from 'react-tooltip'
 
-function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
+function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, refreshPlaylists, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
 
     const [queueClearConfirmation, setQueueClearConfirmation] = useState(false)
     const queueClearRef = useRef(null)
@@ -63,6 +63,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                             onSongSelect={onSongSelect}
                             playlistData={playlistData}
                             addSongToQueue={addSongToQueue}
+                            refreshPlaylists={refreshPlaylists}
                         />
                     </>
                     ): 
@@ -85,6 +86,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                                     queueItemClick={queueItemClick}
                                     playlistData={playlistData}
                                     addSongToQueue={addSongToQueue}
+                                    refreshPlaylists={refreshPlaylists}
                                     isSidebar={true}
                                     setUserQueue={setUserQueue}
                                 />

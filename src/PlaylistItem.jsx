@@ -1,12 +1,13 @@
 import { IoMusicalNotesOutline } from "react-icons/io5";
+import PlaylistCover from "./PlaylistCover";
 
-function PlaylistItem(props) {
+function PlaylistItem({playlistName, playlistDescription, covers}) {
     return(
         <div className="playlistItem">
-            <IoMusicalNotesOutline className="playlistIcon"/>
+            <PlaylistCover covers={covers} className="playlistIcon"/>
             <div className="playlistItemText">
-                <b className="playlistName">{props.playlistName}</b>
-                <p className="playlistDescription">{props.playlistDescription}</p>
+                <b className="playlistName">{playlistName}</b>
+                <p className="playlistDescription">{playlistDescription}</p>
             </div>
         </div>
     )

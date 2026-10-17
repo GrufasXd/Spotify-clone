@@ -81,7 +81,7 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                     <ul className="playlists">
                         {playlistData.map(playlist => (
                         <li onClick={() => navigate(`/playlist/${playlist.id}`)} key={playlist.id}>
-                            <PlaylistItem playlistName={playlist.name} playlistDescription={playlist.description}/>
+                            <PlaylistItem playlistName={playlist.name} playlistDescription={playlist.description} covers={playlist.covers}/>
                         </li>
                         ))}
                     </ul>

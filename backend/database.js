@@ -70,12 +70,14 @@ if (count.c === 0) {
   const adl = album.run('ADL', yeat, '/album_covers/adl.jfif').lastInsertRowid
   const lifestyle = album.run('LIFESTYLE', yeat, '/album_covers/lifestyle.png').lastInsertRowid
   const _2093 = album.run('2093', yeat, '/album_covers/2093.png').lastInsertRowid
+  const lyfe = album.run('2093', yeat, '/album_covers/lyfe.jfif').lastInsertRowid
   const pablo = album.run('The Life of Pablo', kanye, '/album_covers/pablo.jfif').lastInsertRowid
   const song = db.prepare('INSERT INTO songs (title, artist_id, album_id, duration, file_url) VALUES (?, ?, ?, ?, ?)')
   song.run('Purpose general', yeat, adl, 205, '/songs/Purpose General.mp3')
   song.run('Naked', yeat, adl, 95, '/songs/Naked.mp3')
-  song.run('Heliman', yeat, adl, 192, '/songs/HeliMAn 4.mp3')
-  song.run('30 hours', kanye, pablo, 323, '/songs/30 Hours 4.mp3')
+  song.run('Heliman', yeat, adl, 192, '/songs/HeliMAn.mp3')
+  song.run('Out the way', yeat, lyfe, 150, '/songs/Out the way.mp3')
+  song.run('30 hours', kanye, pablo, 323, '/songs/30 Hours.mp3')
   song.run('Under your spell', snow, april, 256, '/songs/Under your spell (slowed + reverb) 4.mp3')
   song.run('You could be the one', snow, april, 141, '/songs/You Could Be The One 4.mp3')
 }
