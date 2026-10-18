@@ -3,13 +3,16 @@ import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
     const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
     const [artistData, setArtistData] = useState({})
+    const isActive = song.playlist_song_id ? 
+    currentSong?.playlist_song_id === song.playlist_song_id:
+    songIndex === currentIndex && pageContextQueue === songList
 
     useEffect(() => {
         function handleClickOutside(){
@@ -107,7 +110,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                     <img className="songBlockCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
                 )}
                 <div className="songBlockTextWrapper">
-                    <b className={songIndex === currentIndex && pageContextQueue === songList ? "activeSong" : ""}>
+                    <b className={isActive ? "activeSong" : ""}>
                         {song.title}
                     </b>
                     <p>{artistData.name}</p>
@@ -124,7 +127,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                             <p>Add song to queue</p>
                         </div>
                         {isPlaylistPage === true ? (
-                            <div className="removeSongFromPlaylistButton" onClick={(e) => removeSongFromPlaylist(e, song.id)}>
+                            <div className="removeSongFromPlaylistButton" onClick={(e) => removeSongFromPlaylist(e, song.playlist_song_id)}>
                                 <p>Remove from playlist</p>
                             </div>
                         ):

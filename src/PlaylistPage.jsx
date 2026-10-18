@@ -83,15 +83,15 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
         })
     }, [])
 
-    function removeSongFromPlaylist(e, songId){
+    function removeSongFromPlaylist(e, playlistSongId){
         e.stopPropagation()
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${songId}`, {
+        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${playlistSongId}`, {
             method: "DELETE",
             credentials: "include"
         })
         .then(res => {
             if (!res.ok) throw new Error("Failed to remove song");
-            setPlaylistSongs(prev => prev.filter(song => song.id !== songId));
+            setPlaylistSongs(prev => prev.filter(song => song.playlist_song_id !== playlistSongId));
             refreshPlaylists();
         })
         .catch(console.error);
@@ -220,7 +220,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={`${song.id}+${index}`} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
+                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

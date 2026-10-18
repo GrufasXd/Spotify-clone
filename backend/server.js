@@ -195,7 +195,7 @@ app.get('/api/playlists/:id/songs', sessionCheck, (req,res) => {
     });
   }
 
-  const playlistData = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN playlist_songs AS ps ON s.id = ps.song_id JOIN albums AS alb ON s.album_id = alb.id WHERE ps.playlist_id = ?').all(playlist_id)
+  const playlistData = db.prepare('SELECT s.*, ps.id AS playlist_song_id, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN playlist_songs AS ps ON s.id = ps.song_id JOIN albums AS alb ON s.album_id = alb.id WHERE ps.playlist_id = ? ORDER BY ps.id').all(playlist_id)
   return res.json(playlistData)
 })
 
@@ -409,13 +409,13 @@ app.delete('/api/playlists/:id', sessionCheck, (req,res) => {
 })
 
 // Istrinti daina is playlisto
-app.delete('/api/playlists/:id/songs/:songId', sessionCheck, (req,res) => {
+app.delete('/api/playlists/:id/songs/:playlistSongId', sessionCheck, (req,res) => {
   const playlist_id = req.params.id
-  const song_id = req.params.songId
+  const playlist_song_id = req.params.playlistSongId
 
   const playlist = db.prepare(
     'SELECT id FROM playlists WHERE id = ? AND user_id = ?'
-  ).get(playlist_id, req.userId)
+  ).get(playlist_id, req.userId);
 
   if (!playlist) {
     return res.status(404).json({
@@ -424,8 +424,8 @@ app.delete('/api/playlists/:id/songs/:songId', sessionCheck, (req,res) => {
   }
 
   db.prepare(
-    'DELETE FROM playlist_songs WHERE playlist_id = ? AND song_id = ?'
-  ).run(playlist_id, song_id)
+    'DELETE FROM playlist_songs WHERE id = ? AND playlist_id = ?'
+  ).run(playlist_song_id, playlist_id)
 
   return res.json({
     message: "Song removed from playlist"
