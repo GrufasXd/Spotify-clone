@@ -78,7 +78,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying}/>
                 ))}
             </div>
             }

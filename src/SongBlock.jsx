@@ -3,7 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -103,7 +103,15 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
             )}
             <div className="artistSong" onClick={() => {onSongSelect(song)}}>
                 <div className="songNumberWrapper">
-                    <p className="songNumber">{songNumber}</p>
+                    {isActive ? (
+                        <div className={`equalizer ${isPlaying ? "" : "paused"}`}>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    ) : (
+                        <p className="songNumber">{songNumber}</p>
+                    )}
                     <FaPlay className="playIcon"/>
                 </div>
                 {!hideCover && song.cover_url && (

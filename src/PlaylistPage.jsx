@@ -220,7 +220,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs}/>
+                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs} isPlaying={isPlaying}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

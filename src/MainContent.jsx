@@ -7,11 +7,13 @@ import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 
 
-function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylists, isPlaying, pageContextQueue, currentSong, handlePlayClick}){
+function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylists, isPlaying, pageContextQueue, currentSong, handlePlayClick, recentSongs, currentUser}){
     let navigate = useNavigate()
     const [songs, setSongs] = useState([])
     const [mainAlbums, setMainAlbums] = useState([])
-
+    const cardsToShow = recentSongs.length > 0 ? recentSongs : songs.slice(0, 6)
+    const currentTime = new Date().getHours()
+    const greetingText = currentTime < 12 ? "Good morning" : currentTime < 19 ? "Good day" : "Good evening"
 
     useEffect(() => {
         fetch('http://localhost:3001/api/songs')
@@ -52,14 +54,14 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
 
     return(
         <div className="mainContent">
-            <h2 className="greetingText">Good morning!</h2>
+            <h2 className="greetingText">{greetingText}, {currentUser.username}</h2>
             <div className="recentlyViewedCards">
-                {songs.map ((song, index) => (
+                {cardsToShow.map ((song, index) => (
                     <RecentCard
                         key={song.id}
                         title={song.title}
                         song={song}
-                        onSongSelect={(song) => onSongSelect(song, songs, index)}
+                        onSongSelect={(song) => onSongSelect(song, recentSongs, index)}
                         playlistData={playlistData}
                         addSongToQueue={addSongToQueue}
                         refreshPlaylists={refreshPlaylists}

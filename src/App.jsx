@@ -43,6 +43,7 @@ function App() {
   const [shuffle, setShuffle] = useState(false)
   const [repeat, setRepeat] = useState("")
   const [currentUser, setCurrentUser] = useState(null)
+  const [recentSongs, setRecentSongs] = useState([])
 
   function handlePlayClick(){
     const audio = audioRef.current
@@ -239,6 +240,45 @@ function App() {
     };
   }, [currentUser]);
 
+  useEffect(() => {
+    if (!currentUser) {
+      setRecentSongs([]);
+      return;
+    }
+
+    fetch(`http://localhost:3001/api/recently-played`, {
+      credentials: "include"
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch recently played songs");
+      return res.json();
+    })
+    .then(data => {
+      if (!Array.isArray(data)) throw new Error("Invalid recently played song response");
+      setRecentSongs(data);
+    })
+    .catch(console.error);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser || !currentSong) {
+      return;
+    }
+
+    setRecentSongs(prev => [currentSong, ...prev.filter(song => song.id !== currentSong.id)].slice(0, 6))
+    fetch(`http://localhost:3001/api/recently-played`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        song_id: currentSong.id
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .catch(console.error);
+  }, [currentSong, currentUser]);
+
   // Kvieciama, kai playlisto dainos pasikeicia, kad sidebar coveriai atsinaujintu
   function refreshPlaylists(){
     if (!currentUser) return
@@ -254,7 +294,7 @@ function App() {
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
                 <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <MainContent onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue} refreshPlaylists={refreshPlaylists} isPlaying={isPlaying} pageContextQueue={pageContextQueue} currentSong={currentSong} handlePlayClick={handlePlayClick}/>
+                <MainContent onSongSelect={handleSongSelect} playlistData={playlistData} addSongToQueue={addSongToQueue} refreshPlaylists={refreshPlaylists} isPlaying={isPlaying} pageContextQueue={pageContextQueue} currentSong={currentSong} handlePlayClick={handlePlayClick} recentSongs={recentSongs} currentUser={currentUser}/>
                 <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
                 <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} refreshPlaylists={refreshPlaylists} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
               </div>
@@ -263,7 +303,7 @@ function App() {
               <div className="contentArea">
                 <SidebarLeft playlistData={playlistData} setPlaylistData={setPlaylistData} leftSidebarWidth={leftSidebarWidth}/>
                 <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentIndex={currentIndex} pageContextQueue={pageContextQueue} playlists={playlistData} refreshPlaylists={refreshPlaylists}/>
+                <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentIndex={currentIndex} pageContextQueue={pageContextQueue} playlists={playlistData} refreshPlaylists={refreshPlaylists} isPlaying={isPlaying}/>
                 <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
                 <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} playlistData={playlistData} addSongToQueue={addSongToQueue} refreshPlaylists={refreshPlaylists} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
               </div>

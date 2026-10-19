@@ -233,6 +233,12 @@ app.get('/api/auth/me', (req, res) => {
   res.json(session_user)
 })
 
+// Gaunam naujausias (recent) dainas
+app.get('/api/recently-played', sessionCheck, (req,res) => {
+  const songs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title, rp.id AS recently_played_id FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id JOIN recently_played as rp ON s.id = rp.song_id WHERE rp.user_id = ? ORDER BY rp.id DESC LIMIT 6').all(req.userId)
+  res.json(songs)
+})
+
 // ********************************** POST **********************************
 
 // Naujo playlisto sukurimas
@@ -357,6 +363,13 @@ app.post('/api/auth/logout', (req, res) => {
     status: 'success',
     message: 'User logged out successfully'
   })
+})
+
+app.post('/api/recently-played', sessionCheck, (req, res) => {
+  const song_id = req.body.song_id
+  db.prepare('DELETE FROM recently_played WHERE user_id = ? AND song_id = ?').run(req.userId, song_id)
+  db.prepare('INSERT INTO recently_played (user_id, song_id) VALUES (?,?)').run(req.userId, song_id)
+  res.json({message: "Recently played updated"})
 })
 
 // ********************************** UPDATE **********************************

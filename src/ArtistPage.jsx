@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import SongBlock from "./SongBlock"
 
 
-function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, playlists, refreshPlaylists}){
+function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, playlists, refreshPlaylists, isPlaying}){
     const navigate = useNavigate()
     let params = useParams()
     const artistId = params.id
@@ -37,7 +37,7 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map((song,index) => (
-                        <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={artistSongs}/>
+                        <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={artistSongs} isPlaying={isPlaying}/>
                     ))}
                 </div>
                 <b className="albumTag">Albums</b>
