@@ -54,14 +54,14 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
 
     return(
         <div className="mainContent">
-            <h2 className="greetingText">{greetingText}, {currentUser.username}</h2>
+            <h2 className="greetingText">{greetingText} {currentUser?.username}</h2>
             <div className="recentlyViewedCards">
                 {cardsToShow.map ((song, index) => (
                     <RecentCard
                         key={song.id}
                         title={song.title}
                         song={song}
-                        onSongSelect={(song) => onSongSelect(song, recentSongs, index)}
+                        onSongSelect={(song) => onSongSelect(song, cardsToShow, index)}
                         playlistData={playlistData}
                         addSongToQueue={addSongToQueue}
                         refreshPlaylists={refreshPlaylists}

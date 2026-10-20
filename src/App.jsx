@@ -44,6 +44,7 @@ function App() {
   const [repeat, setRepeat] = useState("")
   const [currentUser, setCurrentUser] = useState(null)
   const [recentSongs, setRecentSongs] = useState([])
+  const [likedSongIds, setLikedSongIds] = useState(new Set())
 
   function handlePlayClick(){
     const audio = audioRef.current
@@ -167,6 +168,33 @@ function App() {
     }
   }
 
+  function toggleLike(songId){
+    if(!currentUser){
+      return
+    }
+    const isLiked = likedSongIds.has(songId)
+    if(!isLiked){
+      likedSongIds.add(songId)
+      fetch(`http://localhost:3001/api/liked-songs`, {
+      credentials: "include",
+      method: "POST",
+      body: JSON.stringify({
+        song_id: songId
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+      })
+      .catch(console.error);
+    }
+    else{
+      fetch(`http://localhost:3001/api/liked-songs/${songId}`, {
+        method: "DELETE"
+      })
+      .catch(console.error);
+    }
+  }
+
   useEffect(() => {
     function resize(e){
       if(!isResizing) return
@@ -278,6 +306,26 @@ function App() {
     })
     .catch(console.error);
   }, [currentSong, currentUser]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      setLikedSongIds(new Set());
+      return;
+    }
+
+    fetch(`http://localhost:3001/api/liked-songs`, {
+      credentials: "include"
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch liked songs");
+      return res.json();
+    })
+    .then(data => {
+      if (!Array.isArray(data)) throw new Error("Invalid liked song response");
+      setLikedSongIds(new Set(data.map(song => song.id)))
+    })
+    .catch(console.error);
+  }, [currentUser]);
 
   // Kvieciama, kai playlisto dainos pasikeicia, kad sidebar coveriai atsinaujintu
   function refreshPlaylists(){

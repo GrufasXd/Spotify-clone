@@ -64,6 +64,16 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (song_id) REFERENCES songs(id)
   );
+
+  CREATE TABLE IF NOT EXISTS liked_songs(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    song_id INTEGER NOT NULL,
+    UNIQUE(user_id, song_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (song_id) REFERENCES songs(id)
+  );
+
 `)
 
 // Test duomenys

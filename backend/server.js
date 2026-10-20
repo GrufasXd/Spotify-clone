@@ -239,6 +239,11 @@ app.get('/api/recently-played', sessionCheck, (req,res) => {
   res.json(songs)
 })
 
+app.get('/api/liked-songs', sessionCheck, (req,res) => {
+  const songs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id JOIN liked_songs as ls ON s.id = ls.song_id WHERE ls.user_id = ? ORDER BY ls.id DESC').all(req.userId)
+  res.json(songs)
+})
+
 // ********************************** POST **********************************
 
 // Naujo playlisto sukurimas
@@ -365,11 +370,19 @@ app.post('/api/auth/logout', (req, res) => {
   })
 })
 
+// Deti daina i neseniai grotu sarasa
 app.post('/api/recently-played', sessionCheck, (req, res) => {
   const song_id = req.body.song_id
   db.prepare('DELETE FROM recently_played WHERE user_id = ? AND song_id = ?').run(req.userId, song_id)
   db.prepare('INSERT INTO recently_played (user_id, song_id) VALUES (?,?)').run(req.userId, song_id)
   res.json({message: "Recently played updated"})
+})
+
+// Pamegti daina
+app.post('/api/liked-songs', sessionCheck, (req,res) => {
+  const song_id = req.body.song_id
+  db.prepare('INSERT OR IGNORE INTO liked_songs (user_id, song_id) VALUES (?,?)').run(req.userId, song_id)
+  res.json({message: "Liked songs updated"})
 })
 
 // ********************************** UPDATE **********************************
@@ -443,6 +456,13 @@ app.delete('/api/playlists/:id/songs/:playlistSongId', sessionCheck, (req,res) =
   return res.json({
     message: "Song removed from playlist"
   })
+})
+
+// Nebemegti dainos
+app.delete('/api/liked-songs/:songId', sessionCheck, (req,res) => {
+  const song_id = req.params.songId
+  db.prepare('DELETE FROM liked_songs WHERE user_id = ? AND song_id = ?').run(req.userId, song_id)
+  res.json({ message: "Song removed from liked" })
 })
 
 app.listen(3001, () => console.log('Serveris veikia: http://localhost:3001'))
