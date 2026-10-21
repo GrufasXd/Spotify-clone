@@ -239,6 +239,7 @@ app.get('/api/recently-played', sessionCheck, (req,res) => {
   res.json(songs)
 })
 
+// Gaunam liked dainas
 app.get('/api/liked-songs', sessionCheck, (req,res) => {
   const songs = db.prepare('SELECT s.*, alb.cover_url, alb.title AS album_title FROM songs AS s JOIN albums AS alb ON s.album_id = alb.id JOIN liked_songs as ls ON s.id = ls.song_id WHERE ls.user_id = ? ORDER BY ls.id DESC').all(req.userId)
   res.json(songs)

@@ -10,8 +10,10 @@ import { Tooltip } from 'react-tooltip'
 import { FaVolumeUp } from "react-icons/fa";
 import { FaVolumeDown } from "react-icons/fa";
 import { FaVolumeMute } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute}){
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute, toggleLike, likedSongIds}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -21,6 +23,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
     const [songAlbumSongId, setSongAlbumSongId] = useState(null)
     const [titleOverflow, setTitleOverflow] = useState(0)
     const titleContainerRef = useRef(null)
+    const isLiked = likedSongIds.has(currentSong?.id)
 
     function handleTitleMouseEnter(){
         const title = titleContainerRef.current
@@ -166,6 +169,11 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
+                {isLiked === true ? (
+                    <FaHeart className="likeButton bottom liked" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
+                ) : (
+                    <FaRegHeart className="likeButton bottom" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
+                )}
                 <VolumeIcon data-tooltip-id="player-tooltip" data-tooltip-content="Toggle mute" className="volumeIcon" onClick={toggleMute}/>
                 <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} style={{ "--volume-level": `${volume * 100}%` }} onChange={(e) => {setVolume(Number(e.target.value)); e.stopPropagation()}} />
             </div>

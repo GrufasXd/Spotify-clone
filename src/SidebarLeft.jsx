@@ -4,8 +4,9 @@ import PlaylistItem from "./PlaylistItem";
 import { LuPanelLeftClose } from "react-icons/lu";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
+import { FaHeart } from "react-icons/fa";
 
-function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
+function SidebarLeft({currentUser, playlistData, setPlaylistData, leftSidebarWidth}){
     let navigate = useNavigate()
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
     const [playlistTitle, setPlaylistTitle] = useState("")
@@ -77,12 +78,23 @@ function SidebarLeft({playlistData, setPlaylistData, leftSidebarWidth}){
                         </>
                     )}
                 </div>
-                {!sidebarLeftClosed && playlistData.length > 0 && (
+                {!sidebarLeftClosed && currentUser &&(
                     <ul className="playlists">
-                        {playlistData.map(playlist => (
-                        <li onClick={() => navigate(`/playlist/${playlist.id}`)} key={playlist.id}>
-                            <PlaylistItem playlistName={playlist.name} playlistDescription={playlist.description} covers={playlist.covers}/>
+                        <li onClick={() => navigate(`/liked`)}>
+                            <div className="playlistItem">
+                                <div className="playlistIcon likedSongsCover">
+                                    <FaHeart/>
+                                </div>
+                                <div className="playlistItemText">
+                                    <b>Liked Songs</b>
+                                    <p className="playlistDescription">Your liked songs</p>
+                                </div>
+                            </div>
                         </li>
+                        {playlistData.map(playlist => (
+                            <li onClick={() => navigate(`/playlist/${playlist.id}`)} key={playlist.id}>
+                                <PlaylistItem playlistName={playlist.name} playlistDescription={playlist.description} covers={playlist.covers}/>
+                            </li>
                         ))}
                     </ul>
                 )}

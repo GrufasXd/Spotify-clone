@@ -768,7 +768,7 @@ body {
 }
 
 .activeSong{
-  color: rgb(73, 194, 73);
+  color: var(--activeIcon);
 }
 
 .songNumberWrapper{
@@ -793,7 +793,6 @@ body {
 }
 
 .songDuration{
-  margin-left: auto;
   padding-right: 20px;
   color: var(--greySupportingColor);
 }
@@ -946,6 +945,18 @@ body {
   height: 180px;
 }
 
+.albumCoverInPage.likedSongsCover{
+  font-size: 5em;
+}
+
+.likedSongsCover{
+  display: flex;
+  background: linear-gradient(135deg, #450af5, #c4efd9);
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
 .albumArtistName{
   font-weight: bold;
 }
@@ -1062,11 +1073,42 @@ body {
   transition: 0.5s;
 }
 
+.artistSong:hover .likeButton{
+  display: block;
+  opacity: 1;
+  transition: 0.5s;
+}
+
 .recentCard:hover .songOptions{
   display: block;
   cursor: pointer;
   opacity: 1;
   color: white;
+}
+
+.likeButton{
+  cursor: pointer;
+  display: none;
+  padding-right: 10px;
+  display: flex;
+  font-size: 25px;
+  background-color: transparent;
+  border: none;
+  opacity: 0;
+  transition: 0.5s;
+  margin-left: auto;
+}
+
+.likeButton.liked{
+  display: block;
+  opacity: 1;
+  color: var(--activeIcon);
+}
+
+.likeButton.bottom{
+  display: block;
+  opacity: 1;
+  font-size: 30px;
 }
 
 .songOptionsWrapper{
@@ -1210,6 +1252,10 @@ body {
   height: 54px;
 }
 
+.playlistIcon.likedSongsCover{
+  font-size: 1em;
+}
+
 svg.playlistIcon{
   background-color: rgb(24, 24, 179);
   padding: 10px;
@@ -1230,7 +1276,7 @@ svg.playlistIcon{
 
 .equalizer span{
   width: 3px;
-  background-color: rgb(73, 194, 73);
+  background-color: var(--activeIcon);
   animation: equalizerBounce 0.8s ease-in-out infinite alternate;
 }
 

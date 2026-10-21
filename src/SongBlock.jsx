@@ -1,15 +1,18 @@
 import { useEffect, useId, useState } from "react"
 import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying}){
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying, toggleLike, likedSongIds}){
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
     const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
     const [artistData, setArtistData] = useState({})
+    const isLiked = likedSongIds.has(song.id)
     const isActive = song.playlist_song_id ? 
     currentSong?.playlist_song_id === song.playlist_song_id:
     songIndex === currentIndex && pageContextQueue === songList
@@ -123,6 +126,11 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                     </b>
                     <p>{artistData.name}</p>
                 </div>
+                {isLiked === true ? (
+                    <FaHeart className="likeButton liked" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                ) : (
+                    <FaRegHeart className="likeButton" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                )}
                 <p className="songDuration">{durationConverter(song.duration)}</p>
                 <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (

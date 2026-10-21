@@ -6,7 +6,7 @@ import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 
 
-function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists,refreshPlaylists}){
+function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists,refreshPlaylists, toggleLike, likedSongIds}){
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
@@ -78,7 +78,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying} toggleLike={toggleLike} likedSongIds={likedSongIds}/>
                 ))}
             </div>
             }
