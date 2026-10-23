@@ -1,4 +1,5 @@
 import { IoMusicalNotesOutline } from "react-icons/io5";
+import { API_URL } from "./config"
 
 
 function PlaylistCover({covers = [], className}) {
@@ -6,13 +7,13 @@ function PlaylistCover({covers = [], className}) {
         return <IoMusicalNotesOutline className={className}/>
     }
     else if (covers.length < 4) {
-        return <img className={className} src={`http://localhost:3001${covers[0]}`} alt="Playlist cover"/>
+        return <img className={className} src={`${API_URL}${covers[0]}`} alt="Playlist cover"/>
     }
 
     return(
         <div className={`playlistMosaic ${className}`}>
             {covers.slice(0,4).map(cover => (
-                <img key={cover} src={`http://localhost:3001${cover}`} alt=""/>
+                <img key={cover} src={`${API_URL}${cover}`} alt=""/>
             ))}
         </div>
     )

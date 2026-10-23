@@ -3,6 +3,7 @@ import { FaPlay } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import { API_URL } from "./config"
 
 
 function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying, toggleLike, likedSongIds}){
@@ -11,7 +12,6 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
     const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
-    const [artistData, setArtistData] = useState({})
     const isLiked = likedSongIds.has(song.id)
     const isActive = song.playlist_song_id ? 
     currentSong?.playlist_song_id === song.playlist_song_id:
@@ -29,12 +29,6 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
             document.removeEventListener('click', handleClickOutside)
         })
     }, [])
-
-    useEffect(() => {
-        fetch(`http://localhost:3001/api/artists/${song.artist_id}`)
-        .then(res => res.json())
-        .then(data => setArtistData(data))
-    }, [song.artist_id])
 
     function durationConverter(duration){
         const mins = Math.floor(duration / 60)
@@ -54,7 +48,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
 
     function addSongToPlaylist(e, playlistId, songId){
         e.preventDefault()
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}/songs`, {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({
@@ -118,13 +112,13 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                     <FaPlay className="playIcon"/>
                 </div>
                 {!hideCover && song.cover_url && (
-                    <img className="songBlockCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+                    <img className="songBlockCover" src={`${API_URL}${song.cover_url}`} alt={song.album_title}/>
                 )}
                 <div className="songBlockTextWrapper">
                     <b className={isActive ? "activeSong" : ""}>
                         {song.title}
                     </b>
-                    <p>{artistData.name}</p>
+                    <p>{song.artist_name}</p>
                 </div>
                 {isLiked === true ? (
                     <FaHeart className="likeButton liked" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>

@@ -6,6 +6,7 @@ import SongBlock from "./SongBlock"
 import { CgPlayButton } from "react-icons/cg";
 import { Tooltip } from 'react-tooltip'
 import PlaylistCover from "./PlaylistCover";
+import { API_URL } from "./config"
 
 function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
     let params = useParams()
@@ -43,7 +44,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     }
 
     useEffect(() => {
-        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}`, {
             credentials: "include"
         })
             .then(res => {
@@ -52,7 +53,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
             })
             .then(data => setPlaylistData(data));
 
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}/songs`, {
             credentials: "include"
         })
             .then(res => {
@@ -85,7 +86,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
 
     function removeSongFromPlaylist(e, playlistSongId){
         e.stopPropagation()
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs/${playlistSongId}`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}/songs/${playlistSongId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -98,7 +99,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     }
 
     function deletePlaylist(){
-        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}`, {
             method: "DELETE",
             credentials: "include"
         })
@@ -113,7 +114,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     function updatePlaylist(e, playlistTitle, playlistDescription){
         e.preventDefault()
 
-        fetch(`http://localhost:3001/api/playlists/${playlistId}`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}`, {
             method: "PUT",
             credentials: "include",
             headers: {
@@ -128,7 +129,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
             if (!res.ok) throw new Error("Failed to update playlist");
             return res.json();
         })
-        .then(data => {
+        .then(() => {
             const updatedPlaylist = {
                 ...playlistData,
                 name: playlistTitle,

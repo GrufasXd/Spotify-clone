@@ -4,6 +4,7 @@ import SongBlock from "./SongBlock"
 import { Tooltip } from 'react-tooltip'
 import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
+import { API_URL } from "./config"
 
 
 function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists,refreshPlaylists, toggleLike, likedSongIds}){
@@ -33,10 +34,10 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
     }
 
     useEffect(() => {
-            fetch(`http://localhost:3001/api/albums/${albumId}`)
+            fetch(`${API_URL}/api/albums/${albumId}`)
             .then(res => res.json())
             .then(data => setAlbumData(data))
-            fetch(`http://localhost:3001/api/albums/${albumId}/songs`)
+            fetch(`${API_URL}/api/albums/${albumId}/songs`)
             .then(res => res.json())
             .then(data => setAlbumSongs(data))
     }, [albumId])
@@ -62,7 +63,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
             ): 
             <div className="mainContent" key={albumData.id}>
                 <div className="albumPageTop">
-                    <img className="albumCoverInPage" src={`http://localhost:3001${albumData.cover_url}`}/>
+                    <img className="albumCoverInPage" src={`${API_URL}${albumData.cover_url}`}/>
                     <div className="albumInfo">
                         <p className="albumTitle">{albumData.title}</p>
                         <p className="albumArtistName" onClick={() => navigate(`/artist/${albumData.artist_id}`)}>{albumData.artist_name}</p>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import SongBlock from "./SongBlock"
+import { API_URL } from "./config"
 
 
 function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, playlists, refreshPlaylists, isPlaying, toggleLike, likedSongIds}){
@@ -13,13 +14,13 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
     const [artistAlbums, setArtistAlbums] = useState([])
 
     useEffect(() => {
-            fetch(`http://localhost:3001/api/artists/${artistId}`)
+            fetch(`${API_URL}/api/artists/${artistId}`)
             .then(res => res.json())
             .then(data => setArtistData(data))
-            fetch(`http://localhost:3001/api/artists/${artistId}/songs`)
+            fetch(`${API_URL}/api/artists/${artistId}/songs`)
             .then(res => res.json())
             .then(data => setArtistSongs(data))
-            fetch(`http://localhost:3001/api/artists/${artistId}/albums`)
+            fetch(`${API_URL}/api/artists/${artistId}/albums`)
             .then(res => res.json())
             .then(data => setArtistAlbums(data))
     }, [artistId])
@@ -44,7 +45,7 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
                 <div className="artistAlbums">
                     {artistAlbums.map(album => (
                         <div className="artistAlbum" key={album.id} onClick={() => navigate(`/album/${album.id}`)}>
-                            <img className="albumCover" src={`http://localhost:3001${album.cover_url}`}/>
+                            <img className="albumCover" src={`${API_URL}${album.cover_url}`}/>
                             <p>{album.title}</p>
                         </div>
                     ))}

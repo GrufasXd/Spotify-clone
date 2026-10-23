@@ -5,6 +5,7 @@ import SongBlock from "./SongBlock"
 import { CgPlayButton } from "react-icons/cg";
 import { Tooltip } from 'react-tooltip'
 import { FaHeart } from "react-icons/fa";
+import { API_URL } from "./config"
 
 function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
     let playlistDuration = 0
@@ -30,7 +31,7 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
 
     useEffect(() => {
         if(!currentUser) return 
-        fetch(`http://localhost:3001/api/liked-songs`, {
+        fetch(`${API_URL}/api/liked-songs`, {
             credentials: "include"
         })
             .then(res => {

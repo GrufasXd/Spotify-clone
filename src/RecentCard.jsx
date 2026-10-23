@@ -1,6 +1,7 @@
 import { MdMusicNote } from "react-icons/md";
 import {useEffect, useState, useId} from "react";
 import { Tooltip } from 'react-tooltip'
+import { API_URL } from "./config"
 
 function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue, refreshPlaylists}){
     const songTooltipId = useId()
@@ -8,16 +9,6 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
     const [showQueueMessage, setShowQueueMessage] = useState(false)
     const [showPlaylistMessage, setShowPlaylistMessage] = useState(false)
-
-    const [songArtist, setSongArtist] = useState(null)
-
-    useEffect(() => {
-        if(!song) return
-
-        fetch(`http://localhost:3001/api/artists/${song.artist_id}`)
-        .then(res => res.json())
-        .then(data => setSongArtist(data))
-    }, [song])
 
     useEffect(() => {
             function handleClickOutside(){
@@ -49,7 +40,7 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
 
     function addSongToPlaylist(e, playlistId, songId){
         e.preventDefault()
-        fetch(`http://localhost:3001/api/playlists/${playlistId}/songs`, {
+        fetch(`${API_URL}/api/playlists/${playlistId}/songs`, {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({
@@ -110,15 +101,13 @@ function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playl
         )}
         <div className="recentCard" onClick={() => recentCardClick()}>
             {song.cover_url ? (
-                <img className="recentCardCover" src={`http://localhost:3001${song.cover_url}`} alt={song.album_title}/>
+                <img className="recentCardCover" src={`${API_URL}${song.cover_url}`} alt={song.album_title}/>
             ) : (
                 <MdMusicNote className="recentCardImage"/>
             )}
             <div className="recentCardText">
                 <p>{title}</p>
-                {songArtist && (
-                    <p className="recentCardArtistName">{songArtist.name}</p>
-                )}
+                <p className="recentCardArtistName">{song.artist_name}</p>
             </div>
             <div className="songOptionsWrapper" onClick={(e) => e.stopPropagation()}>
                 <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" type="button" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>

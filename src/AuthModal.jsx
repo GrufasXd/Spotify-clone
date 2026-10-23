@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
+import { API_URL } from "./config"
 
 
 function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUser}){
@@ -21,7 +22,7 @@ function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUse
 
     function signUp(e){
         e.preventDefault();
-        fetch(`http://localhost:3001/api/auth/register`, {
+        fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
             body: JSON.stringify({
                 username: username,
@@ -39,7 +40,7 @@ function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUse
             }
             return data;
         })
-        .then(data => {
+        .then(() => {
             logIn();
         })
         .catch(error => {
@@ -50,7 +51,7 @@ function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUse
 
     function logIn(e){
         e?.preventDefault();
-        fetch(`http://localhost:3001/api/auth/login`, {
+        fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -66,7 +67,7 @@ function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUse
             if (!res.ok) {
                 throw new Error(data.message || "Log in failed");
             }
-            return fetch("http://localhost:3001/api/auth/me", {
+            return fetch(`${API_URL}/api/auth/me`, {
                 credentials: "include"
             });
         })

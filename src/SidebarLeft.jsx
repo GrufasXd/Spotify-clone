@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import PlaylistItem from "./PlaylistItem";
 import { LuPanelLeftClose } from "react-icons/lu";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import { FaHeart } from "react-icons/fa";
+import { API_URL } from "./config"
 
 function SidebarLeft({currentUser, playlistData, setPlaylistData, leftSidebarWidth}){
     let navigate = useNavigate()
@@ -16,7 +17,7 @@ function SidebarLeft({currentUser, playlistData, setPlaylistData, leftSidebarWid
     function playlistCreation(e, playlistTitle, playlistDescription){
         e.preventDefault()
         if(playlistTitle != null){
-            fetch(`http://localhost:3001/api/playlists`, {
+            fetch(`${API_URL}/api/playlists`, {
                 method: "POST",
                 credentials: "include",
                 body: JSON.stringify({

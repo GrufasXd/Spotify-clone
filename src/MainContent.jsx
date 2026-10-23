@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { Tooltip } from 'react-tooltip'
 import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
+import { API_URL } from "./config"
 
 
 function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylists, isPlaying, pageContextQueue, currentSong, handlePlayClick, recentSongs, currentUser}){
@@ -16,10 +17,10 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
     const greetingText = currentTime < 12 ? "Good morning" : currentTime < 19 ? "Good day" : "Good evening"
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/songs')
+        fetch(`${API_URL}/api/songs`)
         .then(res => res.json())
         .then(data => setSongs(data))
-        fetch('http://localhost:3001/api/albums')
+        fetch(`${API_URL}/api/albums`)
         .then(res => res.json())
         .then(data => setMainAlbums(data))
     }, [])
@@ -40,7 +41,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
             return
         }
 
-        fetch(`http://localhost:3001/api/albums/${album.id}/songs`)
+        fetch(`${API_URL}/api/albums/${album.id}/songs`)
         .then(res => {
             if (!res.ok) throw new Error("Failed to fetch album songs")
             return res.json()
@@ -75,7 +76,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
                     return(
                         <div className="mainAlbumObject" key={album.id} onClick={() => navigate(`/album/${album.id}`)}>
                             <div className="mainAlbumCoverWrapper">
-                                <img className="mainAlbumCover" src={`http://localhost:3001${album.cover_url}`} alt={album.title}/>
+                                <img className="mainAlbumCover" src={`${API_URL}${album.cover_url}`} alt={album.title}/>
                                 {albumIsPlaying ? (
                                     <IoPauseOutline data-tooltip-id="mainAlbum-tooltip" data-tooltip-content="Pause" className="mainAlbumPlayButton visible" onClick={(e) => handleAlbumPlay(e, album)}/>
                                 ) : (

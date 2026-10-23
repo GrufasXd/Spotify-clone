@@ -12,13 +12,13 @@ import { FaVolumeDown } from "react-icons/fa";
 import { FaVolumeMute } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import { API_URL } from "./config"
 
 function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute, toggleLike, likedSongIds}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
-    const [songArtist, setSongArtist] = useState(null)
     const [songAlbum, setSongAlbum] = useState(null)
     const [songAlbumSongId, setSongAlbumSongId] = useState(null)
     const [titleOverflow, setTitleOverflow] = useState(0)
@@ -65,17 +65,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
         if(!currentSong) return
         let isCurrentSong = true
 
-        fetch(`http://localhost:3001/api/artists/${currentSong.artist_id}`)
-        .then(res => {
-            if (!res.ok) throw new Error("Failed to fetch song artist")
-            return res.json()
-        })
-        .then(data => {
-            if (isCurrentSong) setSongArtist(data)
-        })
-        .catch(console.error)
-
-        fetch(`http://localhost:3001/api/songs/${currentSong.id}/album`)
+        fetch(`${API_URL}/api/songs/${currentSong.id}/album`)
         .then(res => {
             if (!res.ok) throw new Error("Failed to fetch song album")
             return res.json()
@@ -104,7 +94,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 <div className="songBottomTrackInfo">
                     {songAlbumSongId === currentSong.id && songAlbum?.cover_url && (
                         <div className="songAlbumCover">
-                            <img src={`http://localhost:3001${songAlbum.cover_url}`} alt={`${songAlbum.title} album cover`}/>
+                            <img src={`${API_URL}${songAlbum.cover_url}`} alt={`${songAlbum.title} album cover`}/>
                         </div>
                     )}
                     <div className="songName">
@@ -118,8 +108,8 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                         >
                             <span>{currentSong.title}</span>
                         </b>
-                        {songArtist &&
-                            <p>{songArtist.name}</p>
+                        {currentSong.artist_name &&
+                            <p>{currentSong.artist_name}</p>
                         }
                     </div>
                 </div>
@@ -131,7 +121,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
             }
             <audio
                 ref={audioRef}
-                src={`http://localhost:3001${currentSong?.file_url}`}
+                src={`${API_URL}${currentSong?.file_url}`}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onEnded={() => {setIsPlaying(false); nextSong(true)}}

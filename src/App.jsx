@@ -1,5 +1,6 @@
+import { API_URL } from "./config"
 import { useState, useEffect, useRef } from "react"
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 
 import ArtistPage from "./ArtistPage"
 import AlbumPage from "./AlbumPage"
@@ -13,7 +14,7 @@ import LikedSongsPage from "./LikedSongsPage"
 
 // Parsiuncia prisijungusio vartotojo playlistus (su covers)
 function fetchPlaylists(){
-  return fetch(`http://localhost:3001/api/playlists`, {
+  return fetch(`${API_URL}/api/playlists`, {
       credentials: "include"
     })
     .then(res => {
@@ -27,7 +28,6 @@ function fetchPlaylists(){
 }
 
 function App() {
-  let navigate = useNavigate()
   const [currentSong, setCurrentSong] = useState(null)
   const [playlistData, setPlaylistData] = useState([])
   const [pageContextQueue, setPageContextQueue] = useState([])
@@ -116,7 +116,7 @@ function App() {
         setCurrentIndex(currentIndex + 1)
       }
       else{
-        fetch(`http://localhost:3001/api/songs/random?exclude=${currentSong.id}`)
+        fetch(`${API_URL}/api/songs/random?exclude=${currentSong.id}`)
           .then(res => res.json())
           .then(randomSong => {
             setPageContextQueue(prev => [...prev, randomSong])
@@ -181,7 +181,7 @@ function App() {
       return next
     })
     if(!isLiked){
-      fetch(`http://localhost:3001/api/liked-songs`, {
+      fetch(`${API_URL}/api/liked-songs`, {
       credentials: "include",
       method: "POST",
       body: JSON.stringify({
@@ -194,7 +194,7 @@ function App() {
       .catch(console.error);
     }
     else{
-      fetch(`http://localhost:3001/api/liked-songs/${songId}`, {
+      fetch(`${API_URL}/api/liked-songs/${songId}`, {
         credentials: "include",
         method: "DELETE"
       })
@@ -242,7 +242,7 @@ function App() {
   }, [volume])
   
   useEffect(() => {
-    fetch("http://localhost:3001/api/auth/me", {
+    fetch(`${API_URL}/api/auth/me`, {
       credentials: "include"
     })
       .then(res => {
@@ -281,7 +281,7 @@ function App() {
       return;
     }
 
-    fetch(`http://localhost:3001/api/recently-played`, {
+    fetch(`${API_URL}/api/recently-played`, {
       credentials: "include"
     })
     .then(res => {
@@ -301,7 +301,7 @@ function App() {
     }
 
     setRecentSongs(prev => [currentSong, ...prev.filter(song => song.id !== currentSong.id)].slice(0, 6))
-    fetch(`http://localhost:3001/api/recently-played`, {
+    fetch(`${API_URL}/api/recently-played`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({
@@ -320,7 +320,7 @@ function App() {
       return;
     }
 
-    fetch(`http://localhost:3001/api/liked-songs`, {
+    fetch(`${API_URL}/api/liked-songs`, {
       credentials: "include"
     })
     .then(res => {

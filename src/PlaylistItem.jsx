@@ -1,4 +1,3 @@
-import { IoMusicalNotesOutline } from "react-icons/io5";
 import PlaylistCover from "./PlaylistCover";
 
 function PlaylistItem({playlistName, playlistDescription, covers}) {
