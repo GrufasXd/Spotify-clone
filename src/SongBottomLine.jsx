@@ -13,14 +13,13 @@ import { FaVolumeMute } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { API_URL } from "./config"
+import { formatTime } from "./utils"
 
 function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute, toggleLike, likedSongIds}){
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
     const [durationDisplay, setDurationDisplay] = useState("00:00")
-    const [songAlbum, setSongAlbum] = useState(null)
-    const [songAlbumSongId, setSongAlbumSongId] = useState(null)
     const [titleOverflow, setTitleOverflow] = useState(0)
     const titleContainerRef = useRef(null)
     const isLiked = likedSongIds.has(currentSong?.id)
@@ -48,40 +47,14 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
 
         audio.ontimeupdate = () => {
             setCurrentTime(audio.currentTime)
-            const mins = Math.floor(audio.currentTime / 60)
-            const secs = Math.floor(audio.currentTime % 60)
-            setCurrentTimeDisplay(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`)
+            setCurrentTimeDisplay(formatTime(audio.currentTime))
         }
 
         audio.onloadedmetadata = () => {
             setDuration(audio.duration)
-            const mins = Math.floor(audio.duration / 60)
-            const secs = Math.floor(audio.duration % 60)
-            setDurationDisplay(`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`)
+            setDurationDisplay(formatTime(audio.duration))
         }
     }, [])
-
-    useEffect(() => {
-        if(!currentSong) return
-        let isCurrentSong = true
-
-        fetch(`${API_URL}/api/songs/${currentSong.id}/album`)
-        .then(res => {
-            if (!res.ok) throw new Error("Failed to fetch song album")
-            return res.json()
-        })
-        .then(data => {
-            if (isCurrentSong) {
-                setSongAlbum(data)
-                setSongAlbumSongId(currentSong.id)
-            }
-        })
-        .catch(console.error)
-
-        return () => {
-            isCurrentSong = false
-        }
-    }, [currentSong])
 
     function handleProgressClick(e){
         let placeToMoveBar = ((e.clientX - e.currentTarget.getBoundingClientRect().left)  * audioRef.current.duration) / e.currentTarget.offsetWidth
@@ -92,9 +65,9 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
         <div className="songBottomLine">
             {currentSong != null ? (
                 <div className="songBottomTrackInfo">
-                    {songAlbumSongId === currentSong.id && songAlbum?.cover_url && (
+                    {currentSong.cover_url && (
                         <div className="songAlbumCover">
-                            <img src={`${API_URL}${songAlbum.cover_url}`} alt={`${songAlbum.title} album cover`}/>
+                            <img src={`${API_URL}${currentSong.cover_url}`} alt={`${currentSong.album_title} album cover`}/>
                         </div>
                     )}
                     <div className="songName">

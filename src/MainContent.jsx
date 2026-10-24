@@ -14,7 +14,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
     const [mainAlbums, setMainAlbums] = useState([])
     const cardsToShow = recentSongs.length > 0 ? recentSongs : songs.slice(0, 6)
     const currentTime = new Date().getHours()
-    const greetingText = currentTime < 12 ? "Good morning" : currentTime < 19 ? "Good day" : "Good evening"
+    const greetingText = currentTime < 12 ? "Good morning" : currentTime < 19 ? "Good afternoon" : "Good evening"
 
     useEffect(() => {
         fetch(`${API_URL}/api/songs`)

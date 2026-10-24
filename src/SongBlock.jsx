@@ -4,6 +4,7 @@ import { Tooltip } from 'react-tooltip'
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { API_URL } from "./config"
+import { formatTime } from "./utils"
 
 
 function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying, toggleLike, likedSongIds}){
@@ -29,12 +30,6 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
             document.removeEventListener('click', handleClickOutside)
         })
     }, [])
-
-    function durationConverter(duration){
-        const mins = Math.floor(duration / 60)
-        const secs = Math.floor(duration % 60)
-        return (`${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`)
-    }
 
     function openSongOptions(e, songId){
         e.stopPropagation()
@@ -125,7 +120,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                 ) : (
                     <FaRegHeart className="likeButton" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
                 )}
-                <p className="songDuration">{durationConverter(song.duration)}</p>
+                <p className="songDuration">{formatTime(song.duration)}</p>
                 <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>
                 {songOptionsWindow === song.id ? (
                 <>

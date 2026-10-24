@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip'
 import { CgPlayButton } from "react-icons/cg";
 import { IoPauseOutline } from "react-icons/io5";
 import { API_URL } from "./config"
+import { durationToText } from "./utils"
 
 
 function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists,refreshPlaylists, toggleLike, likedSongIds}){
@@ -18,20 +19,6 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
     albumSongs.forEach(song => {
         albumDuration += song.duration
     });
-
-    function durationToText(duration){
-        const hours = Math.floor(duration / 3600)
-        if (hours > 0){
-            const mins = Math.floor((duration % 3600) / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${hours} h ${mins} min ${secs} s`)
-        }
-        else{
-            const mins = Math.floor(duration / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${mins} min ${secs} s`)
-        }
-    }
 
     useEffect(() => {
             fetch(`${API_URL}/api/albums/${albumId}`)

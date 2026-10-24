@@ -7,6 +7,7 @@ import { CgPlayButton } from "react-icons/cg";
 import { Tooltip } from 'react-tooltip'
 import PlaylistCover from "./PlaylistCover";
 import { API_URL } from "./config"
+import { durationToText } from "./utils"
 
 function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
     let params = useParams()
@@ -28,20 +29,6 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
     playlistSongs.forEach(song => {
         playlistDuration += song.duration
     });
-
-    function durationToText(duration){
-        const hours = Math.floor(duration / 3600)
-        if (hours > 0){
-            const mins = Math.floor((duration % 3600) / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${hours} h ${mins} min ${secs} s`)
-        }
-        else{
-            const mins = Math.floor(duration / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${mins} min ${secs} s`)
-        }
-    }
 
     useEffect(() => {
         fetch(`${API_URL}/api/playlists/${playlistId}`, {

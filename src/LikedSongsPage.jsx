@@ -6,6 +6,7 @@ import { CgPlayButton } from "react-icons/cg";
 import { Tooltip } from 'react-tooltip'
 import { FaHeart } from "react-icons/fa";
 import { API_URL } from "./config"
+import { durationToText } from "./utils"
 
 function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
     let playlistDuration = 0
@@ -14,20 +15,6 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
     likedSongs.forEach(song => {
         playlistDuration += song.duration
     });
-
-    function durationToText(duration){
-        const hours = Math.floor(duration / 3600)
-        if (hours > 0){
-            const mins = Math.floor((duration % 3600) / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${hours} h ${mins} min ${secs} s`)
-        }
-        else{
-            const mins = Math.floor(duration / 60)
-            const secs = Math.floor(duration % 60)
-            return(`${mins} min ${secs} s`)
-        }
-    }
 
     useEffect(() => {
         if(!currentUser) return 
