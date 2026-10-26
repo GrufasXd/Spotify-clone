@@ -81,6 +81,7 @@ function SearchBar({onSongSelect}){
                             <b className="searchSection">Artists</b>
                             {artistsResults.map(artist =>(
                                 <div key={artist.id} className="searchResult" onClick={() => handleNavigationClick("artist", artist.id)}>
+                                    <img className="searchResultCover artist" src={`${API_URL}${artist.header_photo}`} alt={artist.name}/>
                                     <p>{artist.name}</p>
                                 </div>
                             ))}

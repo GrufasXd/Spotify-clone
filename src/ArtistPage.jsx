@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 
 import SongBlock from "./SongBlock"
 import { API_URL } from "./config"
+import ScrollRow from "./ScrollRow"
 
 
 function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, playlists, refreshPlaylists, isPlaying, toggleLike, likedSongIds}){
@@ -32,24 +33,30 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
                     <p>Loading artist data...</p>
                 </div>
             ) : 
-            <div className="mainContent" key={artistData.id}>
-                <p className="artistName">{artistData.name}</p>
-                <p className="monthlyListeners">Monthly listeners: {Number(artistData.monthly_listeners).toLocaleString('en-US')}</p>
+            <div
+                className="mainContent artistMainContent"
+                key={artistData.id}
+                style={{"--artist-header": `url("${API_URL}${artistData.header_photo}")`}}
+                onScroll={(e) => e.currentTarget.style.setProperty("--scroll-y", e.currentTarget.scrollTop)}
+            >
+                <div className="artistPageTop">
+                    <p className="artistName">{artistData.name}</p>
+                    <p className="monthlyListeners">Monthly listeners: {Number(artistData.monthly_listeners).toLocaleString('en-US')}</p>
+                </div>
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map((song,index) => (
                         <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={artistSongs} isPlaying={isPlaying} toggleLike={toggleLike} likedSongIds={likedSongIds}/>
                     ))}
                 </div>
-                <b className="albumTag">Albums</b>
-                <div className="artistAlbums">
+                <ScrollRow title="Albums">
                     {artistAlbums.map(album => (
                         <div className="artistAlbum" key={album.id} onClick={() => navigate(`/album/${album.id}`)}>
                             <img className="albumCover" src={`${API_URL}${album.cover_url}`}/>
                             <p>{album.title}</p>
                         </div>
                     ))}
-                </div>
+                </ScrollRow>
             </div>
             }
         </>

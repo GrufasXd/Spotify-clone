@@ -12,6 +12,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
     let navigate = useNavigate()
     const [songs, setSongs] = useState([])
     const [mainAlbums, setMainAlbums] = useState([])
+    const [mainArtists, setMainArtists] = useState([])
     const cardsToShow = recentSongs.length > 0 ? recentSongs : songs.slice(0, 6)
     const currentTime = new Date().getHours()
     const greetingText = currentTime < 12 ? "Good morning" : currentTime < 19 ? "Good afternoon" : "Good evening"
@@ -23,6 +24,9 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
         fetch(`${API_URL}/api/albums`)
         .then(res => res.json())
         .then(data => setMainAlbums(data))
+        fetch(`${API_URL}/api/artists`)
+        .then(res => res.json())
+        .then(data => setMainArtists(data))
     }, [])
 
 
@@ -88,6 +92,14 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
                         </div>
                     )
                 })}
+            </ScrollRow>
+            <ScrollRow title="Artists">
+                {mainArtists.map(artist => (
+                    <div className="mainArtist" key={artist.id} onClick={() => navigate(`/artist/${artist.id}`)}>
+                        <img className="mainArtistCover" src={`${API_URL}${artist.header_photo}`} alt={artist.name}/>
+                        <p>{artist.name}</p>
+                    </div>
+                ))}
             </ScrollRow>
             <Tooltip id="mainAlbum-tooltip" place="top" positionStrategy="fixed"/>
         </div>

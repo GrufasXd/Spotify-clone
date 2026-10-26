@@ -19,7 +19,8 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS artists (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    monthly_listeners INT NOT NULL
+    monthly_listeners INT NOT NULL,
+    header_photo TEXT
   );
 
   CREATE TABLE IF NOT EXISTS albums (
@@ -79,11 +80,11 @@ db.exec(`
 // Test duomenys
 const count = db.prepare('SELECT COUNT(*) as c FROM songs').get()
 if (count.c === 0) {
-  const artist = db.prepare(`INSERT INTO artists (name, monthly_listeners) VALUES(?,?)`)
-  const snow = artist.run('Snow strippers', 113000).lastInsertRowid
-  const yeat = artist.run('Yeat', 23000000).lastInsertRowid
-  const shy = artist.run('Jessica Shy', 243237).lastInsertRowid
-  const kanye = artist.run('Kanye West', 64000000).lastInsertRowid
+  const artist = db.prepare(`INSERT INTO artists (name, monthly_listeners, header_photo) VALUES(?,?,?)`)
+  const snow = artist.run('Snow strippers', 113000, '/artist_headers/snow_header.jfif').lastInsertRowid
+  const yeat = artist.run('Yeat', 23000000, '/artist_headers/yeat_header.jfif').lastInsertRowid
+  const shy = artist.run('Jessica Shy', 243237, '/artist_headers/jessica_shy_header.jfif').lastInsertRowid
+  const kanye = artist.run('Kanye West', 64000000, '/artist_headers/kanye_header.jfif').lastInsertRowid
   const album = db.prepare(`INSERT INTO albums (title, artist_id, cover_url) VALUES(?,?,?)`)
   const april = album.run('April mixtape 3', snow, '/album_covers/april.jfif').lastInsertRowid
   const adl = album.run('ADL', yeat, '/album_covers/adl.jfif').lastInsertRowid

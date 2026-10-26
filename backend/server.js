@@ -14,6 +14,7 @@ app.use(cors({
 app.use(express.json())
 app.use('/songs', express.static(path.join(__dirname, 'songs')))
 app.use('/album_covers', express.static(path.join(__dirname, 'album_covers')))
+app.use('/artist_headers', express.static(path.join(__dirname, 'artist_headers')))
 app.use(cookieParser())
 
 const albumCoversQuery = db.prepare(`
@@ -99,6 +100,12 @@ app.get('/api/playlists/:id',  sessionCheck, (req, res) => {
   
   const playlists = db.prepare('SELECT * FROM playlists WHERE id = ?').get(playlist_id)
   res.json(playlists)
+})
+
+// Visi artistai
+app.get('/api/artists', (req, res) => {
+  const artists = db.prepare('SELECT * FROM artists').all()
+  res.json(artists)
 })
 
 // Tik searchinti artistai
