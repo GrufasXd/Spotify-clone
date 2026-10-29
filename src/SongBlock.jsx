@@ -1,13 +1,20 @@
-import { useEffect, useId, useState } from "react"
-import { FaPlay } from "react-icons/fa";
-import { Tooltip } from 'react-tooltip'
-import { FaHeart } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
 import { API_URL } from "./config"
 import { formatTime } from "./utils"
 
+import { useEffect, useId, useState, useContext } from "react"
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlists,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover,refreshPlaylists, currentSong, isPlaying, toggleLike, likedSongIds}){
+import { FaPlay } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+
+import { Tooltip } from 'react-tooltip'
+import { LikedSongsContext } from "./LikedSongsContext"
+import { PlaylistContext } from "./PlaylistContext"
+
+
+function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover, currentSong, isPlaying}){
+    const { likedSongIds, toggleLike } = useContext(LikedSongsContext)
+    const { playlistData, refreshPlaylists } = useContext(PlaylistContext)
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -142,7 +149,7 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,playlist
                     {playlistsWindow === song.id ? (
                         <div className="playlistsWindow" onClick={(e) => e.stopPropagation()}>
                             <p>Your playlists:</p>
-                            {playlists.map(playlist => (
+                            {playlistData.map(playlist => (
                                 <div className="playlistInWindow" key={playlist.id} onClick={(e) => addSongToPlaylist(e, playlist.id, song.id)}>
                                     <p key={playlist.id}>{playlist.name}</p>
                                 </div>

@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
-import SongBlock from "./SongBlock"
-import { Tooltip } from 'react-tooltip'
-import { CgPlayButton } from "react-icons/cg";
-import { IoPauseOutline } from "react-icons/io5";
 import { API_URL } from "./config"
 import { durationToText } from "./utils"
 
+import { useState, useEffect } from "react"
+import { useParams, useNavigate } from "react-router-dom"
 
-function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue,playlists,refreshPlaylists, toggleLike, likedSongIds}){
+import { CgPlayButton } from "react-icons/cg";
+import { IoPauseOutline } from "react-icons/io5";
+import { IoShuffle } from "react-icons/io5";
+
+import { Tooltip } from 'react-tooltip'
+import SongBlock from "./SongBlock"
+
+
+function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue, shuffle, toggleShuffle}){
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
@@ -57,6 +61,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                         <p>{albumSongs.length} songs, {durationToText(albumDuration)}</p>
                     </div>
                     <div className="playlistPlayButtonWrapper">
+                        <IoShuffle data-tooltip-id="playlist-tooltip" data-tooltip-content={shuffle ? "Disable shuffle" : "Enable shuffle"} className={shuffle ? "shuffleButton active" : "shuffleButton"} onClick={toggleShuffle}/>
                         {isPlaying && pageContextQueue == albumSongs ? (
                             <IoPauseOutline data-tooltip-id="playlist-tooltip" data-tooltip-content="Pause" className="playlistPlayButton" onClick={() => handleAlbumPlay()}/>
                         ) : (
@@ -66,7 +71,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying} toggleLike={toggleLike} likedSongIds={likedSongIds}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying}/>
                 ))}
             </div>
             }

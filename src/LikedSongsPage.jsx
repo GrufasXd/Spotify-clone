@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react"
-import { IoPauseOutline } from "react-icons/io5";
-
-import SongBlock from "./SongBlock"
-import { CgPlayButton } from "react-icons/cg";
-import { Tooltip } from 'react-tooltip'
-import { FaHeart } from "react-icons/fa";
 import { API_URL } from "./config"
 import { durationToText } from "./utils"
 
-function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
+import { useEffect, useState } from "react"
+
+import { IoPauseOutline } from "react-icons/io5";
+import { CgPlayButton } from "react-icons/cg";
+import { FaHeart } from "react-icons/fa";
+
+import { Tooltip } from 'react-tooltip'
+import SongBlock from "./SongBlock"
+
+function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
     let playlistDuration = 0
     const [likedSongs, setLikedSongs] = useState([])
 
@@ -27,7 +29,7 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
             })
             .then(data => setLikedSongs(data))
             .catch(console.error);
-    }, [likedSongIds, currentUser]);
+    }, [currentUser]);
 
     function handlePlaylistPlay(){
         if (likedSongs.length === 0) return
@@ -67,7 +69,7 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
                     </div>
                 </div>
                 {likedSongs.map((song, index) => ( 
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, likedSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={likedSongs} isPlaying={isPlaying} toggleLike={toggleLike} likedSongIds={likedSongIds}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, likedSongs, index)} addSongToQueue={addSongToQueue} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={likedSongs} isPlaying={isPlaying}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

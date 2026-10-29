@@ -1,5 +1,6 @@
-import { IoMusicalNotesOutline } from "react-icons/io5";
 import { API_URL } from "./config"
+
+import { IoMusicalNotesOutline } from "react-icons/io5";
 
 
 function PlaylistCover({covers = [], className}) {

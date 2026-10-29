@@ -1,9 +1,14 @@
-import { MdMusicNote } from "react-icons/md";
-import {useEffect, useState, useId} from "react";
-import { Tooltip } from 'react-tooltip'
 import { API_URL } from "./config"
 
-function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, playlistData, addSongToQueue, isSidebar, setUserQueue, refreshPlaylists}){
+import { useEffect, useState, useId, useContext } from "react";
+
+import { MdMusicNote } from "react-icons/md";
+
+import { Tooltip } from 'react-tooltip'
+import { PlaylistContext } from "./PlaylistContext"
+
+function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, addSongToQueue, isSidebar, setUserQueue}){
+    const { playlistData, refreshPlaylists } = useContext(PlaylistContext)
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)

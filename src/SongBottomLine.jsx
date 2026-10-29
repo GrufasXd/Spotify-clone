@@ -1,21 +1,26 @@
+import { API_URL } from "./config"
+import { formatTime } from "./utils"
+
+import { useEffect, useRef, useState, useContext } from "react";
+
 import { CgPlayButton } from "react-icons/cg";
 import { FaStepForward } from "react-icons/fa";
 import { FaStepBackward } from "react-icons/fa";
 import { IoPauseOutline } from "react-icons/io5";
 import { IoShuffle } from "react-icons/io5";
-import {useEffect, useRef, useState} from "react";
 import { BsRepeat } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
-import { Tooltip } from 'react-tooltip'
 import { FaVolumeUp } from "react-icons/fa";
 import { FaVolumeDown } from "react-icons/fa";
 import { FaVolumeMute } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import { API_URL } from "./config"
-import { formatTime } from "./utils"
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute, toggleLike, likedSongIds}){
+import { Tooltip } from 'react-tooltip'
+import { LikedSongsContext } from "./LikedSongsContext"
+
+function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute}){
+    const { likedSongIds, toggleLike } = useContext(LikedSongsContext)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)

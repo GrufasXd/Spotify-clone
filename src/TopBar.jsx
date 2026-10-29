@@ -1,16 +1,19 @@
+import { API_URL } from "./config"
 import spotifyLogo from "./assets/Spotify_White.png"
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { GoHome } from "react-icons/go";
-import { Tooltip } from 'react-tooltip'
 import { FaRegUser } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
+
+import { Tooltip } from 'react-tooltip'
 import SearchBar from "./SearchBar"
-import { useNavigate } from "react-router-dom";
 import AuthModal from "./AuthModal";
-import { useState } from "react";
-import { API_URL } from "./config"
 
 
-function TopBar({handleSongSelect, currentUser, setCurrentUser, setPlaylistData}){
+function TopBar({handleSongSelect, currentUser, setCurrentUser}){
     const navigate = useNavigate();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState("login");
@@ -30,7 +33,6 @@ function TopBar({handleSongSelect, currentUser, setCurrentUser, setPlaylistData}
         })
         .then(() => {
             setLogoutModalOpen(false)
-            setPlaylistData([])
             setCurrentUser(null)
         })
         .catch(error => {

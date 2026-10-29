@@ -1,14 +1,17 @@
-import RecentCard from "./RecentCard"
-import ScrollRow from "./ScrollRow"
-import { useState, useEffect} from "react"
-import { useNavigate } from "react-router-dom"
-import { Tooltip } from 'react-tooltip'
-import { CgPlayButton } from "react-icons/cg";
-import { IoPauseOutline } from "react-icons/io5";
 import { API_URL } from "./config"
 
+import { useState, useEffect} from "react"
+import { useNavigate } from "react-router-dom"
 
-function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylists, isPlaying, pageContextQueue, currentSong, handlePlayClick, recentSongs, currentUser}){
+import { CgPlayButton } from "react-icons/cg";
+import { IoPauseOutline } from "react-icons/io5";
+
+import { Tooltip } from 'react-tooltip'
+import RecentCard from "./RecentCard"
+import ScrollRow from "./ScrollRow"
+
+
+function MainContent({onSongSelect, addSongToQueue, isPlaying, pageContextQueue, currentSong, handlePlayClick, recentSongs, currentUser}){
     let navigate = useNavigate()
     const [songs, setSongs] = useState([])
     const [mainAlbums, setMainAlbums] = useState([])
@@ -67,9 +70,7 @@ function MainContent({onSongSelect, playlistData, addSongToQueue, refreshPlaylis
                         title={song.title}
                         song={song}
                         onSongSelect={(song) => onSongSelect(song, cardsToShow, index)}
-                        playlistData={playlistData}
                         addSongToQueue={addSongToQueue}
-                        refreshPlaylists={refreshPlaylists}
                     />
                 ))}
             </div>

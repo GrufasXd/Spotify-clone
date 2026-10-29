@@ -1,13 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"
-import PlaylistItem from "./PlaylistItem";
-import { LuPanelLeftClose } from "react-icons/lu";
-import { MdKeyboardArrowRight } from "react-icons/md";
-import { Tooltip } from "react-tooltip";
-import { FaHeart } from "react-icons/fa";
 import { API_URL } from "./config"
 
-function SidebarLeft({currentUser, playlistData, setPlaylistData, leftSidebarWidth}){
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom"
+
+import { LuPanelLeftClose } from "react-icons/lu";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaHeart } from "react-icons/fa";
+
+import { Tooltip } from "react-tooltip";
+import PlaylistItem from "./PlaylistItem";
+import { PlaylistContext } from "./PlaylistContext"
+
+function SidebarLeft({currentUser, leftSidebarWidth}){
+    const { playlistData, setPlaylistData } = useContext(PlaylistContext)
     let navigate = useNavigate()
     const [playlistCreationWindow, setplaylistCreationWindow] = useState(false)
     const [playlistTitle, setPlaylistTitle] = useState("")

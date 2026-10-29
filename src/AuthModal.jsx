@@ -1,7 +1,9 @@
+import { API_URL } from "./config"
+
 import { useState } from "react";
+
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
-import { API_URL } from "./config"
 
 
 function AuthModal({setIsAuthModalOpen, authMode, isAuthModalOpen, setCurrentUser}){

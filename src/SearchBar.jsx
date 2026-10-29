@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { CiSearch } from "react-icons/ci";
-import { useNavigate } from "react-router-dom"
-import { Tooltip } from "react-tooltip";
 import { API_URL } from "./config"
+
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom"
+
+import { CiSearch } from "react-icons/ci";
+
+import { Tooltip } from "react-tooltip";
 
 
 function SearchBar({onSongSelect}){

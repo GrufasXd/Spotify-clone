@@ -1,15 +1,21 @@
-import { useEffect, useRef, useState } from "react"
-import { useParams, useNavigate} from "react-router-dom"
-import { IoPauseOutline } from "react-icons/io5";
-
-import SongBlock from "./SongBlock"
-import { CgPlayButton } from "react-icons/cg";
-import { Tooltip } from 'react-tooltip'
-import PlaylistCover from "./PlaylistCover";
 import { API_URL } from "./config"
 import { durationToText } from "./utils"
 
-function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, updatePlaylistInSidebar, addSongToQueue, playlists, refreshPlaylists, currentSong, isPlaying, handlePlayClick, pageContextQueue, toggleLike, likedSongIds}){
+import { useEffect, useRef, useState, useContext } from "react"
+import { useParams, useNavigate} from "react-router-dom"
+
+import { IoPauseOutline } from "react-icons/io5";
+import { IoShuffle } from "react-icons/io5";
+import { CgPlayButton } from "react-icons/cg";
+
+import { Tooltip } from 'react-tooltip'
+import SongBlock from "./SongBlock"
+import PlaylistCover from "./PlaylistCover";
+import { PlaylistContext } from "./PlaylistContext"
+
+
+function PlaylistPage({currentIndex, onSongSelect, addSongToQueue, currentSong, isPlaying, handlePlayClick, pageContextQueue, shuffle, toggleShuffle}){
+    const { refreshPlaylists, removePlaylistFromSidebar, updatePlaylistInSidebar } = useContext(PlaylistContext)
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -200,6 +206,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                         }
                     </div>
                     <div className="playlistPlayButtonWrapper">
+                        <IoShuffle data-tooltip-id="playlist-tooltip" data-tooltip-content={shuffle ? "Disable shuffle" : "Enable shuffle"} className={shuffle ? "shuffleButton active" : "shuffleButton"} onClick={toggleShuffle}/>
                         {isPlaying && pageContextQueue == playlistSongs ? (
                             <IoPauseOutline data-tooltip-id="playlist-tooltip" data-tooltip-content="Pause" className="playlistPlayButton" onClick={() => handlePlaylistPlay()}/>
                         ) : (
@@ -208,7 +215,7 @@ function PlaylistPage({currentIndex, onSongSelect, removePlaylistFromSidebar, up
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} playlists={playlists} refreshPlaylists={refreshPlaylists} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs} isPlaying={isPlaying} toggleLike={toggleLike} likedSongIds={likedSongIds}/>
+                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs} isPlaying={isPlaying}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

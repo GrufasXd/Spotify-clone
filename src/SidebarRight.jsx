@@ -1,10 +1,12 @@
 import {useEffect, useRef, useState} from "react";
-import RecentCard from "./RecentCard"
+
 import { LuPanelLeftOpen } from "react-icons/lu";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { Tooltip } from 'react-tooltip'
 
-function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, playlistData, addSongToQueue, refreshPlaylists, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
+import { Tooltip } from 'react-tooltip'
+import RecentCard from "./RecentCard"
+
+function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, addSongToQueue, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
 
     const [queueClearConfirmation, setQueueClearConfirmation] = useState(false)
     const queueClearRef = useRef(null)
@@ -61,9 +63,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                             title={currentSong.title}
                             song={currentSong}
                             onSongSelect={onSongSelect}
-                            playlistData={playlistData}
                             addSongToQueue={addSongToQueue}
-                            refreshPlaylists={refreshPlaylists}
                         />
                     </>
                     ): 
@@ -84,9 +84,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                                     song={queueItem.song}
                                     queueItem={queueItem}
                                     queueItemClick={queueItemClick}
-                                    playlistData={playlistData}
                                     addSongToQueue={addSongToQueue}
-                                    refreshPlaylists={refreshPlaylists}
                                     isSidebar={true}
                                     setUserQueue={setUserQueue}
                                 />
