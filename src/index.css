@@ -1099,6 +1099,10 @@ body {
   transition: 0.5s;
 }
 
+.artistSong:hover .likeButton.hidden{
+  opacity: 0;
+}
+
 .recentCard:hover .songOptions{
   display: block;
   cursor: pointer;

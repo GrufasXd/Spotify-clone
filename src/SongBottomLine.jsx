@@ -18,9 +18,13 @@ import { FaRegHeart } from "react-icons/fa";
 
 import { Tooltip } from 'react-tooltip'
 import { LikedSongsContext } from "./LikedSongsContext"
+import { PlayerContext } from "./PlayerContext";
+import { AuthContext } from "./AuthContext";
 
-function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPlaying, handlePlayClick, audioRef, currentIndex, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute}){
+function SongBottomLine({nextSong, previousSong, setIsPlaying, handlePlayClick, audioRef, shuffle, toggleShuffle, repeat, setRepeat, toggleRepeat, volume, setVolume, toggleMute}){
     const { likedSongIds, toggleLike } = useContext(LikedSongsContext)
+    const { isPlaying, currentIndex, currentSong } = useContext(PlayerContext)
+    const { currentUser } = useContext(AuthContext)
     const [currentTime, setCurrentTime] = useState(0)
     const [currentTimeDisplay, setCurrentTimeDisplay] = useState("00:00")
     const [duration, setDuration] = useState(0)
@@ -45,7 +49,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
             audioRef.current.currentTime = 0
             audioRef.current.play()
         }
-    }, [currentSong, currentIndex])
+    }, [currentSong, currentIndex, audioRef])
 
     useEffect(() => {
         const audio = audioRef.current
@@ -59,7 +63,7 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
             setDuration(audio.duration)
             setDurationDisplay(formatTime(audio.duration))
         }
-    }, [])
+    }, [audioRef])
 
     function handleProgressClick(e){
         let placeToMoveBar = ((e.clientX - e.currentTarget.getBoundingClientRect().left)  * audioRef.current.duration) / e.currentTarget.offsetWidth
@@ -137,10 +141,12 @@ function SongBottomLine({currentSong, nextSong, previousSong, isPlaying, setIsPl
                 </div>
             </div>
             <div className="songBottomRight">
-                {isLiked === true ? (
-                    <FaHeart className="likeButton bottom liked" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
-                ) : (
-                    <FaRegHeart className="likeButton bottom" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
+                {currentUser && (
+                    isLiked === true ? (
+                        <FaHeart className="likeButton bottom liked" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
+                    ) : (
+                        <FaRegHeart className="likeButton bottom" onClick={(e) => {e.stopPropagation(); toggleLike(currentSong.id)}}/>
+                    )
                 )}
                 <VolumeIcon data-tooltip-id="player-tooltip" data-tooltip-content="Toggle mute" className="volumeIcon" onClick={toggleMute}/>
                 <input className="volumeSlider" type="range" min="0" max="1" step="0.01" value={volume} style={{ "--volume-level": `${volume * 100}%` }} onChange={(e) => {setVolume(Number(e.target.value)); e.stopPropagation()}} />

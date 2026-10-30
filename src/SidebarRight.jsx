@@ -1,13 +1,14 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 
 import { LuPanelLeftOpen } from "react-icons/lu";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 
 import { Tooltip } from 'react-tooltip'
 import RecentCard from "./RecentCard"
+import { PlayerContext } from "./PlayerContext"
 
-function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queueItemClick, addSongToQueue, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
-
+function SidebarRight({userQueue, setUserQueue, queueItemClick, clearQueue, rightSidebarWidth, sidebarRightClosed, setSidebarRightClosed}){
+    const { currentSong, handleSongSelect } = useContext(PlayerContext)
     const [queueClearConfirmation, setQueueClearConfirmation] = useState(false)
     const queueClearRef = useRef(null)
 
@@ -62,8 +63,7 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                             key={currentSong.id}
                             title={currentSong.title}
                             song={currentSong}
-                            onSongSelect={onSongSelect}
-                            addSongToQueue={addSongToQueue}
+                            onSongSelect={handleSongSelect}
                         />
                     </>
                     ): 
@@ -84,7 +84,6 @@ function SidebarRight({currentSong, userQueue, setUserQueue, onSongSelect, queue
                                     song={queueItem.song}
                                     queueItem={queueItem}
                                     queueItemClick={queueItemClick}
-                                    addSongToQueue={addSongToQueue}
                                     isSidebar={true}
                                     setUserQueue={setUserQueue}
                                 />

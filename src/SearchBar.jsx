@@ -1,14 +1,16 @@
 import { API_URL } from "./config"
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom"
 
 import { CiSearch } from "react-icons/ci";
 
 import { Tooltip } from "react-tooltip";
+import { PlayerContext } from "./PlayerContext"
 
 
-function SearchBar({onSongSelect}){
+function SearchBar(){
+    const { handleSongSelect } = useContext(PlayerContext)
     let navigate = useNavigate()
     const [searchString, setSearchString] = useState("")
     const [artistsResults, setArtistsResults] = useState([])
@@ -21,6 +23,12 @@ function SearchBar({onSongSelect}){
     function handleSearch(event){
         setSearchString(event.target.value)
         setDropdownOpen(true)
+        if (event.target.value === ""){
+            setArtistsResults([])
+            setSongResults([])
+            setSongRelatedResults([])
+            setAlbumResults([])
+        }
     }
 
     function handleNavigationClick(navigationSpot, artistId){
@@ -42,10 +50,6 @@ function SearchBar({onSongSelect}){
             fetch(`${API_URL}/api/albums/search?q=${searchString}`)
             .then(res => res.json())
             .then(data => setAlbumResults(data))
-        }
-        else if (searchString == ""){
-            setArtistsResults([])
-            setSongResults([])
         }
     },[searchString])
 
@@ -96,7 +100,7 @@ function SearchBar({onSongSelect}){
                         <>
                             <b className="searchSection">Songs</b>
                             {songResults.map(song =>(
-                                <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
+                                <div className="searchResult" key={song.id} onClick={() => handleSongSelect(song)} song={song}>
                                     <img className="searchResultCover" src={`${API_URL}${song.cover_url}`} alt={song.album_title}/>
                                     <div>
                                         <p>{song.title}</p>
@@ -105,7 +109,7 @@ function SearchBar({onSongSelect}){
                                 </div>
                             ))}
                             {filteredRelatedResults.map(song =>(
-                                <div className="searchResult" key={song.id} onClick={() => onSongSelect(song)} song={song}>
+                                <div className="searchResult" key={song.id} onClick={() => handleSongSelect(song)} song={song}>
                                     <img className="searchResultCover" src={`${API_URL}${song.cover_url}`} alt={song.album_title}/>
                                     <div>
                                         <p>{song.title}</p>

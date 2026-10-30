@@ -6,9 +6,11 @@ import { MdMusicNote } from "react-icons/md";
 
 import { Tooltip } from 'react-tooltip'
 import { PlaylistContext } from "./PlaylistContext"
+import { PlayerContext } from "./PlayerContext"
 
-function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, addSongToQueue, isSidebar, setUserQueue}){
+function RecentCard({title, song, queueItem, onSongSelect, queueItemClick, isSidebar, setUserQueue}){
     const { playlistData, refreshPlaylists } = useContext(PlaylistContext)
+    const { addSongToQueue } = useContext(PlayerContext)
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)

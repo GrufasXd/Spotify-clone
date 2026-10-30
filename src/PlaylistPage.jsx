@@ -12,10 +12,12 @@ import { Tooltip } from 'react-tooltip'
 import SongBlock from "./SongBlock"
 import PlaylistCover from "./PlaylistCover";
 import { PlaylistContext } from "./PlaylistContext"
+import { PlayerContext } from "./PlayerContext";
 
 
-function PlaylistPage({currentIndex, onSongSelect, addSongToQueue, currentSong, isPlaying, handlePlayClick, pageContextQueue, shuffle, toggleShuffle}){
+function PlaylistPage({handlePlayClick, shuffle, toggleShuffle}){
     const { refreshPlaylists, removePlaylistFromSidebar, updatePlaylistInSidebar } = useContext(PlaylistContext)
+    const { isPlaying, currentSong, pageContextQueue, handleSongSelect } = useContext(PlayerContext)
     let params = useParams()
     const playlistId = params.id
     let navigate = useNavigate()
@@ -138,7 +140,7 @@ function PlaylistPage({currentIndex, onSongSelect, addSongToQueue, currentSong, 
     function handlePlaylistPlay(){
         
         if(pageContextQueue !== playlistSongs || currentSong == null){
-            onSongSelect(playlistSongs[0], playlistSongs,0)
+            handleSongSelect(playlistSongs[0], playlistSongs, 0)
         }
         else{
             handlePlayClick()
@@ -215,7 +217,7 @@ function PlaylistPage({currentIndex, onSongSelect, addSongToQueue, currentSong, 
                     </div>
                 </div>
                 {playlistSongs.map((song, index) => ( 
-                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, playlistSongs, index)} addSongToQueue={addSongToQueue} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={playlistSongs} isPlaying={isPlaying}/>
+                    <SongBlock key={song.playlist_song_id} song={song} songNumber={index + 1} songIndex={index} onSongSelect={(song) => handleSongSelect(song, playlistSongs, index)} isPlaylistPage={true} removeSongFromPlaylist={removeSongFromPlaylist} songList={playlistSongs}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>

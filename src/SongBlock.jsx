@@ -10,11 +10,15 @@ import { FaRegHeart } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip'
 import { LikedSongsContext } from "./LikedSongsContext"
 import { PlaylistContext } from "./PlaylistContext"
+import { PlayerContext } from "./PlayerContext"
+import { AuthContext } from "./AuthContext";
 
 
-function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,isPlaylistPage,removeSongFromPlaylist, addSongToQueue,pageContextQueue,songList,hideCover, currentSong, isPlaying}){
+function SongBlock({song, songNumber, songIndex, onSongSelect, isPlaylistPage, removeSongFromPlaylist, songList, hideCover}){
     const { likedSongIds, toggleLike } = useContext(LikedSongsContext)
     const { playlistData, refreshPlaylists } = useContext(PlaylistContext)
+    const { isPlaying, currentIndex, pageContextQueue, addSongToQueue, currentSong } = useContext(PlayerContext)
+    const { currentUser } = useContext(AuthContext)
     const songTooltipId = useId()
     const [songOptionsWindow, setSongOptionsWindow] = useState(null)
     const [playlistsWindow, setPlaylistsWindow] = useState(null)
@@ -122,10 +126,14 @@ function SongBlock({song,songNumber,songIndex,currentIndex,onSongSelect,isPlayli
                     </b>
                     <p>{song.artist_name}</p>
                 </div>
-                {isLiked === true ? (
-                    <FaHeart className="likeButton liked" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                {currentUser != null ? (
+                    isLiked === true ? (
+                        <FaHeart className="likeButton liked" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                    ) : (
+                        <FaRegHeart className="likeButton" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                    )
                 ) : (
-                    <FaRegHeart className="likeButton" onClick={(e) => {e.stopPropagation(); toggleLike(song.id)}}/>
+                    <FaHeart className="likeButton hidden"/>
                 )}
                 <p className="songDuration">{formatTime(song.duration)}</p>
                 <button data-tooltip-id={songTooltipId} data-tooltip-content="Song options" className="songOptions" onClick={(e) => openSongOptions(e, song.id)}>...</button>

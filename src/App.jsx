@@ -14,6 +14,8 @@ import PlaylistPage from "./PlaylistPage"
 import LikedSongsPage from "./LikedSongsPage"
 import { LikedSongsContext } from "./LikedSongsContext"
 import { PlaylistContext } from "./PlaylistContext"
+import { PlayerContext } from "./PlayerContext"
+import { AuthContext } from "./AuthContext"
 
 // Parsiuncia prisijungusio vartotojo playlistus (su covers)
 function fetchPlaylists(){
@@ -63,7 +65,8 @@ function App() {
     }
   }
 
-  function handleSongSelect(song, songList, songIndex){
+  // Jei sarasas neperduotas (pvz. is paieskos), grojama tik ta viena daina
+  function handleSongSelect(song, songList = [song], songIndex = 0){
     setCurrentSong(song)
     setPageContextQueue(songList)
     setCurrentIndex(songIndex)
@@ -205,6 +208,13 @@ function App() {
     }
   }
 
+  function handleLogout(){
+    setCurrentUser(null)
+    setPlaylistData([])
+    setRecentSongs([])
+    setLikedSongIds(new Set())
+  }
+
   useEffect(() => {
     function resize(e){
       if(!isResizing) return
@@ -261,12 +271,10 @@ function App() {
 
   useEffect(() => {
     if (!currentUser) {
-      setPlaylistData([]);
       return;
     }
 
     let isCurrentRequest = true;
-    setPlaylistData([]);
 
     fetchPlaylists()
       .then(data => {
@@ -280,7 +288,6 @@ function App() {
 
   useEffect(() => {
     if (!currentUser) {
-      setRecentSongs([]);
       return;
     }
 
@@ -303,7 +310,6 @@ function App() {
       return;
     }
 
-    setRecentSongs(prev => [currentSong, ...prev.filter(song => song.id !== currentSong.id)].slice(0, 6))
     fetch(`${API_URL}/api/recently-played`, {
       method: "POST",
       credentials: "include",
@@ -314,12 +320,12 @@ function App() {
         "Content-type": "application/json; charset=UTF-8"
       }
     })
+    .then(() => setRecentSongs(prev => [currentSong, ...prev.filter(song => song.id !== currentSong.id)].slice(0, 6)))
     .catch(console.error);
   }, [currentSong, currentUser]);
 
   useEffect(() => {
     if (!currentUser) {
-      setLikedSongIds(new Set());
       return;
     }
 
@@ -347,61 +353,65 @@ function App() {
 
   return(
   <>
-  <PlaylistContext.Provider value={{playlistData, setPlaylistData, refreshPlaylists, removePlaylistFromSidebar, updatePlaylistInSidebar}}>
-    <LikedSongsContext.Provider value={{likedSongIds, toggleLike}}>
-          <TopBar handleSongSelect={handleSongSelect} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-          <Routes>
-            <Route path="/" element={
-              <div className="contentArea">
-                <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <MainContent onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} isPlaying={isPlaying} pageContextQueue={pageContextQueue} currentSong={currentSong} handlePlayClick={handlePlayClick} recentSongs={recentSongs} currentUser={currentUser}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+  <AuthContext.Provider value={{currentUser}}>
+    <PlayerContext.Provider value={{isPlaying, currentIndex, pageContextQueue, handleSongSelect, addSongToQueue, currentSong}}>
+      <PlaylistContext.Provider value={{playlistData, setPlaylistData, refreshPlaylists, removePlaylistFromSidebar, updatePlaylistInSidebar}}>
+        <LikedSongsContext.Provider value={{likedSongIds, toggleLike}}>
+              <TopBar currentUser={currentUser} setCurrentUser={setCurrentUser} handleLogout={handleLogout}/>
+              <Routes>
+                <Route path="/" element={
+                  <div className="contentArea">
+                    <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
+                    <MainContent handlePlayClick={handlePlayClick} recentSongs={recentSongs} currentUser={currentUser}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                    <SidebarRight userQueue={userQueue} setUserQueue={setUserQueue} queueItemClick={queueItemClick} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+                  </div>
+                }/>
+                <Route path="/artist/:id" element={
+                  <div className="contentArea">
+                    <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
+                    <ArtistPage/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                    <SidebarRight userQueue={userQueue} setUserQueue={setUserQueue} queueItemClick={queueItemClick} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+                  </div>
+                }/>
+                <Route path="/album/:id" element={
+                  <div className="contentArea">
+                    <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
+                    <AlbumPage handlePlayClick={handlePlayClick} shuffle={shuffle} toggleShuffle={toggleShuffle}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                    <SidebarRight userQueue={userQueue} setUserQueue={setUserQueue} queueItemClick={queueItemClick} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+                  </div>
+                }/>
+                <Route path="/playlist/:id" element={
+                  <div className="contentArea">
+                    <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
+                    <PlaylistPage handlePlayClick={handlePlayClick} shuffle={shuffle} toggleShuffle={toggleShuffle}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                    <SidebarRight userQueue={userQueue} setUserQueue={setUserQueue} queueItemClick={queueItemClick} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+                  </div>
+                }/>
+                <Route path="/liked" element={
+                  <div className="contentArea">
+                    <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
+                    <LikedSongsPage currentUser={currentUser} handlePlayClick={handlePlayClick}/>
+                    <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
+                    <SidebarRight userQueue={userQueue} setUserQueue={setUserQueue} queueItemClick={queueItemClick} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
+                  </div>
+                }/>
+              </Routes>
+              <div>
+                <SongBottomLine nextSong={nextSong} previousSong={previousSong} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat} volume={volume} setVolume={setVolume} toggleMute={toggleMute}/>
               </div>
-            }/>
-            <Route path="/artist/:id" element={
-              <div className="contentArea">
-                <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <ArtistPage onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentIndex={currentIndex} pageContextQueue={pageContextQueue} isPlaying={isPlaying}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
-              </div>
-            }/>
-            <Route path="/album/:id" element={
-              <div className="contentArea">
-                <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <AlbumPage currentIndex={currentIndex} onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue} shuffle={shuffle} toggleShuffle={toggleShuffle}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
-              </div>
-            }/>
-            <Route path="/playlist/:id" element={
-              <div className="contentArea">
-                <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <PlaylistPage currentIndex={currentIndex} onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue} shuffle={shuffle} toggleShuffle={toggleShuffle}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
-              </div>
-            }/>
-            <Route path="/liked" element={
-              <div className="contentArea">
-                <SidebarLeft currentUser={currentUser} leftSidebarWidth={leftSidebarWidth}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("left"); setIsResizing(true)}}></div>
-                <LikedSongsPage currentUser={currentUser} currentIndex={currentIndex} onSongSelect={handleSongSelect} addSongToQueue={addSongToQueue} currentSong={currentSong} isPlaying={isPlaying} handlePlayClick={handlePlayClick} pageContextQueue={pageContextQueue}/>
-                <div className="resizeHandle" onMouseDown={() => {setResizeSide("right"); setIsResizing(true)}}></div>
-                <SidebarRight currentSong={currentSong} userQueue={userQueue} setUserQueue={setUserQueue} onSongSelect={handleSongSelect} queueItemClick={queueItemClick} addSongToQueue={addSongToQueue} clearQueue={clearQueue} rightSidebarWidth={rightSidebarWidth} sidebarRightClosed={sidebarRightClosed} setSidebarRightClosed={setSidebarRightClosed}/>
-              </div>
-            }/>
-          </Routes>
-          <div>
-            <SongBottomLine currentSong={currentSong} nextSong={nextSong} previousSong={previousSong} isPlaying={isPlaying} setIsPlaying={setIsPlaying} handlePlayClick={handlePlayClick} audioRef={audioRef} currentIndex={currentIndex} shuffle={shuffle} toggleShuffle={toggleShuffle} repeat={repeat} setRepeat={setRepeat} toggleRepeat={toggleRepeat} volume={volume} setVolume={setVolume} toggleMute={toggleMute}/>
-          </div>
-    </LikedSongsContext.Provider>
-  </PlaylistContext.Provider>
+        </LikedSongsContext.Provider>
+      </PlaylistContext.Provider>
+    </PlayerContext.Provider>
+  </AuthContext.Provider>
   </>)
 }
 

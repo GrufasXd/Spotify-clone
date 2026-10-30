@@ -1,7 +1,7 @@
 import { API_URL } from "./config"
 import { durationToText } from "./utils"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import { CgPlayButton } from "react-icons/cg";
@@ -10,9 +10,11 @@ import { IoShuffle } from "react-icons/io5";
 
 import { Tooltip } from 'react-tooltip'
 import SongBlock from "./SongBlock"
+import { PlayerContext } from "./PlayerContext";
 
 
-function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPlaying,handlePlayClick,pageContextQueue, shuffle, toggleShuffle}){
+function AlbumPage({handlePlayClick, shuffle, toggleShuffle}){
+    const { isPlaying, currentSong, pageContextQueue, handleSongSelect } = useContext(PlayerContext)
     const navigate = useNavigate()
     let params = useParams()
     const albumId = params.id
@@ -36,7 +38,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
     function handleAlbumPlay(){
         
         if(pageContextQueue !== albumSongs || currentSong == null){
-            onSongSelect(albumSongs[0], albumSongs, 0)
+            handleSongSelect(albumSongs[0], albumSongs, 0)
         }
         else{
             handlePlayClick()
@@ -71,7 +73,7 @@ function AlbumPage({currentIndex, onSongSelect, addSongToQueue, currentSong,isPl
                     </div>
                 </div>
                 {albumSongs.map((song,index) => (
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, albumSongs, index)} addSongToQueue={addSongToQueue} pageContextQueue={pageContextQueue} songList={albumSongs} hideCover={true} isPlaying={isPlaying}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} onSongSelect={(song) => handleSongSelect(song, albumSongs, index)} songList={albumSongs} hideCover={true}/>
                 ))}
             </div>
             }

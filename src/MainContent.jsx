@@ -1,6 +1,6 @@
 import { API_URL } from "./config"
 
-import { useState, useEffect} from "react"
+import { useState, useEffect, useContext} from "react"
 import { useNavigate } from "react-router-dom"
 
 import { CgPlayButton } from "react-icons/cg";
@@ -9,10 +9,12 @@ import { IoPauseOutline } from "react-icons/io5";
 import { Tooltip } from 'react-tooltip'
 import RecentCard from "./RecentCard"
 import ScrollRow from "./ScrollRow"
+import { PlayerContext } from "./PlayerContext";
 
 
-function MainContent({onSongSelect, addSongToQueue, isPlaying, pageContextQueue, currentSong, handlePlayClick, recentSongs, currentUser}){
+function MainContent({handlePlayClick, recentSongs, currentUser}){
     let navigate = useNavigate()
+    const { isPlaying, currentSong, pageContextQueue, handleSongSelect } = useContext(PlayerContext)
     const [songs, setSongs] = useState([])
     const [mainAlbums, setMainAlbums] = useState([])
     const [mainArtists, setMainArtists] = useState([])
@@ -55,7 +57,7 @@ function MainContent({onSongSelect, addSongToQueue, isPlaying, pageContextQueue,
         })
         .then(albumSongs => {
             if (albumSongs.length === 0) return
-            onSongSelect(albumSongs[0], albumSongs, 0)
+            handleSongSelect(albumSongs[0], albumSongs, 0)
         })
         .catch(console.error)
     }
@@ -69,8 +71,7 @@ function MainContent({onSongSelect, addSongToQueue, isPlaying, pageContextQueue,
                         key={song.id}
                         title={song.title}
                         song={song}
-                        onSongSelect={(song) => onSongSelect(song, cardsToShow, index)}
-                        addSongToQueue={addSongToQueue}
+                        onSongSelect={(song) => handleSongSelect(song, cardsToShow, index)}
                     />
                 ))}
             </div>

@@ -13,7 +13,7 @@ import SearchBar from "./SearchBar"
 import AuthModal from "./AuthModal";
 
 
-function TopBar({handleSongSelect, currentUser, setCurrentUser}){
+function TopBar({currentUser, setCurrentUser, handleLogout}){
     const navigate = useNavigate();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [authMode, setAuthMode] = useState("login");
@@ -33,7 +33,7 @@ function TopBar({handleSongSelect, currentUser, setCurrentUser}){
         })
         .then(() => {
             setLogoutModalOpen(false)
-            setCurrentUser(null)
+            handleLogout()
         })
         .catch(error => {
             console.error(error);
@@ -62,7 +62,7 @@ function TopBar({handleSongSelect, currentUser, setCurrentUser}){
                     <div className="homeButton" onClick={() => navigate(`/`)}>
                         <button data-tooltip-id="topbar-tooltip" data-tooltip-content="Home" className="homeBackground"><GoHome className="homeButton"/></button>
                     </div>
-                    <SearchBar onSongSelect={handleSongSelect}/>
+                    <SearchBar/>
                 </div>
                 <div className="topRight">
                     {currentUser != null ? (

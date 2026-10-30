@@ -1,13 +1,14 @@
 import { API_URL } from "./config"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 
 import SongBlock from "./SongBlock"
 import ScrollRow from "./ScrollRow"
+import { PlayerContext } from "./PlayerContext"
 
-
-function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueue, isPlaying}){
+function ArtistPage(){
+    const { handleSongSelect } = useContext(PlayerContext)
     const navigate = useNavigate()
     let params = useParams()
     const artistId = params.id
@@ -47,7 +48,7 @@ function ArtistPage({onSongSelect, addSongToQueue, currentIndex, pageContextQueu
                 <b className="popularTag">Popular</b>
                 <div className="artistSongs">
                     {artistSongs.map((song,index) => (
-                        <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, artistSongs, index)} addSongToQueue={addSongToQueue} pageContextQueue={pageContextQueue} songList={artistSongs} isPlaying={isPlaying}/>
+                        <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} onSongSelect={(song) => handleSongSelect(song, artistSongs, index)} songList={artistSongs}/>
                     ))}
                 </div>
                 <ScrollRow title="Albums">

@@ -1,7 +1,7 @@
 import { API_URL } from "./config"
 import { durationToText } from "./utils"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { IoPauseOutline } from "react-icons/io5";
 import { CgPlayButton } from "react-icons/cg";
@@ -9,8 +9,10 @@ import { FaHeart } from "react-icons/fa";
 
 import { Tooltip } from 'react-tooltip'
 import SongBlock from "./SongBlock"
+import { PlayerContext } from "./PlayerContext";
 
-function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue, currentSong, isPlaying, handlePlayClick, pageContextQueue}){
+function LikedSongsPage({currentUser, handlePlayClick}){
+    const { isPlaying, currentSong, pageContextQueue, handleSongSelect } = useContext(PlayerContext)
     let playlistDuration = 0
     const [likedSongs, setLikedSongs] = useState([])
 
@@ -34,7 +36,7 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
     function handlePlaylistPlay(){
         if (likedSongs.length === 0) return
         if(pageContextQueue !== likedSongs || currentSong == null){
-            onSongSelect(likedSongs[0], likedSongs,0)
+            handleSongSelect(likedSongs[0], likedSongs, 0)
         }
         else{
             handlePlayClick()
@@ -69,7 +71,7 @@ function LikedSongsPage({currentUser, currentIndex, onSongSelect, addSongToQueue
                     </div>
                 </div>
                 {likedSongs.map((song, index) => ( 
-                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} currentIndex={currentIndex} onSongSelect={(song) => onSongSelect(song, likedSongs, index)} addSongToQueue={addSongToQueue} currentSong={currentSong} pageContextQueue={pageContextQueue} songList={likedSongs} isPlaying={isPlaying}/>
+                    <SongBlock key={song.id} song={song} songNumber={index + 1} songIndex={index} onSongSelect={(song) => handleSongSelect(song, likedSongs, index)} songList={likedSongs}/>
                 ))}
                 <Tooltip id="playlist-tooltip" place="top" positionStrategy="fixed"/>
             </div>
